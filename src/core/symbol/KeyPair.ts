@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as Crypto from 'crypto';
 import * as nacl from 'tweetnacl';
 import { Converter } from '../utils/Converter';
 
@@ -20,26 +21,46 @@ import { Converter } from '../utils/Converter';
  * Represents an ED25519 private and public key.
  */
 export class KeyPair {
+    /**
+     * Private properties
+     */
     private readonly privateKey: Uint8Array;
     private readonly publicKey: Uint8Array;
+
     /**
-     *
-     * @param privateKey private key
+     *Constructor
+     * @param {string} privateKey Private Key
      */
     constructor(privateKey: string) {
+        // sanity
+        Converter.validateHexString(privateKey, 64, 'Invalid PrivateKey');
+
         this.privateKey = Converter.hexToUint8(privateKey);
-        if (32 !== privateKey.length) {
-            throw Error(`private key has unexpected size: ${privateKey.length}`);
-        }
         this.publicKey = nacl.sign.keyPair.fromSeed(this.privateKey).publicKey;
     }
 
-    get PublicKey() {
+    /**
+     * @property Public key
+     * @returns {string} Raw public key string
+     */
+    get PublicKey(): string {
         return Converter.uint8ToHex(this.publicKey);
     }
 
-    get PrivateKey() {
+    /**
+     * @property Private key
+     * @returns {string} Raw private key string
+     */
+    get PrivateKey(): string {
         return Converter.uint8ToHex(this.privateKey);
+    }
+
+    /**
+     * Generate a random new keypair
+     * @returns {KeyPair} New keypair
+     */
+    public static generate(): KeyPair {
+        return new KeyPair(Converter.uint8ToHex(Crypto.randomBytes(32)));
     }
 
     /**

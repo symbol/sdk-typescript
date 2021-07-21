@@ -9,6 +9,7 @@
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "stripInternal": true,
     "outDir": "dist",
     "allowJs": false,

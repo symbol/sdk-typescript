@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import { decode } from 'utf8';
-import { Nibble_To_Char_Map, tryParseByte } from './Utilities';
+import { Nibble_To_Char_Map } from './Contstants';
+import { tryParseByte } from './Utilities';
 
 export class Converter {
     /**
@@ -23,13 +24,13 @@ export class Converter {
      * @param {string} char2 The second hex digit.
      * @returns {number} The decoded byte.
      */
-    public static toByte = (char1: string, char2: string): number => {
+    public static toByte(char1: string, char2: string): number {
         const byte = tryParseByte(char1, char2);
         if (undefined === byte) {
             throw Error(`unrecognized hex char`);
         }
         return byte;
-    };
+    }
 
     /**
      * Determines whether or not a string is a hex string.
@@ -37,7 +38,7 @@ export class Converter {
      * @param {string} expectedSize the expected size of the input
      * @returns {boolean} true if the input is a hex string, false otherwise.
      */
-    public static isHexString = (input: string, expectedSize = 0): boolean => {
+    public static isHexString(input: string, expectedSize: number = 0): boolean {
         if (0 !== input.length % 2) {
             return false;
         }
@@ -50,7 +51,7 @@ export class Converter {
             return false;
         }
         return true;
-    };
+    }
 
     /**
      * Validates if a string is a valid hex of the expected size.
@@ -58,40 +59,29 @@ export class Converter {
      * @param {string} expectedSize the expected size of the input
      * @param {string} message error message.
      */
-    public static validateHexString = (input: string, expectedSize: number, message: string): void => {
+    public static validateHexString(input: string, expectedSize: number, message: string): void {
         if (!Converter.isHexString(input, expectedSize)) {
             throw new Error(`${message}. Value ${input} is not an hex string of size ${expectedSize}.`);
         }
-    };
+    }
 
     /**
      * Converts a hex string to a uint8 array.
      * @param {string} input A hex encoded string.
+     * @param {boolean} reversed Is reversed (default false).
      * @returns {Uint8Array} A uint8 array corresponding to the input.
      */
-    public static hexToUint8 = (input: string): Uint8Array => {
+    public static hexToUint8 = (input: string, reversed: boolean = false): Uint8Array => {
         if (0 !== input.length % 2) {
             throw Error(`hex string has unexpected size '${input.length}'`);
         }
         const output = new Uint8Array(input.length / 2);
         for (let i = 0; i < input.length; i += 2) {
-            output[i / 2] = Converter.toByte(input[i], input[i + 1]);
-        }
-        return output;
-    };
-
-    /**
-     * Reversed convertion hex string to a uint8 array.
-     * @param {string} input A hex encoded string.
-     * @returns {Uint8Array} A uint8 array corresponding to the input.
-     */
-    public static hexToUint8Reverse = (input: string): Uint8Array => {
-        if (0 !== input.length % 2) {
-            throw Error(`hex string has unexpected size '${input.length}'`);
-        }
-        const output = new Uint8Array(input.length / 2);
-        for (let i = 0; i < input.length; i += 2) {
-            output[output.length - 1 - i / 2] = Converter.toByte(input[i], input[i + 1]);
+            if (reversed) {
+                output[output.length - 1 - i / 2] = Converter.toByte(input[i], input[i + 1]);
+            } else {
+                output[i / 2] = Converter.toByte(input[i], input[i + 1]);
+            }
         }
         return output;
     };
@@ -107,7 +97,6 @@ export class Converter {
             s += Nibble_To_Char_Map[byte >> 4];
             s += Nibble_To_Char_Map[byte & 0x0f];
         }
-
         return s;
     };
 
@@ -245,7 +234,7 @@ export class Converter {
      * @param number the number
      * @param arraySize the expected size of the array.
      */
-    public static numberToUint8Array(number: number, arraySize: number): Uint8Array {
+    public static numberToUint8(number: number, arraySize: number): Uint8Array {
         const uint8Array = new Uint8Array(arraySize);
         for (let index = 0; index < uint8Array.length; index++) {
             const byte = number & 0xff;
@@ -259,7 +248,7 @@ export class Converter {
      * It creates a number from the bytes in the array.
      * @param array the number from the bytes.
      */
-    public static uintArray8ToNumber(array: Uint8Array): number {
+    public static uint8ToNumber(array: Uint8Array): number {
         let value = 0;
         for (let index = 0; index < array.length; index++) {
             value += array[index] << (index * 8);
