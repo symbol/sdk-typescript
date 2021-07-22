@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NEM
+ * Copyright 2021 SYMBOL
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 import * as Crypto from 'crypto';
 import * as nacl from 'tweetnacl';
 import { Converter } from '../utils/Converter';
-
 /**
  * Represents an ED25519 private and public key.
  */
-export class KeyPair {
+export class SymbolKeyPair {
     /**
      * Private properties
      */
@@ -59,8 +58,8 @@ export class KeyPair {
      * Generate a random new keypair
      * @returns {KeyPair} New keypair
      */
-    public static generate(): KeyPair {
-        return new KeyPair(Converter.uint8ToHex(Crypto.randomBytes(32)));
+    public static generate(): SymbolKeyPair {
+        return new SymbolKeyPair(Converter.uint8ToHex(Crypto.randomBytes(32)));
     }
 
     /**

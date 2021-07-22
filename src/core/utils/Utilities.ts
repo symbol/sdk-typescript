@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { sha3_256 } from 'js-sha3';
-import { Alphabet, Encoded_Block_Size } from './Contstants';
+import { Alphabet, Encoded_Block_Size } from '../Constants';
 
 export const createBuilder = (): any => {
     const map = {};

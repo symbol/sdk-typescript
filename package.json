@@ -49,6 +49,7 @@
     "dependencies": {
         "long": "^4.0.0",
         "ripemd160": "^2.0.2",
+        "sha3": "^2.1.4",
         "tweetnacl": "^1.0.3",
         "utf8": "^3.0.0"
     }

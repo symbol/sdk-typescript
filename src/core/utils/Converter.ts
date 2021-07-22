@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { decode } from 'utf8';
-import { Nibble_To_Char_Map } from './Contstants';
+import { Nibble_To_Char_Map } from '../Constants';
 import { tryParseByte } from './Utilities';
 
 export class Converter {
