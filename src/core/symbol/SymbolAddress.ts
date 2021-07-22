@@ -21,10 +21,18 @@ import { Base32 } from '../utils/Base32';
  * The address structure describes an address with its network
  */
 export class SymbolAddress extends Address {
+    /**
+     * Constructor
+     * @param {RawAddress}rawAddress Raw address bytes
+     */
     constructor(rawAddress: RawAddress) {
         super(rawAddress);
     }
 
+    /**
+     * Get the raw address byte with checksum bytes for Symbol Address
+     * @returns {Uint8Array}
+     */
     public getAddressBytes(): Uint8Array {
         const address = new Uint8Array(this.rawAddress.addressWithoutChecksum.length + 3);
         address.set(this.rawAddress.addressWithoutChecksum, 0);
@@ -32,6 +40,11 @@ export class SymbolAddress extends Address {
         return address;
     }
 
+    /**
+     * Create SymbolAddress object from encoded address string
+     * @param {string} encodedAddress Encoded address
+     * @returns {SymbolAddress}
+     */
     public static createFromEncoded(encodedAddress: string): SymbolAddress {
         const decoded = Base32.Base32Decode(`${encodedAddress}A`).subarray(0, 24);
         return new SymbolAddress({
