@@ -1,6 +1,6 @@
 import ripemd160 = require('ripemd160');
 import { Keccak, SHA3 } from 'sha3';
-import { Address, RawAddress } from './Address';
+import { RawAddress } from './Address';
 import { Converter } from './utils/Converter';
 
 export abstract class Network {
@@ -16,7 +16,7 @@ export abstract class Network {
      * @param {string} publicKey Public key
      * @returns {RawAddress}
      */
-    public generateFromPublicKey(publicKey: string): RawAddress {
+    public createAddressFromPublicKey(publicKey: string): RawAddress {
         const publicKeyBytes = Converter.hexToUint8(publicKey);
         // step 1: sha3 hash of the public key
         const publicKeyHash = this.addressHasher().update(Buffer.from(publicKeyBytes));
@@ -37,36 +37,8 @@ export abstract class Network {
     }
 
     /**
-     * Abstract method to create Address object
-     * @param {RawAddress} rawAddress Address buffer
-     * @returns {Address}
-     */
-    public abstract createAddress(rawAddress: RawAddress): Address;
-
-    /**
-     * Abstract method to create address object from encoded address
-     * @param {string} encodedAddress Encoded address
-     * @returns {Address}
-     */
-    public abstract createAddressFromEncoded(encodedAddress: string): Address;
-
-    /**
      * Abstract method to gets the primary hasher to use in the public key to address conversion.
      * @returns {SHA3 | Keccak}
      */
     public abstract addressHasher(): SHA3 | Keccak;
-
-    /**
-     * Abstract method to get network by its name
-     * @param {string} name Network name
-     * @returns {Network}
-     */
-    public abstract findByName(name: string): Network | undefined;
-
-    /**
-     * Abstract method to get network by its identifier
-     * @param {number} identifier Network identifier
-     * @returns {Network}
-     */
-    public abstract findByIdentifier(identifier: number): Network | undefined;
 }

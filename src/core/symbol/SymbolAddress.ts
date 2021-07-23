@@ -49,7 +49,7 @@ export class SymbolAddress extends Address {
         const decoded = Base32.Base32Decode(`${encodedAddress}A`).subarray(0, 24);
         return new SymbolAddress({
             addressWithoutChecksum: decoded.subarray(0, 21),
-            checksum: decoded.subarray(22, 24),
+            checksum: decoded.subarray(21, 24),
         });
     }
 }

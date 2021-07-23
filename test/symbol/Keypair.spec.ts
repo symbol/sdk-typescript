@@ -238,4 +238,13 @@ describe('key pair', () => {
             expect(isNonCanonicalVerified).to.equal(true);
         });
     });
+
+    describe('generate', () => {
+        it('Can generate a random keypair', () => {
+            const key = SymbolKeyPair.generate();
+            expect(key).not.to.be.undefined;
+            expect(key.PrivateKey.length).to.be.equal(64);
+            expect(key.PublicKey.length).to.be.equal(64);
+        });
+    });
 });
