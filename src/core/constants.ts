@@ -20,3 +20,10 @@ export const Nibble_To_Char_Map = ['0', '1', '2', '3', '4', '5', '6', '7', '8', 
 export const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 export const Decoded_Block_Size = 5;
 export const Encoded_Block_Size = 8;
+
+/**
+ * EPOCH
+ */
+export const SymbolPulblicNetworkEpochTime = Date.UTC(2021, 3, 16, 0, 6, 25);
+export const SymbolPublicNetworkEpoch = 1615853185;
+export const Nis1MainnetEpochTime = Date.UTC(2015, 3, 29, 0, 6, 25);
