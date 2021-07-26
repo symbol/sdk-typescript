@@ -189,7 +189,6 @@ export class Converter {
      * @return {string}
      */
     public static uint8ToUtf8 = (input: Uint8Array): string => {
-        // return new TextDecoder().decode(input);
         const hex = Converter.uint8ToHex(input);
         return Converter.decodeHex(hex);
     };
