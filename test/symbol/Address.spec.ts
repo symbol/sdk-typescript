@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { Key } from '../../src/core/Key';
 import { SymbolAddress } from '../../src/core/symbol';
 import { SymbolNetwork } from '../../src/core/symbol/SymbolNetwork';
+import { Converter } from '../../src/core/utils/Converter';
 
 describe('Symbol Address', () => {
     const testKeyAddressPair = {
@@ -31,6 +32,14 @@ describe('Symbol Address', () => {
         //Arrange
         const addressBytes = SymbolAddress.createFromString(testKeyAddressPair.address_Public).getAddressBytes();
         const address = SymbolAddress.createFromBytes(addressBytes);
+        expect(address).not.to.be.undefined;
+        expect(address.getAddressBytes()).to.be.deep.equal(addressBytes);
+    });
+
+    it('Can create address from hex', () => {
+        //Arrange
+        const addressBytes = SymbolAddress.createFromString(testKeyAddressPair.address_Public).getAddressBytes();
+        const address = SymbolAddress.createFromHex(Converter.uint8ToHex(addressBytes));
         expect(address).not.to.be.undefined;
         expect(address.getAddressBytes()).to.be.deep.equal(addressBytes);
     });

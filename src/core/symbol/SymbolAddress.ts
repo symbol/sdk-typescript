@@ -16,6 +16,7 @@
 
 import { Address, RawAddress } from '../Address';
 import { Base32 } from '../utils/Base32';
+import { Converter } from '../utils/Converter';
 
 /**
  * The address structure describes an address with its network
@@ -55,7 +56,7 @@ export class SymbolAddress extends Address {
 
     /**
      * Create SymbolAddress object from encoded address bytes
-     * @param {Uint8Array} addressBytes decoded address bytes
+     * @param {Uint8Array} addressBytes address bytes
      * @returns {SymbolAddress}
      */
     public static createFromBytes(addressBytes: Uint8Array): SymbolAddress {
@@ -65,5 +66,15 @@ export class SymbolAddress extends Address {
             addressWithoutChecksum: padded.subarray(0, 21),
             checksum: padded.subarray(21, 24),
         });
+    }
+
+    /**
+     * Create SymbolAddress object from decoded
+     * @param {string} addressHex address hex string
+     * @returns {SymbolAddress}
+     */
+    public static createFromHex(addressHex: string): SymbolAddress {
+        const bytes = Converter.hexToUint8(addressHex);
+        return SymbolAddress.createFromBytes(bytes);
     }
 }
