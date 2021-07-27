@@ -32,18 +32,18 @@ export abstract class KeyPair {
 
     /**
      * @property Public key
-     * @returns {string} Raw public key string
+     * @returns {Key} Raw public key
      */
-    public get PublicKey(): string {
-        return this.publicKey.toString();
+    public get PublicKey(): Key {
+        return this.publicKey;
     }
 
     /**
      * @property Private key
-     * @returns {string} Raw private key string
+     * @returns {Key} Raw private key
      */
-    public get PrivateKey(): string {
-        return this.privateKey.toString();
+    public get PrivateKey(): Key {
+        return this.privateKey;
     }
 
     /**

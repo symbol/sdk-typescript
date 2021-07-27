@@ -29,8 +29,8 @@ describe('key pair', () => {
                 const keyPair = new SymbolKeyPair(Key.createFromHex(kp.privateKey));
                 // Assert:
                 const message = ` from ${kp.privateKey}`;
-                expect(keyPair.PublicKey, `public ${message}`).equal(kp.publicKey);
-                expect(keyPair.PrivateKey, `private ${message}`).equal(kp.privateKey);
+                expect(keyPair.PublicKey.toString(), `public ${message}`).equal(kp.publicKey);
+                expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(kp.privateKey);
             });
         });
 
