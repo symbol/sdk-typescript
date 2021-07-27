@@ -3,9 +3,7 @@
  */
 export const SymbolNetworkList = [
     { name: 'public', identifier: 0x68, generationHash: '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6' },
-    { name: 'private', identifier: 0x78, generationHash: '' },
     { name: 'public_test', identifier: 0x98, generationHash: '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155' },
-    { name: 'private_test', identifier: 0xa8, generationHash: '' },
 ];
 
 export const NIS1NetworkList = [
