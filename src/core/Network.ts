@@ -1,7 +1,23 @@
+/*
+ * Copyright 2021 SYMBOL
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import ripemd160 = require('ripemd160');
 import { Keccak, SHA3 } from 'sha3';
 import { RawAddress } from './Address';
-import { Converter } from './utils/Converter';
+import { Key } from './Key';
 
 export abstract class Network {
     /**
@@ -16,8 +32,8 @@ export abstract class Network {
      * @param {string} publicKey Public key
      * @returns {RawAddress}
      */
-    public createAddressFromPublicKey(publicKey: string): RawAddress {
-        const publicKeyBytes = Converter.hexToUint8(publicKey);
+    public createAddressFromPublicKey(publicKey: Key): RawAddress {
+        const publicKeyBytes = publicKey.toBytes();
         // step 1: sha3 hash of the public key
         const publicKeyHash = this.addressHasher().update(Buffer.from(publicKeyBytes));
 

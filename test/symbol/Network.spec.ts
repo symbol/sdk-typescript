@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { SHA3 } from 'sha3';
+import { Key } from '../../src/core/Key';
 import { SymbolAddress } from '../../src/core/symbol';
 import { SymbolNetwork } from '../../src/core/symbol/SymbolNetwork';
 import { Symbol_Address_Vector } from '../resource/vector/1.test-address';
@@ -23,7 +24,7 @@ describe('Symbol Network', () => {
             Symbol_Address_Vector.forEach((a) => {
                 const netwrokName = n.name.charAt(0).toUpperCase() + n.name.slice(1);
                 const keyName = `address_${netwrokName}`.replace('_t', 'T');
-                const rawAddress = network.createAddressFromPublicKey(a.publicKey);
+                const rawAddress = network.createAddressFromPublicKey(Key.createFromHex(a.publicKey));
                 //Act
                 expect(a[keyName]).to.be.equal(new SymbolAddress(rawAddress).encoded);
             });

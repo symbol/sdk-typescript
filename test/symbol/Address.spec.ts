@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Key } from '../../src/core/Key';
 import { SymbolAddress } from '../../src/core/symbol';
 import { SymbolNetwork } from '../../src/core/symbol/SymbolNetwork';
 
@@ -14,22 +15,30 @@ describe('Symbol Address', () => {
     it('Can generate address bytes', () => {
         //Arrange
         const network = new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        const address = new SymbolAddress(network.createAddressFromPublicKey(testKeyAddressPair.publicKey));
+        const address = new SymbolAddress(network.createAddressFromPublicKey(Key.createFromHex(testKeyAddressPair.publicKey)));
         expect(address.getAddressBytes()).not.to.be.undefined;
         expect(address.getAddressBytes().length).to.be.equal(24);
     });
 
     it('Can create address from encoded', () => {
         //Arrange
-        const address = SymbolAddress.createFromEncoded(testKeyAddressPair.address_Public);
+        const address = SymbolAddress.createFromString(testKeyAddressPair.address_Public);
         expect(address.getAddressBytes()).not.to.be.undefined;
         expect(address.getAddressBytes().length).to.be.equal(24);
+    });
+
+    it('Can create address from bytes', () => {
+        //Arrange
+        const addressBytes = SymbolAddress.createFromString(testKeyAddressPair.address_Public).getAddressBytes();
+        const address = SymbolAddress.createFromBytes(addressBytes);
+        expect(address).not.to.be.undefined;
+        expect(address.getAddressBytes()).to.be.deep.equal(addressBytes);
     });
 
     it('Can return encoded address', () => {
         //Arrange
         const network = new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        const address = new SymbolAddress(network.createAddressFromPublicKey(testKeyAddressPair.publicKey));
+        const address = new SymbolAddress(network.createAddressFromPublicKey(Key.createFromHex(testKeyAddressPair.publicKey)));
         expect(address.encoded).not.to.be.undefined;
         expect(address.encoded).to.be.equal(testKeyAddressPair.address_Public);
     });
@@ -37,7 +46,7 @@ describe('Symbol Address', () => {
     it('Can return decoded address', () => {
         //Arrange
         const network = new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        const address = new SymbolAddress(network.createAddressFromPublicKey(testKeyAddressPair.publicKey));
+        const address = new SymbolAddress(network.createAddressFromPublicKey(Key.createFromHex(testKeyAddressPair.publicKey)));
         expect(address.decode).not.to.be.undefined;
         expect(address.decode).to.be.equal('6826D27E1D0A26CA4E316F901E23E55C8711DB20DF250DEF');
     });
@@ -45,7 +54,7 @@ describe('Symbol Address', () => {
     it('Can return pretty address presentation', () => {
         //Arrange
         const network = new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        const address = new SymbolAddress(network.createAddressFromPublicKey(testKeyAddressPair.publicKey));
+        const address = new SymbolAddress(network.createAddressFromPublicKey(Key.createFromHex(testKeyAddressPair.publicKey)));
         expect(address.pretty()).not.to.be.undefined;
         expect(address.pretty()).to.be.equal('NATNE7-Q5BITM-UTRRN6-IB4I7F-LSDRDW-ZA34SQ-33Y');
     });
@@ -53,7 +62,7 @@ describe('Symbol Address', () => {
     it('Can compare with other address', () => {
         //Arrange
         const network = new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        const address = new SymbolAddress(network.createAddressFromPublicKey(testKeyAddressPair.publicKey));
+        const address = new SymbolAddress(network.createAddressFromPublicKey(Key.createFromHex(testKeyAddressPair.publicKey)));
         expect(address.equals(testKeyAddressPair.address_Public)).to.be.true;
         expect(address.equals(testKeyAddressPair.address_Private)).to.be.false;
     });
@@ -61,7 +70,7 @@ describe('Symbol Address', () => {
     it('Can return encoded address by calling toString', () => {
         //Arrange
         const network = new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        const address = new SymbolAddress(network.createAddressFromPublicKey(testKeyAddressPair.publicKey));
+        const address = new SymbolAddress(network.createAddressFromPublicKey(Key.createFromHex(testKeyAddressPair.publicKey)));
         expect(address.toString()).not.to.be.undefined;
         expect(address.toString()).to.be.equal(address.encoded);
     });

@@ -15,43 +15,18 @@
  */
 import * as Crypto from 'crypto';
 import * as nacl from 'tweetnacl';
-import { Converter } from '../utils/Converter';
+import { Key } from '../Key';
+import { KeyPair } from '../KeyPair';
 /**
  * Represents an ED25519 private and public key.
  */
-export class SymbolKeyPair {
-    /**
-     * Private properties
-     */
-    private readonly privateKey: Uint8Array;
-    private readonly publicKey: Uint8Array;
-
+export class SymbolKeyPair extends KeyPair {
     /**
      *Constructor
      * @param {string} privateKey Private Key
      */
-    constructor(privateKey: string) {
-        // sanity
-        Converter.validateHexString(privateKey, 64, 'Invalid PrivateKey');
-
-        this.privateKey = Converter.hexToUint8(privateKey);
-        this.publicKey = nacl.sign.keyPair.fromSeed(this.privateKey).publicKey;
-    }
-
-    /**
-     * @property Public key
-     * @returns {string} Raw public key string
-     */
-    get PublicKey(): string {
-        return Converter.uint8ToHex(this.publicKey);
-    }
-
-    /**
-     * @property Private key
-     * @returns {string} Raw private key string
-     */
-    get PrivateKey(): string {
-        return Converter.uint8ToHex(this.privateKey);
+    constructor(privateKey: Key) {
+        super(privateKey);
     }
 
     /**
@@ -59,7 +34,15 @@ export class SymbolKeyPair {
      * @returns {KeyPair} New keypair
      */
     public static generate(): SymbolKeyPair {
-        return new SymbolKeyPair(Converter.uint8ToHex(Crypto.randomBytes(32)));
+        return new SymbolKeyPair(new Key(Crypto.randomBytes(32)));
+    }
+
+    /**
+     * Derive public key from private key
+     * @returns {Key}
+     */
+    public getPublicKey(): Key {
+        return new Key(nacl.sign.keyPair.fromSeed(this.privateKey.toBytes()).publicKey);
     }
 
     /**
@@ -69,8 +52,8 @@ export class SymbolKeyPair {
      */
     public sign(data: Uint8Array): Uint8Array {
         const secretKey = new Uint8Array(64);
-        secretKey.set(this.privateKey);
-        secretKey.set(this.publicKey, 32);
+        secretKey.set(this.privateKey.toBytes());
+        secretKey.set(this.publicKey.toBytes(), 32);
         return nacl.sign.detached(data, secretKey);
     }
 
@@ -81,6 +64,6 @@ export class SymbolKeyPair {
      * @returns {boolean} true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
-        return nacl.sign.detached.verify(data, signature, this.publicKey);
+        return nacl.sign.detached.verify(data, signature, this.publicKey.toBytes());
     }
 }

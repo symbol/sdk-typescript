@@ -45,11 +45,25 @@ export class SymbolAddress extends Address {
      * @param {string} encodedAddress Encoded address
      * @returns {SymbolAddress}
      */
-    public static createFromEncoded(encodedAddress: string): SymbolAddress {
+    public static createFromString(encodedAddress: string): SymbolAddress {
         const decoded = Base32.Base32Decode(`${encodedAddress}A`).subarray(0, 24);
         return new SymbolAddress({
             addressWithoutChecksum: decoded.subarray(0, 21),
             checksum: decoded.subarray(21, 24),
+        });
+    }
+
+    /**
+     * Create SymbolAddress object from encoded address bytes
+     * @param {Uint8Array} addressBytes decoded address bytes
+     * @returns {SymbolAddress}
+     */
+    public static createFromBytes(addressBytes: Uint8Array): SymbolAddress {
+        const padded = new Uint8Array(25);
+        padded.set(addressBytes);
+        return new SymbolAddress({
+            addressWithoutChecksum: padded.subarray(0, 21),
+            checksum: padded.subarray(21, 24),
         });
     }
 }
