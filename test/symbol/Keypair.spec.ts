@@ -244,8 +244,8 @@ describe('key pair', () => {
         it('Can generate a random keypair', () => {
             const key = SymbolKeyPair.generate();
             expect(key).not.to.be.undefined;
-            expect(key.PrivateKey.length).to.be.equal(64);
-            expect(key.PublicKey.length).to.be.equal(64);
+            expect(key.PrivateKey.length).to.be.equal(32);
+            expect(key.PublicKey.length).to.be.equal(32);
         });
     });
 });

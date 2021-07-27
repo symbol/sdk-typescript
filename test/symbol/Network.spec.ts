@@ -8,11 +8,9 @@ import { Symbol_Address_Vector } from '../resource/vector/1.test-address';
 describe('Symbol Network', () => {
     it('can list all symbol netwroks', () => {
         const list = SymbolNetwork.list();
-        expect(list.length).to.equal(4);
+        expect(list.length).to.equal(2);
         expect(list.find((l) => l.name === 'public')).not.to.be.undefined;
-        expect(list.find((l) => l.name === 'private')).not.to.be.undefined;
         expect(list.find((l) => l.name === 'public_test')).not.to.be.undefined;
-        expect(list.find((l) => l.name === 'private_test')).not.to.be.undefined;
     });
 
     it('can create address from publickey', () => {
