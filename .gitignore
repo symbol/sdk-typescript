@@ -9,9 +9,7 @@ dist/
 dist/test
 dist/e2e
 licenses/
-travis/
 target/
 ts-docs/
-.travis
 *.iml
 *.log

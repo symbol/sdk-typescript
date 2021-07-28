@@ -14,7 +14,8 @@
         "prettier": "prettier --write ./src ./test",
         "lint": "eslint --cache src/ test/ --ext .ts",
         "lint:fix": "eslint src/ test/ --ext .ts --fix",
-        "style:fix": "npm run prettier && npm run lint:fix"
+        "style:fix": "npm run prettier && npm run lint:fix",
+        "version": "echo $npm_package_version"
     },
     "repository": {
         "type": "git",
