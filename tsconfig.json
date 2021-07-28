@@ -12,7 +12,7 @@
     "resolveJsonModule": true,
     "stripInternal": true,
     "outDir": "dist",
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "lib": [
       "es2017",
@@ -31,6 +31,7 @@
   ],
   "include": [
     "test/**/*.spec.ts",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.js",
   ]
 }
