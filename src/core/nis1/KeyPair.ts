@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 import * as Crypto from 'crypto';
-import { keccak512 } from 'js-sha3';
 import { Converter } from '../utils/Converter';
-import { publickey_hash_unsafe } from './external/ed25519';
+import { keccakHash, KeccakHasher } from '../utils/Utilities';
+const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
 export class KeyPair {
     /**
@@ -31,10 +31,12 @@ export class KeyPair {
      */
     constructor(privateKey: string) {
         // sanity
-        Converter.validateHexString(privateKey, 64, 'Invalid PrivateKey');
+        Converter.validateHexString(privateKey, Ed25519.crypto_sign_SECRETKEYBYTES, 'Invalid PrivateKey');
 
         this.privateKey = Converter.hexToUint8(privateKey, true);
-        this.publicKey = publickey_hash_unsafe(this.privateKey, keccak512);
+        this.publicKey = new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES);
+
+        Ed25519.crypto_sign_keypair_hash(this.publicKey, this.privateKey, keccakHash);
     }
 
     /**
@@ -70,8 +72,15 @@ export class KeyPair {
      * @returns {Uint8Array} The signature.
      */
     public sign(data: Uint8Array): Uint8Array {
-        // Todo
-        return new Uint8Array(0);
+        const signature = new Uint8Array(64);
+        const hasher = KeccakHasher();
+        const signed = Ed25519.crypto_sign_hash(signature, this, data, hasher);
+
+        if (!signed) {
+            throw new Error(`Couldn't sign the tx, generated invalid signature`);
+        }
+
+        return signature;
     }
 
     /**
@@ -81,7 +90,7 @@ export class KeyPair {
      * @returns {boolean} true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
-        // Todo
-        return true;
+        const hasher = KeccakHasher();
+        return Ed25519.crypto_verify_hash(signature, this.publicKey, data, hasher);
     }
 }
