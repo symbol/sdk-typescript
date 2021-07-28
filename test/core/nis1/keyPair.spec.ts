@@ -97,7 +97,7 @@ describe('NIS key pair', () => {
     });
 
     describe('verify', () => {
-        it.only('returns true for data signed with same key pair', () => {
+        it('returns true for data signed with same key pair', () => {
             // Arrange:
             const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(100);

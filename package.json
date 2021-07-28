@@ -7,7 +7,7 @@
     "scripts": {
         "build": "shx rm -rf dist/ && tsc",
         "doc": "typedoc --out \"ts-docs/$(npm run version --silent)\" src",
-        "test": "npm run build && mocha --ui bdd --recursive ./dist/test --timeout 120000 --unhandled-rejections=strict ",
+        "test": "npm run build && mocha --ui bdd --recursive ./dist/test --timeout 180000 --unhandled-rejections=strict ",
         "test:cov": "nyc --reporter=lcov --reporter=text-summary npm t",
         "test:coveralls": "npm run test:cov | coveralls",
         "coveralls-report": "cat ./coverage/lcov.info | coveralls",
@@ -47,9 +47,9 @@
         "typescript": "^4.3.5"
     },
     "dependencies": {
-        "js-sha3": "^0.8.0",
         "@js-joda/core": "^3.2.0",
         "catbuffer-typescript": "^1.0.0",
+        "js-sha3": "^0.8.0",
         "long": "^4.0.0",
         "ripemd160": "^2.0.2",
         "sha3": "^2.1.4",
