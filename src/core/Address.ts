@@ -73,7 +73,7 @@ export abstract class Address {
                 return false;
             }
             try {
-                const address = SymbolAddress.createFromEncoded(encodedAddress);
+                const address = SymbolAddress.createFromString(encodedAddress);
                 const hasher = new SHA3(256);
                 const hash = hasher.update(Buffer.from(address.rawAddress.addressWithoutChecksum)).digest();
                 return Converter.uint8ToHex(hash.subarray(0, 3)) === Converter.uint8ToHex(address.rawAddress.checksum);

@@ -15,6 +15,7 @@
  */
 import { expect } from 'chai';
 import * as crypto from 'crypto';
+import { Key } from '../../src/core/Key';
 import { SymbolKeyPair } from '../../src/core/symbol';
 import { Converter } from '../../src/core/utils';
 import { Symbol_Key_Vector } from '../resource/vector/1.test-keys';
@@ -25,11 +26,11 @@ describe('key pair', () => {
         it('can extract from private key test vectors', () => {
             Symbol_Key_Vector.forEach((kp) => {
                 // Act:
-                const keyPair = new SymbolKeyPair(kp.privateKey);
+                const keyPair = new SymbolKeyPair(Key.createFromHex(kp.privateKey));
                 // Assert:
                 const message = ` from ${kp.privateKey}`;
-                expect(keyPair.PublicKey, `public ${message}`).equal(kp.publicKey);
-                expect(keyPair.PrivateKey, `private ${message}`).equal(kp.privateKey);
+                expect(keyPair.PublicKey.toString(), `public ${message}`).equal(kp.publicKey);
+                expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(kp.privateKey);
             });
         });
 
@@ -46,7 +47,7 @@ describe('key pair', () => {
             invalidPrivateKeys.forEach((privateKey) => {
                 // Assert:
                 expect(() => {
-                    new SymbolKeyPair(privateKey);
+                    new SymbolKeyPair(Key.createFromHex(privateKey));
                 }, `from ${privateKey}`).to.throw();
             });
         });
@@ -56,7 +57,7 @@ describe('key pair', () => {
         it('sign', () => {
             Symbol_Sign_Vector.forEach((s) => {
                 // Arrange:
-                const keyPair = new SymbolKeyPair(s.privateKey);
+                const keyPair = new SymbolKeyPair(Key.createFromHex(s.privateKey));
                 const payload = Converter.hexToUint8(s.data);
 
                 // Act:
@@ -87,8 +88,8 @@ describe('key pair', () => {
         it('returns same signature for same data signed by same key pairs', () => {
             // Arrange:
             const privateKey = Converter.uint8ToHex(crypto.randomBytes(32));
-            const keyPair1 = new SymbolKeyPair(privateKey);
-            const keyPair2 = new SymbolKeyPair(privateKey);
+            const keyPair1 = new SymbolKeyPair(Key.createFromHex(privateKey));
+            const keyPair2 = new SymbolKeyPair(Key.createFromHex(privateKey));
             const payload = crypto.randomBytes(100);
 
             // Act:
@@ -192,7 +193,7 @@ describe('key pair', () => {
         it('rejects zero public key', () => {
             // Arrange:
             const keyPair = SymbolKeyPair.generate();
-            Object.assign(keyPair, { publicKey: new Uint8Array(32) });
+            Object.assign(keyPair, { publicKey: new Key(new Uint8Array(32)) });
 
             const payload = crypto.randomBytes(100);
             const signature = keyPair.sign(payload);
@@ -243,8 +244,8 @@ describe('key pair', () => {
         it('Can generate a random keypair', () => {
             const key = SymbolKeyPair.generate();
             expect(key).not.to.be.undefined;
-            expect(key.PrivateKey.length).to.be.equal(64);
-            expect(key.PublicKey.length).to.be.equal(64);
+            expect(key.PrivateKey.length).to.be.equal(32);
+            expect(key.PublicKey.length).to.be.equal(32);
         });
     });
 });
