@@ -32,6 +32,6 @@
   "include": [
     "test/**/*.spec.ts",
     "src/**/*.ts",
-    "src/**/*.js",
+    "src/core/nis1/external/*.js"
   ]
 }
