@@ -23,8 +23,8 @@ import { Converter } from '../../src/core/utils';
 
 describe('key pair - TestVector', () => {
     describe('construction', () => {
-        it('can extract from private key test vectors', () => {
-            var stream = fs.createReadStream(path.join(__dirname, '../test-vector/1.test-keys.json'), { encoding: 'utf-8' });
+        it('can extract from private key test vectors', (done) => {
+            const stream = fs.createReadStream(path.join(__dirname, '../test-vector/1.test-keys.json'), { encoding: 'utf-8' });
             stream.pipe(
                 JSONStream.parse([]).on('data', (data) => {
                     data.forEach((kp) => {
@@ -35,14 +35,15 @@ describe('key pair - TestVector', () => {
                         expect(keyPair.PublicKey.toString(), `public ${message}`).equal(kp.publicKey);
                         expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(kp.privateKey);
                     });
+                    done();
                 }),
             );
         });
     });
 
     describe('sign & verify- Test Vector', () => {
-        it('sign', () => {
-            var stream = fs.createReadStream(path.join(__dirname, '../test-vector/2.test-sign.json'), { encoding: 'utf-8' });
+        it('sign', (done) => {
+            const stream = fs.createReadStream(path.join(__dirname, '../test-vector/2.test-sign.json'), { encoding: 'utf-8' });
             stream.pipe(
                 JSONStream.parse([]).on('data', (data) => {
                     data.forEach((s) => {
@@ -59,6 +60,7 @@ describe('key pair - TestVector', () => {
                         const isVerified = keyPair.verify(payload, signature);
                         expect(isVerified, `private ${message}`).to.equal(true);
                     });
+                    done();
                 }),
             );
         });

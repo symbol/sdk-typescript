@@ -8,7 +8,7 @@
         "build": "shx rm -rf dist/ && tsc",
         "doc": "typedoc --out \"ts-docs/$(npm run version --silent)\" src",
         "test": "npm run build && mocha --ui bdd --recursive ./dist/test --timeout 120000 --unhandled-rejections=strict ",
-        "test:vector": "npm run build && shx cp -R ./test/test-vector ./dist/test/test-vector && mocha --ui bdd --recursive ./dist/test/vector --timeout 120000 --unhandled-rejections=strict ",
+        "test:vector": "npm run build && shx cp -R ./test/test-vector ./dist/test/test-vector && mocha --ui bdd --recursive ./dist/test/vector --timeout 200000 --unhandled-rejections=strict ",
         "test:cov": "nyc --reporter=lcov --reporter=text-summary npm t",
         "test:coveralls": "npm run test:cov | coveralls",
         "coveralls-report": "cat ./coverage/lcov.info | coveralls",

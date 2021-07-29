@@ -21,8 +21,8 @@ import { Key } from '../../src/core/Key';
 import { SymbolAddress, SymbolNetwork } from '../../src/core/symbol';
 
 describe('Address - TestVector', () => {
-    it('can create address from publickey', () => {
-        var stream = fs.createReadStream(path.join(__dirname, '../test-vector/1.test-address.json'), { encoding: 'utf-8' });
+    it('can create address from publickey', (done) => {
+        const stream = fs.createReadStream(path.join(__dirname, '../test-vector/1.test-address.json'), { encoding: 'utf-8' });
         stream.pipe(
             JSONStream.parse([]).on('data', (data) => {
                 //Arrange
@@ -38,6 +38,7 @@ describe('Address - TestVector', () => {
                         expect(a[keyName]).to.be.equal(new SymbolAddress(rawAddress).encoded);
                     });
                 });
+                done();
             }),
         );
     });
