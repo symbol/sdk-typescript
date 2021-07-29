@@ -95,7 +95,7 @@ describe('Symbol IdGenerator - TestVector', () => {
 
         it('rejects improper qualified names', () => {
             // Assert:
-            ['a:b:c', 'a::b'].forEach((name) => expect(() => SymbolIdGenerator.generateNamespacePath(name), `name ${name}`).to.throw());
+            ['a:b:c', 'a..b'].forEach((name) => expect(() => SymbolIdGenerator.generateNamespacePath(name), `name ${name}`).to.throw());
         });
     });
 });
