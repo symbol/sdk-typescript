@@ -62,14 +62,14 @@ export class SymbolIdGenerator {
         if (0 >= fullName.length) {
             throw new Error(`${fullName} has zero length`);
         }
-        let parent_namespace_id: bigint = BigInt(0);
+        let parentId: bigint = BigInt(0);
         const path: bigint[] = [];
         fullName.split('.').forEach((name) => {
             if (!SymbolIdGenerator.isValidNamespaceName(name)) {
                 throw new Error(`fully qualified name is invalid due to invalid part name (${fullName})`);
             }
-            path.push(SymbolIdGenerator.generateNamespaceId(name, parent_namespace_id));
-            parent_namespace_id = path[-1];
+            path.push(SymbolIdGenerator.generateNamespaceId(name, parentId));
+            parentId = path[-1];
         });
         return path;
     };
