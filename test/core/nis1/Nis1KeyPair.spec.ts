@@ -19,58 +19,8 @@ import * as crypto from 'crypto';
 import { Key } from '../../../src/core/Key';
 import { Nis1KeyPair } from '../../../src/core/nis1';
 import { Converter } from '../../../src/core/utils';
-import { NIS1_Key_Vector } from '../../resource/vector/nis1/1.test-keys';
-import { NIS1_Sign_Vector } from '../../resource/vector/nis1/2.test-sign';
 
 describe('NIS key pair', () => {
-    describe('construction', () => {
-        it('can extract from private key test vectors', () => {
-            NIS1_Key_Vector.forEach((kp) => {
-                // Act:
-                const keyPair = new Nis1KeyPair(Key.createFromHex(kp.privateKey));
-                // Assert:
-                const message = ` from ${kp.privateKey}`;
-                expect(keyPair.PublicKey.toString(), `public ${message}`).equal(kp.publicKey);
-                expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(kp.privateKey);
-            });
-        });
-
-        it('cannot extract from invalid private key', () => {
-            // Arrange:
-            const invalidPrivateKeys = [
-                '', // empty
-                '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB', // short
-                '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB1BBB', // long
-                'EERRERE', // invalid
-            ];
-
-            // Act:
-            invalidPrivateKeys.forEach((privateKey) => {
-                // Assert:
-                expect(() => {
-                    new Nis1KeyPair(Key.createFromHex(privateKey));
-                }, `from ${privateKey}`).to.throw();
-            });
-        });
-    });
-
-    describe('sign & verify- Test Vector', () => {
-        it('sign', () => {
-            NIS1_Sign_Vector.forEach((s) => {
-                // Arrange:
-                const keyPair = new Nis1KeyPair(Key.createFromHex(s.privateKey));
-                const payload = Converter.hexToUint8(s.data);
-                // Act:
-                const signature = keyPair.sign(payload);
-                // Assert:
-                const message = `from ${s.privateKey}`;
-                expect(Converter.uint8ToHex(signature).toUpperCase(), `private ${message}`).to.deep.equal(s.signature);
-                // const isVerified = keyPair.verify(payload, signature);
-                // expect(isVerified, `private ${message}`).to.equal(true);
-            });
-        });
-    });
-
     describe('sign', () => {
         it('fills the signature', () => {
             // Arrange:
