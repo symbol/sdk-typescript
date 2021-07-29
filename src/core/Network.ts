@@ -15,7 +15,7 @@
  */
 
 import ripemd160 = require('ripemd160');
-import { Keccak, SHA3 } from 'sha3';
+import { Hash } from 'js-sha3';
 import { RawAddress } from './Address';
 import { Key } from './Key';
 
@@ -35,10 +35,10 @@ export abstract class Network {
     public createAddressFromPublicKey(publicKey: Key): RawAddress {
         const publicKeyBytes = publicKey.toBytes();
         // step 1: sha3 hash of the public key
-        const publicKeyHash = this.addressHasher().update(Buffer.from(publicKeyBytes));
+        const publicKeyHash = this.addressHasher().arrayBuffer(publicKeyBytes);
 
         // step 2: ripemd160 hash of (1)
-        const ripemd160Hash = new ripemd160().update(publicKeyHash.digest()).digest();
+        const ripemd160Hash = new ripemd160().update(Buffer.from(publicKeyHash)).digest();
 
         // step 3: add network identifier byte in front of (2)
         const addressWithoutChecksum = new Uint8Array(ripemd160Hash.length + 1);
@@ -46,15 +46,15 @@ export abstract class Network {
         addressWithoutChecksum.set(ripemd160Hash, 1);
 
         // step 4: concatenate (3) and the checksum of (3)
-        const hash = this.addressHasher().update(Buffer.from(addressWithoutChecksum)).digest();
-        const checksum = hash.subarray(0, 4);
+        const hash = this.addressHasher().arrayBuffer(Buffer.from(addressWithoutChecksum));
+        const checksum = new Uint8Array(hash).subarray(0, 4);
 
         return { addressWithoutChecksum, checksum };
     }
 
     /**
      * Abstract method to gets the primary hasher to use in the public key to address conversion.
-     * @returns {SHA3 | Keccak}
+     * @returns {Hash}
      */
-    public abstract addressHasher(): SHA3 | Keccak;
+    public abstract addressHasher(): Hash;
 }

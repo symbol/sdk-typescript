@@ -25,3 +25,11 @@ export const Encoded_Block_Size = 8;
 export const SymbolPulblicNetworkEpochTime = Date.UTC(2021, 3, 16, 0, 6, 25);
 export const SymbolPublicNetworkEpoch = 1615853185;
 export const Nis1MainnetEpochTime = Date.UTC(2015, 3, 29, 0, 6, 25);
+
+/**
+ * Namespace
+ */
+export const NamespaceConst = {
+    namespace_base_id: [0, 0],
+    name_pattern: /^[a-z0-9][a-z0-9-_]*$/,
+};

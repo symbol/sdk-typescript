@@ -32,7 +32,7 @@
   "include": [
     "test/**/*.spec.ts",
     "src/**/*.ts",
-    "test/vector/*.ts",
+    "test/vector-tests/*.ts",
     "test/test-vector/*"
   ]
 }

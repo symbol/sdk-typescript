@@ -15,9 +15,9 @@
  */
 import { expect } from 'chai';
 import * as crypto from 'crypto';
-import { Key } from '../../src/core/Key';
-import { SymbolKeyPair } from '../../src/core/symbol';
-import { Converter } from '../../src/core/utils';
+import { Key } from '../../../src/core/Key';
+import { SymbolKeyPair } from '../../../src/core/symbol';
+import { Converter } from '../../../src/core/utils';
 
 describe('key pair', () => {
     describe('sign', () => {
