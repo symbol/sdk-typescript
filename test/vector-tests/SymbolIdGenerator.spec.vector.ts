@@ -29,7 +29,6 @@ describe('Symbol IdGenerator - TestVector', () => {
                 //Arrange
                 const networkList = SymbolNetwork.list();
                 networkList.forEach((n) => {
-                    const network = new SymbolNetwork(n.name, n.identifier, n.generationHash);
                     //Load test vector addresses
                     data.forEach((a) => {
                         const netwrokName = n.name.charAt(0).toUpperCase() + n.name.slice(1);
