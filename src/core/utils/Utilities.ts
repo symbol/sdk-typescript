@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { sha3_256 } from 'js-sha3';
-import { Keccak } from 'sha3';
+import { keccak512, sha3_256 } from 'js-sha3';
 import { Alphabet, Encoded_Block_Size } from '../Constants';
-import { Converter } from '../utils/Converter';
 
 export const createBuilder = (): any => {
     const map = {};
@@ -176,12 +174,10 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
 /**
  * Generate keccak 512 hash given by data.
  * @param {Uint8Array} data The data to hash.
- * @returns {Uint8Array} The keccak hash value.
+ * @returns {number[]} The hash value.
  * */
-export const keccakHash = (data: Uint8Array): Uint8Array => {
-    const hasher = new Keccak(512);
-    const hex = hasher.update(Buffer.from(data)).digest('hex');
-    return Converter.hexToUint8(hex);
+export const keccakHash = (data: Uint8Array): number[] => {
+    return keccak512.digest(Buffer.from(data));
 };
 
 /**
@@ -189,15 +185,14 @@ export const keccakHash = (data: Uint8Array): Uint8Array => {
  * @returns KeccakHasher object
  **/
 export const KeccakHasher = () => {
-    const hasher = new Keccak(512);
+    let hasher = keccak512.create();
     return {
         update: (data) => {
             hasher.update(Buffer.from(data));
         },
-        digest: () => {
-            let hash = hasher.digest('hex');
-            return Converter.hexToUint8(hash);
+        digest: () => hasher.digest(),
+        reset: () => {
+            hasher = keccak512.create();
         },
-        reset: () => hasher.reset(),
     };
 };
