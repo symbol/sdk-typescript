@@ -1,1 +1,1 @@
-export * from './KeyPair';
+export * from './Nis1KeyPair';
