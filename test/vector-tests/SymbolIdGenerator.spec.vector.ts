@@ -22,11 +22,6 @@ import { SymbolAddress, SymbolNetwork } from '../../src/core/symbol';
 import { SymbolIdGenerator } from '../../src/core/symbol/SymbolIdGenerator';
 
 describe('Symbol IdGenerator - TestVector', () => {
-    const testAccount = {
-        publicKey: '2E834140FD66CF87B254A693A2C7862C819217B676D3943267156625E816EC6F',
-        address: 'NATNE7Q5BITMUTRRN6IB4I7FLSDRDWZA34SQ33Y',
-    };
-
     it('Can generate mosaic id', (done) => {
         const stream = fs.createReadStream(path.join(__dirname, '../test-vector/5.test-mosaic-id.json'), { encoding: 'utf-8' });
         stream.pipe(
