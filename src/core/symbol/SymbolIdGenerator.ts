@@ -55,18 +55,18 @@ export class SymbolIdGenerator {
 
     /**
      * Generate a namespace path.
-     * @param {string} fully_qualified_name The unified namespace name.
+     * @param {string} fullName The fully qualified namespace name. e.g. abc.def.ghi
      * @returns {array<module:coders/uint64~uint64>} The namespace path.
      */
-    public static generateNamespacePath = (fully_qualified_name: string): bigint[] => {
-        if (0 >= fully_qualified_name.length) {
-            throw new Error(`${fully_qualified_name} has zero length`);
+    public static generateNamespacePath = (fullName: string): bigint[] => {
+        if (0 >= fullName.length) {
+            throw new Error(`${fullName} has zero length`);
         }
         let parent_namespace_id: bigint = BigInt(0);
         const path: bigint[] = [];
-        fully_qualified_name.split('.').forEach((name) => {
+        fullName.split('.').forEach((name) => {
             if (!SymbolIdGenerator.isValidNamespaceName(name)) {
-                throw new Error(`fully qualified name is invalid due to invalid part name (${fully_qualified_name})`);
+                throw new Error(`fully qualified name is invalid due to invalid part name (${fullName})`);
             }
             path.push(SymbolIdGenerator.generateNamespaceId(name, parent_namespace_id));
             parent_namespace_id = path[-1];
