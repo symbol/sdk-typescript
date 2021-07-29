@@ -32,6 +32,8 @@
   "include": [
     "test/**/*.spec.ts",
     "src/**/*.ts",
-    "src/core/nis1/external/*.js"
+    "src/core/nis1/external/*.js",
+    "test/vector/*.ts",
+    "test/test-vector/*"
   ]
 }
