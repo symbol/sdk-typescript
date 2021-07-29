@@ -43,6 +43,12 @@ export class SymbolIdGenerator {
         return Crypto.randomBytes(4);
     }
 
+    /**
+     * Generate namespace id
+     * @param {string} name Namespace name
+     * @param {bigint} parentId Parent namespace id
+     * @returns {bigint}
+     */
     public static generateNamespaceId(name: string, parentId: bigint = BigInt(0)): bigint {
         const hash = sha3_256.create();
         hash.update(toBufferLE(parentId, 8));
