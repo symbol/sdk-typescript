@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Address, NamespaceConst } from '@core';
+import { Address, Converter, NamespaceConst } from '@core';
 import { toBigIntLE, toBufferLE } from 'bigint-buffer';
+import { GeneratorUtils } from 'catbuffer-typescript';
 import * as Crypto from 'crypto';
 import { sha3_256 } from 'js-sha3';
 
@@ -82,6 +83,36 @@ export class SymbolIdGenerator {
     };
 
     /**
+     * The namespace id based on the full alias name.
+     * @param fullName - the full namespace
+     */
+    public static namespaceId = (fullName: string): bigint => {
+        const path = SymbolIdGenerator.generateNamespacePath(fullName);
+        return path[path.length - 1];
+    };
+
+    /**
+     * Returns the bigint representation of an mosaic or namespace id.
+     *
+     * @param hexId - The hex id, like E74B99BA41F4AFEE (symbol.xym namespace) or 091F837E059AE13C (testnet mosaic id)
+     * @returns the bigint representation of the id
+     */
+    public static fromHex(hexId: string): bigint {
+        Converter.isHexString(hexId, 16);
+        return BigInt(`0x${hexId}`);
+    }
+
+    /**
+     * Returns the hex representation of an mosaic or namespace id.
+     *
+     * @param id - The bigint id, like 16666583871264174062 (symbol.xym namespace) or 657388647902535996 (testnet mosaic id)
+     * @returns the hex representation of the id
+     */
+    public static toHex(id: bigint): string {
+        return id.toString(16).toUpperCase().padStart(16, '0');
+    }
+
+    /**
      * Returns true if a name is a valid namespace name.
      *
      * @param name - Namespace name
@@ -89,5 +120,14 @@ export class SymbolIdGenerator {
      */
     public static isValidNamespaceName(name: string): boolean {
         return NamespaceConst.name_pattern.test(name);
+    }
+
+    /**
+     * It encodes a namespace id as an unresolved alias to be used when serializing unresolved addresses with catbuffer.
+     * @param networkType - the network type
+     * @param namespaceId - the network id as bigint.
+     */
+    public static encodeUnresolvedAddress(networkType: number, namespaceId: bigint): Uint8Array {
+        return Converter.concat(Uint8Array.of(networkType | 0x01), GeneratorUtils.bigIntToBuffer(namespaceId), Buffer.alloc(15));
     }
 }
