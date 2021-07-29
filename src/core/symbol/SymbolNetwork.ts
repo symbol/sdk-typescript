@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import SHA3 from 'sha3';
+import { Hash, sha3_256 } from 'js-sha3';
 import { SymbolNetworkList } from '../constants';
 import { Network } from '../Network';
 
@@ -33,8 +33,8 @@ export class SymbolNetwork extends Network {
      * Get hasher for address generation based on selected network type
      * @returns {SHA3}
      */
-    public addressHasher(): SHA3 {
-        return new SHA3(256);
+    public addressHasher(): Hash {
+        return sha3_256;
     }
 
     /**

@@ -1,4 +1,4 @@
-import SHA3 from 'sha3';
+import { sha3_256 } from 'js-sha3';
 import { SymbolAddress } from './symbol/SymbolAddress';
 import { Converter } from './utils';
 import { Base32 } from './utils/Base32';
@@ -74,9 +74,9 @@ export abstract class Address {
             }
             try {
                 const address = SymbolAddress.createFromString(encodedAddress);
-                const hasher = new SHA3(256);
+                const hasher = sha3_256.create();
                 const hash = hasher.update(Buffer.from(address.rawAddress.addressWithoutChecksum)).digest();
-                return Converter.uint8ToHex(hash.subarray(0, 3)) === Converter.uint8ToHex(address.rawAddress.checksum);
+                return Converter.uint8ToHex(new Uint8Array(hash).subarray(0, 3)) === Converter.uint8ToHex(address.rawAddress.checksum);
             } catch {
                 return false;
             }
