@@ -29,6 +29,10 @@ jobs:
       name: docs
       script: npm run doc
     - stage: test
+      name: vector
+      script: npm run test:vector
+      if: branch = env(DEV_BRANCH) OR branch = env(RELEASE_BRANCH)
+    - stage: test
       name: lint
       script: npm run lint
     - name: e2e
