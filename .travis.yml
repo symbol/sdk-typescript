@@ -22,7 +22,7 @@ before_script:
   - log_env_variables
 script:
   - npm run test:cov
-  - npm run coveralls-report
+#  - npm run coveralls-report MOVE from Coveralls TO Sonar
 jobs:
   include:
     - stage: test
@@ -31,7 +31,7 @@ jobs:
     - stage: test
       name: vector
       script: npm run test:vector
-      if: branch = env(DEV_BRANCH) OR branch = env(RELEASE_BRANCH)
+      if: branch = (env(DEV_BRANCH) OR branch = env(RELEASE_BRANCH)) AND (type = push OR type = api)
     - stage: test
       name: lint
       script: npm run lint
