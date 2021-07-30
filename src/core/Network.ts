@@ -38,7 +38,7 @@ export abstract class Network {
         const publicKeyHash = this.addressHasher().arrayBuffer(publicKeyBytes);
 
         // step 2: ripemd160 hash of (1)
-        const ripemd160Hash = new ripemd160().update(Buffer.from(publicKeyHash)).digest();
+        const ripemd160Hash = new ripemd160().update(new Uint8Array(publicKeyBytes)).digest();
 
         // step 3: add network identifier byte in front of (2)
         const addressWithoutChecksum = new Uint8Array(ripemd160Hash.length + 1);
