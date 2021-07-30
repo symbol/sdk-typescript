@@ -31,7 +31,7 @@ jobs:
     - stage: test
       name: vector
       script: npm run test:vector
-      if: branch = (env(DEV_BRANCH) OR branch = env(RELEASE_BRANCH)) AND (type = push OR type = api)
+      if: (branch = env(DEV_BRANCH) OR branch = env(RELEASE_BRANCH)) AND (type = push OR type = api)
     - stage: test
       name: lint
       script: npm run lint
