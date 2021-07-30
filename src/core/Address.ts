@@ -75,7 +75,7 @@ export abstract class Address {
             try {
                 const address = SymbolAddress.createFromString(encodedAddress);
                 const hasher = sha3_256.create();
-                const hash = hasher.update(Buffer.from(address.rawAddress.addressWithoutChecksum)).digest();
+                const hash = hasher.update(address.rawAddress.addressWithoutChecksum).arrayBuffer();
                 return Converter.uint8ToHex(new Uint8Array(hash).subarray(0, 3)) === Converter.uint8ToHex(address.rawAddress.checksum);
             } catch {
                 return false;

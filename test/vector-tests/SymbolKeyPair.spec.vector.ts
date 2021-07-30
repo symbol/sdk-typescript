@@ -26,14 +26,15 @@ describe('key pair - TestVector', () => {
         it('can extract from private key test vectors', (done) => {
             const stream = fs.createReadStream(path.join(__dirname, '../test-vector/1.test-keys.json'), { encoding: 'utf-8' });
             stream.pipe(
-                JSONStream.parse([]).on('data', (data) => {
-                    data.forEach((kp) => {
+                JSONStream.parse([]).on('data', (vector) => {
+                    vector.forEach((item: { [x: string]: any }) => {
                         // Act:
-                        const keyPair = new SymbolKeyPair(Key.createFromHex(kp.privateKey));
+                        const keyPair = new SymbolKeyPair(Key.createFromHex(item.privateKey));
+
                         // Assert:
-                        const message = ` from ${kp.privateKey}`;
-                        expect(keyPair.PublicKey.toString(), `public ${message}`).equal(kp.publicKey);
-                        expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(kp.privateKey);
+                        const message = ` from ${item.privateKey}`;
+                        expect(keyPair.PublicKey.toString(), `public ${message}`).equal(item.publicKey);
+                        expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(item.privateKey);
                     });
                     done();
                 }),
@@ -45,19 +46,22 @@ describe('key pair - TestVector', () => {
         it('sign', (done) => {
             const stream = fs.createReadStream(path.join(__dirname, '../test-vector/2.test-sign.json'), { encoding: 'utf-8' });
             stream.pipe(
-                JSONStream.parse([]).on('data', (data) => {
-                    data.forEach((s) => {
+                JSONStream.parse([]).on('data', (vector) => {
+                    vector.forEach((item: { [x: string]: any }) => {
                         // Arrange:
-                        const keyPair = new SymbolKeyPair(Key.createFromHex(s.privateKey));
-                        const payload = Converter.hexToUint8(s.data);
+                        const keyPair = new SymbolKeyPair(Key.createFromHex(item.privateKey));
+                        const payload = Converter.hexToUint8(item.data);
 
                         // Act:
                         const signature = keyPair.sign(payload);
 
                         // Assert:
-                        const message = ` from ${s.privateKey}`;
-                        expect(Converter.uint8ToHex(signature).toUpperCase(), `private ${message}`).to.deep.equal(s.signature);
+                        const message = ` from ${item.privateKey}`;
+                        expect(Converter.uint8ToHex(signature).toUpperCase(), `private ${message}`).to.deep.equal(item.signature);
+
+                        // Act:
                         const isVerified = keyPair.verify(payload, signature);
+                        // Assert:
                         expect(isVerified, `private ${message}`).to.equal(true);
                     });
                     done();

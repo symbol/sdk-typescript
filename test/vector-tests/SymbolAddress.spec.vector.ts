@@ -24,18 +24,21 @@ describe('Address - TestVector', () => {
     it('can create address from publickey', (done) => {
         const stream = fs.createReadStream(path.join(__dirname, '../test-vector/1.test-address.json'), { encoding: 'utf-8' });
         stream.pipe(
-            JSONStream.parse([]).on('data', (data) => {
-                //Arrange
+            JSONStream.parse([]).on('data', (vector) => {
+                // Arrange:
                 const networkList = SymbolNetwork.list();
-                networkList.forEach((n) => {
-                    const network = new SymbolNetwork(n.name, n.identifier, n.generationHash);
-                    //Load test vector addresses
-                    data.forEach((a) => {
-                        const netwrokName = n.name.charAt(0).toUpperCase() + n.name.slice(1);
-                        const keyName = `address_${netwrokName}`.replace('_t', 'T');
-                        const rawAddress = network.createAddressFromPublicKey(Key.createFromHex(a.publicKey));
-                        //Act
-                        expect(a[keyName]).to.be.equal(new SymbolAddress(rawAddress).encoded);
+                networkList.forEach((network) => {
+                    const symbolNetwork = new SymbolNetwork(network.name, network.identifier, network.generationHash);
+                    // Load test vector addresses
+                    vector.forEach((item: { [x: string]: any }) => {
+                        const networkName = network.name.charAt(0).toUpperCase() + network.name.slice(1);
+                        const keyName = `address_${networkName}`.replace('_t', 'T');
+
+                        // Act:
+                        const rawAddress = symbolNetwork.createAddressFromPublicKey(Key.createFromHex(item.publicKey));
+
+                        // Assert:
+                        expect(item[keyName]).to.be.equal(new SymbolAddress(rawAddress).encoded);
                     });
                 });
                 done();
