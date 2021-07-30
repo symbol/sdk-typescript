@@ -170,3 +170,22 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
     output[outputOffset + 3] = ((bytes[4] & 0x01) << 7) | (bytes[5] << 2) | (bytes[6] >> 3);
     output[outputOffset + 4] = ((bytes[6] & 0x07) << 5) | bytes[7];
 };
+
+export const arrayDeepEqual = (first, second, numElementsToCompare?): boolean => {
+    let length = numElementsToCompare;
+    if (undefined === length) {
+        if (first.length !== second.length) {
+            return false;
+        }
+        length = first.length;
+    }
+    if (length > first.length || length > second.length) {
+        return false;
+    }
+    for (let i = 0; i < length; ++i) {
+        if (first[i] !== second[i]) {
+            return false;
+        }
+    }
+    return true;
+};
