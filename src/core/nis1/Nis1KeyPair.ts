@@ -16,7 +16,6 @@
 import * as Crypto from 'crypto';
 import { Key } from '../Key';
 import { KeyPair } from '../KeyPair';
-import { Converter } from '../utils/Converter';
 import { keccakHash, KeccakHasher } from '../utils/Utilities';
 const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
@@ -43,7 +42,7 @@ export class Nis1KeyPair extends KeyPair {
      */
     public getPublicKey(): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
-        const reversedPrivateKey = Converter.hexToUint8(this.PrivateKey.toString(), true);
+        const reversedPrivateKey = [...this.privateKey.toBytes()].reverse();
 
         Ed25519.crypto_sign_keypair_hash(publicKey.toBytes(), reversedPrivateKey, keccakHash);
 
@@ -60,13 +59,13 @@ export class Nis1KeyPair extends KeyPair {
         const hasher = KeccakHasher();
 
         const keypair = {
-            privateKey: Converter.hexToUint8(this.PrivateKey.toString(), true),
-            publicKey: this.PublicKey.toBytes(),
+            privateKey: [...this.privateKey.toBytes()].reverse(),
+            publicKey: this.publicKey.toBytes(),
         };
 
-        const signed = Ed25519.crypto_sign_hash(signature, keypair, data, hasher);
+        const success = Ed25519.crypto_sign_hash(signature, keypair, data, hasher);
 
-        if (!signed) {
+        if (!success) {
             throw new Error(`Couldn't sign the tx, generated invalid signature`);
         }
 
@@ -81,6 +80,6 @@ export class Nis1KeyPair extends KeyPair {
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
         const hasher = KeccakHasher();
-        return Ed25519.crypto_verify_hash(signature, this.PublicKey.toBytes(), data, hasher);
+        return Ed25519.crypto_verify_hash(signature, this.publicKey.toBytes(), data, hasher);
     }
 }
