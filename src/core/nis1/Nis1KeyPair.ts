@@ -17,6 +17,7 @@ import * as Crypto from 'crypto';
 import { Key } from '../Key';
 import { KeyPair } from '../KeyPair';
 import { keccakHash, KeccakHasher } from '../utils/Utilities';
+/* eslint @typescript-eslint/no-var-requires: "off" */
 const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
 export class Nis1KeyPair extends KeyPair {
