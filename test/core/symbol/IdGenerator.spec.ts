@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { expect } from 'chai';
-import { SymbolIdGenerator } from '../../src/core/symbol/SymbolIdGenerator';
+import { SymbolIdGenerator } from '../../../src/core/symbol/SymbolIdGenerator';
 
 describe('Symbol IdGenerator - TestVector', () => {
     it('Can generate a random nonce', () => {
