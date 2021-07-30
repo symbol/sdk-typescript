@@ -31,22 +31,6 @@ export abstract class KeyPair {
     }
 
     /**
-     * @property Public key
-     * @returns {Key} Raw public key
-     */
-    public get PublicKey(): Key {
-        return this.publicKey;
-    }
-
-    /**
-     * @property Private key
-     * @returns {Key} Raw private key
-     */
-    public get PrivateKey(): Key {
-        return this.privateKey;
-    }
-
-    /**
      * Abastrct method to derive public key from private key
      * @returns {Key}
      */
