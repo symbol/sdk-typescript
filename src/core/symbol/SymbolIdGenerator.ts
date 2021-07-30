@@ -16,23 +16,22 @@
 import { toBigIntLE, toBufferLE } from 'bigint-buffer';
 import * as Crypto from 'crypto';
 import { sha3_256 } from 'js-sha3';
+import { Address } from '../Address';
 import { NamespaceConst } from '../Constants';
-import { Converter } from '../utils/Converter';
 
 export class SymbolIdGenerator {
     /**
      * Generate a mosaic id
-     * @param {Uint8Array} ownerAddress Mosaic owner's address bytes
+     * @param {Address} ownerAddress Mosaic owner's address bytes
      * @param {Uint8Array} nonce Mosaic nonce bytes
      * @returns {BigInt}
      */
-    public static generateMosaicId(ownerAddress: Uint8Array, nonce: Uint8Array): bigint {
+    public static generateMosaicId(ownerAddress: Address, nonce: Uint8Array): bigint {
         const hash = sha3_256.create();
         hash.update(nonce);
-        hash.update(ownerAddress);
+        hash.update(ownerAddress.getAddressBytes());
         const result = new Uint32Array(hash.arrayBuffer());
-        const buffer = Converter.uint32ToUint8(new Uint32Array([result[0], result[1] & 0x7fffffff]));
-        return toBigIntLE(Buffer.from(buffer));
+        return toBigIntLE(Buffer.from(new Uint32Array([result[0], result[1] & 0x7fffffff]).buffer));
     }
 
     /**
@@ -55,8 +54,7 @@ export class SymbolIdGenerator {
         hash.update(name);
         const result = new Uint32Array(hash.arrayBuffer());
         // right zero-filling required to keep unsigned number representation
-        const buffer = Converter.uint32ToUint8(new Uint32Array([result[0], (result[1] | 0x80000000) >>> 0]));
-        return toBigIntLE(Buffer.from(buffer));
+        return toBigIntLE(Buffer.from(new Uint32Array([result[0], (result[1] | 0x80000000) >>> 0]).buffer));
     }
 
     /**

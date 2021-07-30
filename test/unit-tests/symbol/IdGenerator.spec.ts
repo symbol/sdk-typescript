@@ -24,15 +24,13 @@ describe('Symbol IdGenerator - TestVector', () => {
     });
 
     it('Can generate namespaceId', () => {
-        const namespaceId = SymbolIdGenerator.generateNamespaceId('nem');
-        expect(namespaceId).not.be.be.undefined;
-        expect(namespaceId.toString(16).toUpperCase()).to.be.equal('84B3552D375FFA4B');
-    });
+        const nem = SymbolIdGenerator.generateNamespaceId('nem');
+        expect(nem).not.be.be.undefined;
+        expect(nem.toString(16).toUpperCase()).to.be.equal('84B3552D375FFA4B');
 
-    it('Can generate namespaceId', () => {
-        const namespaceId = SymbolIdGenerator.generateNamespaceId('xem');
-        expect(namespaceId).not.be.be.undefined;
-        expect(namespaceId.toString(16).toUpperCase()).to.be.equal('A60FC7C97DB58AFC');
+        const xem = SymbolIdGenerator.generateNamespaceId('xem');
+        expect(xem).not.be.be.undefined;
+        expect(xem.toString(16).toUpperCase()).to.be.equal('A60FC7C97DB58AFC');
     });
 
     it('Can generate namespaceId with parents', () => {

@@ -46,7 +46,7 @@ export abstract class Network {
         addressWithoutChecksum.set(ripemd160Hash, 1);
 
         // step 4: concatenate (3) and the checksum of (3)
-        const hash = this.addressHasher().arrayBuffer(Buffer.from(addressWithoutChecksum));
+        const hash = this.addressHasher().arrayBuffer(addressWithoutChecksum);
         const checksum = new Uint8Array(hash).subarray(0, 4);
 
         return { addressWithoutChecksum, checksum };

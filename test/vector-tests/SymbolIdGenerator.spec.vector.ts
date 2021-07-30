@@ -25,22 +25,22 @@ describe('Symbol IdGenerator - TestVector', () => {
     it('Can generate mosaic id', (done) => {
         const stream = fs.createReadStream(path.join(__dirname, '../test-vector/5.test-mosaic-id.json'), { encoding: 'utf-8' });
         stream.pipe(
-            JSONStream.parse([]).on('data', (data) => {
-                //Arrange
+            JSONStream.parse([]).on('data', (vector) => {
+                // Arrange:
                 const networkList = SymbolNetwork.list();
-                networkList.forEach((n) => {
+                networkList.forEach((network) => {
                     //Load test vector addresses
-                    data.forEach((a) => {
-                        const netwrokName = n.name.charAt(0).toUpperCase() + n.name.slice(1);
-                        const addressKeyName = `address_${netwrokName}`.replace('_t', 'T');
-                        const mosaicKeyName = `mosaicId_${netwrokName}`.replace('_t', 'T');
-                        const address = SymbolAddress.createFromString(a[addressKeyName]);
-                        const mosaicId = SymbolIdGenerator.generateMosaicId(
-                            address.getAddressBytes(),
-                            toBufferLE(BigInt(a['mosaicNonce']), 4),
-                        );
-                        //Act
-                        expect(a[mosaicKeyName]).to.be.equal(mosaicId.toString(16).toLocaleUpperCase().padStart(16, '0'));
+                    vector.forEach((item: { [x: string]: any }) => {
+                        const networkName = network.name.charAt(0).toUpperCase() + network.name.slice(1);
+                        const addressKeyName = `address_${networkName}`.replace('_t', 'T');
+                        const mosaicKeyName = `mosaicId_${networkName}`.replace('_t', 'T');
+                        const address = SymbolAddress.createFromString(item[addressKeyName]);
+
+                        // Act:
+                        const mosaicId = SymbolIdGenerator.generateMosaicId(address, toBufferLE(BigInt(item['mosaicNonce']), 4));
+
+                        // Assert:
+                        expect(item[mosaicKeyName]).to.be.equal(mosaicId.toString(16).toLocaleUpperCase().padStart(16, '0'));
                     });
                 });
                 done();
