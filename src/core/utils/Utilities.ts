@@ -53,7 +53,7 @@ const Char_To_Digit_Map = (): any => {
     return builder.map;
 };
 
-export const tryParseByte = (char1, char2): any => {
+export const tryParseByte = (char1: string, char2: string): any => {
     const charMap = Char_To_Nibble_Map();
     const nibble1 = charMap[char1];
     const nibble2 = charMap[char2];
@@ -92,7 +92,7 @@ export const idGeneratorConst = {
     name_pattern: /^[a-z0-9][a-z0-9-_]*$/,
 };
 
-export const throwInvalidFqn = (reason: any, name: any): void => {
+export const throwInvalidFqn = (reason: string, name: string): void => {
     throw Error(`fully qualified id is invalid due to ${reason} (${name})`);
 };
 
@@ -107,10 +107,7 @@ export const extractPartName = (name: string, start: number, size: number): stri
     return partName;
 };
 
-export const append = (path: any, id: any): any => {
-    path.push(id);
-};
-
+// eslint-disable-next-line
 export const split = (name: string, processor: any): any => {
     let start = 0;
     for (let index = 0; index < name.length; ++index) {
@@ -124,14 +121,14 @@ export const split = (name: string, processor: any): any => {
 
 export const generateNamespaceId = (parentId: number[], name: string): number[] => {
     const hash = sha3_256.create();
-    hash.update(Uint32Array.from(parentId).buffer as any);
+    hash.update(Uint32Array.from(parentId).buffer);
     hash.update(name);
     const result = new Uint32Array(hash.arrayBuffer());
     // right zero-filling required to keep unsigned number representation
     return [result[0], (result[1] | 0x80000000) >>> 0];
 };
 
-export const encodeBlock = (input: any, inputOffset: number, output: any, outputOffset: number): any => {
+export const encodeBlock = (input: Uint8Array, inputOffset: number, output: string[], outputOffset: number): void => {
     output[outputOffset + 0] = Alphabet[input[inputOffset + 0] >> 3];
     output[outputOffset + 1] = Alphabet[((input[inputOffset + 0] & 0x07) << 2) | (input[inputOffset + 1] >> 6)];
     output[outputOffset + 2] = Alphabet[(input[inputOffset + 1] & 0x3e) >> 1];
@@ -149,16 +146,16 @@ export const Char_To_Decoded_Char_Map = (): any => {
     return builder.map;
 };
 
-export const decodeChar = (c: any): any => {
+export const decodeChar = (char: string): number => {
     const charMap = Char_To_Decoded_Char_Map();
-    const decodedChar = charMap[c];
+    const decodedChar = charMap[char];
     if (undefined !== decodedChar) {
         return decodedChar;
     }
-    throw Error(`illegal base32 character ${c}`);
+    throw Error(`illegal base32 character ${char}`);
 };
 
-export const decodeBlock = (input: any, inputOffset: number, output: any, outputOffset: number): any => {
+export const decodeBlock = (input: string, inputOffset: number, output: Uint8Array, outputOffset: number): any => {
     const bytes = new Uint8Array(Encoded_Block_Size);
     for (let i = 0; i < Encoded_Block_Size; ++i) {
         bytes[i] = decodeChar(input[inputOffset + i]);
@@ -171,9 +168,10 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
     output[outputOffset + 4] = ((bytes[6] & 0x07) << 5) | bytes[7];
 };
 
-export const arrayDeepEqual = (first, second, numElementsToCompare?): boolean => {
+// eslint-disable-next-line
+export const arrayDeepEqual = (first: any, second: any, numElementsToCompare = 0): boolean => {
     let length = numElementsToCompare;
-    if (undefined === length) {
+    if (0 === length) {
         if (first.length !== second.length) {
             return false;
         }
