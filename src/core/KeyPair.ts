@@ -34,7 +34,7 @@ export abstract class KeyPair {
      * Abastrct method to derive public key from private key
      * @returns {Key}
      */
-    public abstract getPublicKey(): Key;
+    protected abstract getPublicKey(): Key;
 
     /**
      * Abstract method to signs a data buffer with a key pair.
