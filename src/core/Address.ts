@@ -1,6 +1,6 @@
 import { sha3_256 } from 'js-sha3';
 import { SymbolAddress } from './symbol/SymbolAddress';
-import { Converter } from './utils';
+import { arrayDeepEqual, Converter } from './utils';
 import { Base32 } from './utils/Base32';
 
 export interface RawAddress {
@@ -76,7 +76,7 @@ export abstract class Address {
                 const address = SymbolAddress.createFromString(encodedAddress);
                 const hasher = sha3_256.create();
                 const hash = hasher.update(address.rawAddress.addressWithoutChecksum).arrayBuffer();
-                return new Uint8Array(hash).subarray(0, 3).toString() === address.rawAddress.checksum.toString();
+                return arrayDeepEqual(new Uint8Array(hash).subarray(0, 3), address.rawAddress.checksum);
             } catch {
                 return false;
             }
