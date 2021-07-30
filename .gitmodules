@@ -1,3 +1,6 @@
+[submodule "travis"]
+	path = travis
+	url = https://github.com/symbol/travis-functions.git
 [submodule "test/test-vector"]
 	path = test/test-vector
-	url = git@github.com:symbol/test-vectors.git
+	url = https://github.com/symbol/test-vectors.git
