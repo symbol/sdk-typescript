@@ -17,7 +17,7 @@ import { toBigIntLE, toBufferLE } from 'bigint-buffer';
 import * as Crypto from 'crypto';
 import { sha3_256 } from 'js-sha3';
 import { Address } from '../Address';
-import { NamespaceConst } from '../Constants';
+import { NamespaceConst } from '../constants';
 
 export class SymbolIdGenerator {
     /**
