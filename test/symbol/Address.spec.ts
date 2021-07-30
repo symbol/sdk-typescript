@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 import { expect } from 'chai';
-import { Key } from '../../../src/core/Key';
-import { SymbolAddress } from '../../../src/core/symbol';
-import { SymbolNetwork } from '../../../src/core/symbol/SymbolNetwork';
-import { Converter } from '../../../src/core/utils/Converter';
+import { Key } from '../../src/core/Key';
+import { SymbolAddress } from '../../src/core/symbol';
+import { SymbolNetwork } from '../../src/core/symbol/SymbolNetwork';
+import { Converter } from '../../src/core/utils/Converter';
 
 describe('Symbol Address', () => {
     const testKeyAddressPair = {
