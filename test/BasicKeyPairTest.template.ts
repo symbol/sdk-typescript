@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { expect } from 'chai';
 import * as crypto from 'crypto';
-import { Key } from '../../src/core/Key';
-import { SymbolKeyPair } from '../../src/core/symbol';
-import { Converter } from '../../src/core/utils/Converter';
+import { Key } from '../src/core/Key';
 
-describe('key pair', () => {
+export const BasicKeyPairTester = (KeyPair: any): void => {
     describe('sign', () => {
         it('fills the signature', () => {
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+
+            const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(100);
 
             // Act:
@@ -32,12 +32,11 @@ describe('key pair', () => {
             // Assert:
             expect(signature).to.not.deep.equal(new Uint8Array(64));
         });
-
         it('returns same signature for same data signed by same key pairs', () => {
             // Arrange:
-            const privateKey = Converter.uint8ToHex(crypto.randomBytes(32));
-            const keyPair1 = new SymbolKeyPair(Key.createFromHex(privateKey));
-            const keyPair2 = new SymbolKeyPair(Key.createFromHex(privateKey));
+            const privateKey = crypto.randomBytes(32);
+            const keyPair1 = new KeyPair(new Key(privateKey));
+            const keyPair2 = new KeyPair(new Key(privateKey));
             const payload = crypto.randomBytes(100);
 
             // Act:
@@ -50,8 +49,8 @@ describe('key pair', () => {
 
         it('returns different signature for same data signed by different key pairs', () => {
             // Arrange:
-            const keyPair1 = SymbolKeyPair.generate();
-            const keyPair2 = SymbolKeyPair.generate();
+            const keyPair1 = KeyPair.generate();
+            const keyPair2 = KeyPair.generate();
             const payload = crypto.randomBytes(100);
 
             // Act:
@@ -66,7 +65,7 @@ describe('key pair', () => {
     describe('verify', () => {
         it('returns true for data signed with same key pair', () => {
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+            const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(100);
             const signature = keyPair.sign(payload);
 
@@ -79,8 +78,8 @@ describe('key pair', () => {
 
         it('returns false for data signed with different key pair', () => {
             // Arrange:
-            const keyPair1 = SymbolKeyPair.generate();
-            const keyPair2 = SymbolKeyPair.generate();
+            const keyPair1 = KeyPair.generate();
+            const keyPair2 = KeyPair.generate();
             const payload = crypto.randomBytes(100);
             const signature = keyPair1.sign(payload);
 
@@ -93,7 +92,7 @@ describe('key pair', () => {
 
         it('returns false if signature has been modified', () => {
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+            const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(100);
 
             for (let i = 0; i < 64; i += 4) {
@@ -110,7 +109,7 @@ describe('key pair', () => {
 
         it('returns false if payload has been modified', () => {
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+            const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(44);
 
             for (let i = 0; i < payload.length; i += 4) {
@@ -127,12 +126,12 @@ describe('key pair', () => {
 
         it('fails if public key does not correspond to private key', () => {
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+            const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(100);
             const signature = keyPair.sign(payload);
 
             // Act:
-            const isVerified = SymbolKeyPair.generate().verify(payload, signature);
+            const isVerified = KeyPair.generate().verify(payload, signature);
 
             // Assert:
             expect(isVerified).to.equal(false);
@@ -140,7 +139,7 @@ describe('key pair', () => {
 
         it('rejects zero public key', () => {
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+            const keyPair = KeyPair.generate();
             Object.assign(keyPair, { publicKey: new Key(new Uint8Array(32)) });
 
             const payload = crypto.randomBytes(100);
@@ -170,7 +169,7 @@ describe('key pair', () => {
             }
 
             // Arrange:
-            const keyPair = SymbolKeyPair.generate();
+            const keyPair = KeyPair.generate();
             const payload = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
             const canonicalSignature = keyPair.sign(payload);
 
@@ -190,10 +189,13 @@ describe('key pair', () => {
 
     describe('generate', () => {
         it('Can generate a random keypair', () => {
-            const key = SymbolKeyPair.generate();
+            // Act:
+            const key = KeyPair.generate();
+
+            // Assert:
             expect(key).not.to.be.undefined;
             expect(key.privateKey.length).to.be.equal(32);
             expect(key.publicKey.length).to.be.equal(32);
         });
     });
-});
+};
