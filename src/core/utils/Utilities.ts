@@ -177,7 +177,7 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
  * @returns {number[]} The hash value.
  * */
 export const keccakHash = (data: Uint8Array): number[] => {
-    return keccak512.digest(Buffer.from(data));
+    return keccak512.digest(data);
 };
 
 /**
@@ -187,9 +187,7 @@ export const keccakHash = (data: Uint8Array): number[] => {
 export const KeccakHasher = () => {
     let hasher = keccak512.create();
     return {
-        update: (data) => {
-            hasher.update(Buffer.from(data));
-        },
+        update: (data: Uint8Array) => hasher.update(data),
         digest: () => hasher.digest(),
         reset: () => {
             hasher = keccak512.create();
