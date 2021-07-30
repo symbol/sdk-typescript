@@ -33,8 +33,8 @@ describe('key pair - TestVector', () => {
 
                         // Assert:
                         const message = ` from ${item.privateKey}`;
-                        expect(keyPair.PublicKey.toString(), `public ${message}`).equal(item.publicKey);
-                        expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(item.privateKey);
+                        expect(keyPair.publicKey.toString(), `public ${message}`).equal(item.publicKey);
+                        expect(keyPair.privateKey.toString(), `private ${message}`).equal(item.privateKey);
                     });
                     done();
                 }),
