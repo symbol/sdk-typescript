@@ -33,7 +33,7 @@
     "test/**/*.spec.ts",
     "src/**/*.ts",
     "src/core/nis1/external/*.js",
-    "test/vector/*.ts",
+    "test/vector-tests/*.ts",
     "test/test-vector/*"
   ]
 }

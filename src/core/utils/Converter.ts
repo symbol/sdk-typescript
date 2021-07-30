@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { decode } from 'utf8';
-import { Nibble_To_Char_Map } from '../Constants';
+import { Nibble_To_Char_Map } from '../constants';
 import { tryParseByte } from './Utilities';
 
 export class Converter {
@@ -38,7 +38,7 @@ export class Converter {
      * @param {string} expectedSize the expected size of the input
      * @returns {boolean} true if the input is a hex string, false otherwise.
      */
-    public static isHexString(input: string, expectedSize: number = 0): boolean {
+    public static isHexString(input: string, expectedSize = 0): boolean {
         if (0 !== input.length % 2) {
             return false;
         }
@@ -71,7 +71,7 @@ export class Converter {
      * @param {boolean} reversed Is reversed (default false).
      * @returns {Uint8Array} A uint8 array corresponding to the input.
      */
-    public static hexToUint8 = (input: string, reversed: boolean = false): Uint8Array => {
+    public static hexToUint8 = (input: string, reversed = false): Uint8Array => {
         if (0 !== input.length % 2) {
             throw Error(`hex string has unexpected size '${input.length}'`);
         }

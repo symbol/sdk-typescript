@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { keccak512, sha3_256 } from 'js-sha3';
-import { Alphabet, Encoded_Block_Size } from '../Constants';
+import { Alphabet, Encoded_Block_Size } from '../constants';
 
 export const createBuilder = (): any => {
     const map = {};
@@ -195,4 +195,23 @@ export const KeccakHasher = () => {
             hasher = keccak512.create();
         },
     };
+};
+
+export const arrayDeepEqual = (first, second, numElementsToCompare?): boolean => {
+    let length = numElementsToCompare;
+    if (undefined === length) {
+        if (first.length !== second.length) {
+            return false;
+        }
+        length = first.length;
+    }
+    if (length > first.length || length > second.length) {
+        return false;
+    }
+    for (let i = 0; i < length; ++i) {
+        if (first[i] !== second[i]) {
+            return false;
+        }
+    }
+    return true;
 };

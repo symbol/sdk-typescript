@@ -17,7 +17,7 @@ import { expect } from 'chai';
 import * as crypto from 'crypto';
 import { Key } from '../../src/core/Key';
 import { SymbolKeyPair } from '../../src/core/symbol';
-import { Converter } from '../../src/core/utils';
+import { Converter } from '../../src/core/utils/Converter';
 
 describe('key pair', () => {
     describe('sign', () => {
@@ -192,8 +192,8 @@ describe('key pair', () => {
         it('Can generate a random keypair', () => {
             const key = SymbolKeyPair.generate();
             expect(key).not.to.be.undefined;
-            expect(key.PrivateKey.length).to.be.equal(32);
-            expect(key.PublicKey.length).to.be.equal(32);
+            expect(key.privateKey.length).to.be.equal(32);
+            expect(key.publicKey.length).to.be.equal(32);
         });
     });
 });
