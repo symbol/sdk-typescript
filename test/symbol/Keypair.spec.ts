@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NEM
+ * Copyright 2021 SYMBOL
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,60 +18,8 @@ import * as crypto from 'crypto';
 import { Key } from '../../src/core/Key';
 import { SymbolKeyPair } from '../../src/core/symbol';
 import { Converter } from '../../src/core/utils';
-import { Symbol_Key_Vector } from '../resource/vector/1.test-keys';
-import { Symbol_Sign_Vector } from '../resource/vector/2.test-sign';
 
 describe('key pair', () => {
-    describe('construction', () => {
-        it('can extract from private key test vectors', () => {
-            Symbol_Key_Vector.forEach((kp) => {
-                // Act:
-                const keyPair = new SymbolKeyPair(Key.createFromHex(kp.privateKey));
-                // Assert:
-                const message = ` from ${kp.privateKey}`;
-                expect(keyPair.PublicKey.toString(), `public ${message}`).equal(kp.publicKey);
-                expect(keyPair.PrivateKey.toString(), `private ${message}`).equal(kp.privateKey);
-            });
-        });
-
-        it('cannot extract from invalid private key', () => {
-            // Arrange:
-            const invalidPrivateKeys = [
-                '', // empty
-                '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB', // short
-                '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB1BBB', // long
-                'EERRERE', // invalid
-            ];
-
-            // Act:
-            invalidPrivateKeys.forEach((privateKey) => {
-                // Assert:
-                expect(() => {
-                    new SymbolKeyPair(Key.createFromHex(privateKey));
-                }, `from ${privateKey}`).to.throw();
-            });
-        });
-    });
-
-    describe('sign & verify- Test Vector', () => {
-        it('sign', () => {
-            Symbol_Sign_Vector.forEach((s) => {
-                // Arrange:
-                const keyPair = new SymbolKeyPair(Key.createFromHex(s.privateKey));
-                const payload = Converter.hexToUint8(s.data);
-
-                // Act:
-                const signature = keyPair.sign(payload);
-
-                // Assert:
-                const message = ` from ${s.privateKey}`;
-                expect(Converter.uint8ToHex(signature).toUpperCase(), `private ${message}`).to.deep.equal(s.signature);
-                const isVerified = keyPair.verify(payload, signature);
-                expect(isVerified, `private ${message}`).to.equal(true);
-            });
-        });
-    });
-
     describe('sign', () => {
         it('fills the signature', () => {
             // Arrange:
