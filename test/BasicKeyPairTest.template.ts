@@ -18,11 +18,21 @@ import { expect } from 'chai';
 import * as crypto from 'crypto';
 import { Key } from '../src/core/Key';
 
-export const BasicKeyPairTester = (KeyPair: any): void => {
+export const BasicKeyPairTester = (KeyPair: any, deterministicPrivateKey: Key, expectedPublicKey: Key): void => {
+    describe('key pair', () => {
+        it('create key pair from private key', () => {
+            // Act:
+            const keyPair = new KeyPair(deterministicPrivateKey);
+
+            // Assert:
+            expect(expectedPublicKey).to.be.deep.equal(keyPair.getPublicKey());
+            expect(deterministicPrivateKey).to.be.deep.equal(keyPair.privateKey);
+        });
+    });
+
     describe('sign', () => {
         it('fills the signature', () => {
             // Arrange:
-
             const keyPair = KeyPair.generate();
             const payload = crypto.randomBytes(100);
 

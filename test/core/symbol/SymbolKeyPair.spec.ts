@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
+import { Key } from '../../../src/core/Key';
 import { SymbolKeyPair } from '../../../src/core/symbol';
 import { BasicKeyPairTester } from '../../BasicKeyPairTest.template';
 
 describe('Symbol key pair', () => {
-    BasicKeyPairTester(SymbolKeyPair);
+    const deterministicPrivateKey = Key.createFromHex('575DBB3062267EFF57C970A336EBBC8FBCFE12C5BD3ED7BC11EB0481D7704CED');
+    const expectedPublicKey = Key.createFromHex('2E834140FD66CF87B254A693A2C7862C819217B676D3943267156625E816EC6F');
+
+    BasicKeyPairTester(SymbolKeyPair, deterministicPrivateKey, expectedPublicKey);
 });
