@@ -31,8 +31,6 @@ export const KeyPairVectorTester = (KeyPair, testKeysVectorFile: string): void =
 
                         // Assert:
                         const message = ` from ${kp.privateKey}`;
-
-                        // Assert:
                         expect(keyPair.publicKey.toString(), `public ${message}`).equal(kp.publicKey);
                         expect(keyPair.privateKey.toString(), `private ${message}`).equal(kp.privateKey);
                     });
@@ -56,15 +54,11 @@ export const SignAndVerifyTester = (KeyPair, testSignVectorFile: string): void =
 
                         // Act:
                         const signature = keyPair.sign(payload);
+                        const isVerified = keyPair.verify(payload, signature);
 
                         // Assert:
                         const message = ` from ${s.privateKey}`;
-                        // Assert:
                         expect(Converter.uint8ToHex(signature).toUpperCase(), `private ${message}`).to.deep.equal(s.signature);
-
-                        // Act:
-                        const isVerified = keyPair.verify(payload, signature);
-                        // Assert:
                         expect(isVerified, `private ${message}`).to.equal(true);
                     });
                     done();
