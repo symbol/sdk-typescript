@@ -41,7 +41,7 @@ export class Nis1KeyPair extends KeyPair {
      * Derive public key from private key
      * @returns {key}
      */
-    public getPublicKey(): Key {
+    protected getPublicKey(): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
         const reversedPrivateKey = [...this.privateKey.toBytes()].reverse();
 
