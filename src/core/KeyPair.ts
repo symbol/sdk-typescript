@@ -21,7 +21,7 @@ export abstract class KeyPair {
     public readonly publicKey: Key;
 
     /**
-     *Constructor
+     * Constructor
      * @param {string} privateKey Private Key
      */
     constructor(public readonly privateKey: Key) {

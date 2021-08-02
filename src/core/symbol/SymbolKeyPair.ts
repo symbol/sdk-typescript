@@ -22,7 +22,7 @@ import { KeyPair } from '../KeyPair';
  */
 export class SymbolKeyPair extends KeyPair {
     /**
-     *Constructor
+     * Constructor
      * @param {string} privateKey Private Key
      */
     constructor(privateKey: Key) {

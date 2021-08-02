@@ -22,7 +22,7 @@ const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
 export class Nis1KeyPair extends KeyPair {
     /**
-     *Constructor
+     * Constructor
      * @param {string} privateKey Private Key
      */
     constructor(privateKey: Key) {
@@ -38,8 +38,8 @@ export class Nis1KeyPair extends KeyPair {
     }
 
     /**
-     * @property Public key
-     * @returns {string} Raw public key string
+     * Derive public key from private key
+     * @returns {key}
      */
     public getPublicKey(): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
