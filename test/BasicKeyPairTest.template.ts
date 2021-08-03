@@ -18,6 +18,7 @@ import { expect } from 'chai';
 import * as crypto from 'crypto';
 import { Key } from '../src/core/Key';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const BasicKeyPairTester = (KeyPair: any, deterministicPrivateKey: Key, expectedPublicKey: Key): void => {
     describe('key pair', () => {
         it('create key pair from private key', () => {

@@ -19,7 +19,8 @@ import * as JSONStream from 'JSONStream';
 import { Key } from '../src/core/Key';
 import { Converter } from '../src/core/utils';
 
-export const KeyPairVectorTester = (KeyPair, testKeysVectorFile: string): void => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const KeyPairVectorTester = (KeyPair: any, testKeysVectorFile: string): void => {
     describe('key pair - test vector', () => {
         it('can extract from private key test vectors', (done) => {
             const stream = fs.createReadStream(testKeysVectorFile, { encoding: 'utf-8' });
@@ -41,7 +42,8 @@ export const KeyPairVectorTester = (KeyPair, testKeysVectorFile: string): void =
     });
 };
 
-export const SignAndVerifyTester = (KeyPair, testSignVectorFile: string): void => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const SignAndVerifyTester = (KeyPair: any, testSignVectorFile: string): void => {
     describe('sign & verify- test vector', () => {
         it('sign', (done) => {
             const stream = fs.createReadStream(testSignVectorFile, { encoding: 'utf-8' });
