@@ -15,17 +15,17 @@
  */
 
 import * as path from 'path';
-import { SymbolKeyPair } from '../../src/core/symbol';
+import { Nis1KeyPair } from '../../src/core/nis1';
 import { KeyPairVectorTester, SignAndVerifyTester } from '../BasicVectorTest.template';
 
-describe('Symbol', () => {
+describe('NIS 1', () => {
     describe('test-keys vector', () => {
-        const testKeys = path.join(__dirname, '../test-vector/1.test-keys.json');
-        KeyPairVectorTester(SymbolKeyPair, testKeys);
+        const testKeys = path.join(__dirname, '../test-vector/nis1/1.test-keys.json');
+        KeyPairVectorTester(Nis1KeyPair, testKeys);
     });
 
     describe('test-sign vector', () => {
-        const testsign = path.join(__dirname, '../test-vector/2.test-sign.json');
-        SignAndVerifyTester(SymbolKeyPair, testsign);
+        const testsign = path.join(__dirname, '../test-vector/nis1/2.test-sign.json');
+        SignAndVerifyTester(Nis1KeyPair, testsign);
     });
 });

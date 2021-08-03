@@ -15,7 +15,7 @@
  */
 import { expect } from 'chai';
 import { keccak256, sha3_256 } from 'js-sha3';
-import { SymbolNetwork } from '../../src/core/symbol/SymbolNetwork';
+import { SymbolNetwork } from '../../../src/core/symbol/SymbolNetwork';
 
 describe('Symbol Network', () => {
     it('can list all symbol netwroks', () => {

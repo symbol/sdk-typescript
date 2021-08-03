@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SYMBOL
+ * Copyright 2021 NEM
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 import * as Crypto from 'crypto';
-import * as nacl from 'tweetnacl';
 import { Key } from '../Key';
 import { KeyPair } from '../KeyPair';
-/**
- * Represents an ED25519 private and public key.
- */
-export class SymbolKeyPair extends KeyPair {
+import { keccakHash, KeccakHasher } from '../utils/Utilities';
+/* eslint @typescript-eslint/no-var-requires: "off" */
+const Ed25519 = require('./external/nacl-fast.js').lowlevel;
+
+export class Nis1KeyPair extends KeyPair {
     /**
      * Constructor
      * @param {string} privateKey Private Key
@@ -33,16 +33,21 @@ export class SymbolKeyPair extends KeyPair {
      * Generate a random new keypair
      * @returns {KeyPair} New keypair
      */
-    public static generate(): SymbolKeyPair {
-        return new SymbolKeyPair(new Key(Crypto.randomBytes(32)));
+    public static generate(): Nis1KeyPair {
+        return new Nis1KeyPair(new Key(Crypto.randomBytes(32)));
     }
 
     /**
      * Derive public key from private key
-     * @returns {Key}
+     * @returns {key}
      */
     protected getPublicKey(): Key {
-        return new Key(nacl.sign.keyPair.fromSeed(this.privateKey.toBytes()).publicKey);
+        const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
+        const reversedPrivateKey = [...this.privateKey.toBytes()].reverse();
+
+        Ed25519.crypto_sign_keypair_hash(publicKey.toBytes(), reversedPrivateKey, keccakHash);
+
+        return publicKey;
     }
 
     /**
@@ -51,10 +56,21 @@ export class SymbolKeyPair extends KeyPair {
      * @returns {Uint8Array} The signature.
      */
     public sign(data: Uint8Array): Uint8Array {
-        const secretKey = new Uint8Array(64);
-        secretKey.set(this.privateKey.toBytes());
-        secretKey.set(this.publicKey.toBytes(), 32);
-        return nacl.sign.detached(data, secretKey);
+        const signature = new Uint8Array(64);
+        const hasher = KeccakHasher();
+
+        const keypair = {
+            privateKey: [...this.privateKey.toBytes()].reverse(),
+            publicKey: this.publicKey.toBytes(),
+        };
+
+        const success = Ed25519.crypto_sign_hash(signature, keypair, data, hasher);
+
+        if (!success) {
+            throw new Error(`Couldn't sign the tx, generated invalid signature`);
+        }
+
+        return signature;
     }
 
     /**
@@ -64,6 +80,7 @@ export class SymbolKeyPair extends KeyPair {
      * @returns {boolean} true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
-        return nacl.sign.detached.verify(data, signature, this.publicKey.toBytes());
+        const hasher = KeccakHasher();
+        return Ed25519.crypto_verify_hash(signature, this.publicKey.toBytes(), data, hasher);
     }
 }

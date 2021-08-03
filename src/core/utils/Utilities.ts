@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { sha3_256 } from 'js-sha3';
+import { keccak512, sha3_256 } from 'js-sha3';
 import { Alphabet, Encoded_Block_Size } from '../constants';
 
 export const createBuilder = (): any => {
@@ -169,6 +169,30 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
     output[outputOffset + 2] = ((bytes[3] & 0x0f) << 4) | (bytes[4] >> 1);
     output[outputOffset + 3] = ((bytes[4] & 0x01) << 7) | (bytes[5] << 2) | (bytes[6] >> 3);
     output[outputOffset + 4] = ((bytes[6] & 0x07) << 5) | bytes[7];
+};
+
+/**
+ * Generate keccak 512 hash given by data.
+ * @param {Uint8Array} data The data to hash.
+ * @returns {number[]} The hash value.
+ * */
+export const keccakHash = (data: Uint8Array): number[] => {
+    return keccak512.digest(data);
+};
+
+/**
+ * Create keccak 512 Hasher object used to hash data.
+ * @returns KeccakHasher object
+ **/
+export const KeccakHasher = () => {
+    let hasher = keccak512.create();
+    return {
+        update: (data: Uint8Array) => hasher.update(data),
+        digest: () => hasher.digest(),
+        reset: () => {
+            hasher = keccak512.create();
+        },
+    };
 };
 
 export const arrayDeepEqual = (first, second, numElementsToCompare?): boolean => {

@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-import * as path from 'path';
-import { SymbolKeyPair } from '../../src/core/symbol';
-import { KeyPairVectorTester, SignAndVerifyTester } from '../BasicVectorTest.template';
+import { Key } from '../../../src/core/Key';
+import { SymbolKeyPair } from '../../../src/core/symbol';
+import { BasicKeyPairTester } from '../../BasicKeyPairTest.template';
 
-describe('Symbol', () => {
-    describe('test-keys vector', () => {
-        const testKeys = path.join(__dirname, '../test-vector/1.test-keys.json');
-        KeyPairVectorTester(SymbolKeyPair, testKeys);
-    });
+describe('Symbol key pair', () => {
+    const deterministicPrivateKey = Key.createFromHex('575DBB3062267EFF57C970A336EBBC8FBCFE12C5BD3ED7BC11EB0481D7704CED');
+    const expectedPublicKey = Key.createFromHex('2E834140FD66CF87B254A693A2C7862C819217B676D3943267156625E816EC6F');
 
-    describe('test-sign vector', () => {
-        const testsign = path.join(__dirname, '../test-vector/2.test-sign.json');
-        SignAndVerifyTester(SymbolKeyPair, testsign);
-    });
+    BasicKeyPairTester(SymbolKeyPair, deterministicPrivateKey, expectedPublicKey);
 });

@@ -48,7 +48,7 @@ export class SymbolIdGenerator {
      * @param {bigint} parentId Parent namespace id
      * @returns {bigint}
      */
-    public static generateNamespaceId(name: string, parentId: bigint = BigInt(0)): bigint {
+    public static generateNamespaceId(name: string, parentId = BigInt(0)): bigint {
         const hash = sha3_256.create();
         hash.update(toBufferLE(parentId, 8));
         hash.update(name);
@@ -66,7 +66,7 @@ export class SymbolIdGenerator {
         if (0 >= fullName.length) {
             throw new Error(`${fullName} has zero length`);
         }
-        let parentId: bigint = BigInt(0);
+        let parentId = BigInt(0);
         const path: bigint[] = [];
         fullName.split('.').forEach((name) => {
             if (!SymbolIdGenerator.isValidNamespaceName(name)) {
