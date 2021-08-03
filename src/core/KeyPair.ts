@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Key } from './Key';
-import { Converter } from './utils';
+import { Key } from '@core';
+import { Converter } from '@utils';
 
 export abstract class KeyPair {
     public readonly publicKey: Key;

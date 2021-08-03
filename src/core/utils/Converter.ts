@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Nibble_To_Char_Map } from '@core';
 import { decode } from 'utf8';
-import { Nibble_To_Char_Map } from '../constants';
 import { tryParseByte } from './Utilities';
 
 export class Converter {

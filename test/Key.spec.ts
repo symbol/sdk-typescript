@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Key } from '@core';
+import { Converter } from '@utils';
 import { expect } from 'chai';
-import { Key } from '../src/core/Key';
-import { Converter } from '../src/core/utils';
 
 describe('Key', () => {
     const testKey = Converter.hexToUint8('2E834140FD66CF87B254A693A2C7862C819217B676D3943267156625E816EC6F');

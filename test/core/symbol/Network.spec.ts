@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { SymbolNetwork } from '@core';
 import { expect } from 'chai';
 import { keccak256, sha3_256 } from 'js-sha3';
-import { SymbolNetwork } from '../../../src/core/symbol/SymbolNetwork';
 
 describe('Symbol Network', () => {
     it('can list all symbol netwroks', () => {

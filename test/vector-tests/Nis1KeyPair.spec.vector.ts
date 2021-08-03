@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import { Nis1KeyPair } from '@core';
 import * as path from 'path';
-import { Nis1KeyPair } from '../../src/core/nis1';
 import { KeyPairVectorTester, SignAndVerifyTester } from '../BasicVectorTest.template';
 
 describe('NIS 1', () => {

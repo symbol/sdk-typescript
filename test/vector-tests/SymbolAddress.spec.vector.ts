@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Key, SymbolAddress, SymbolNetwork } from '@core';
 import { expect } from 'chai';
 import * as fs from 'fs';
 import * as JSONStream from 'JSONStream';
 import * as path from 'path';
-import { Key } from '../../src/core/Key';
-import { SymbolAddress, SymbolNetwork } from '../../src/core/symbol';
 
 describe('Address - TestVector', () => {
     it('can create address from publickey', (done) => {

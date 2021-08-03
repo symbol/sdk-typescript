@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Key } from '@core';
+import { Converter } from '@utils';
 import { expect } from 'chai';
 import * as fs from 'fs';
 import * as JSONStream from 'JSONStream';
-import { Key } from '../src/core/Key';
-import { Converter } from '../src/core/utils';
 
 export const KeyPairVectorTester = (KeyPair, testKeysVectorFile: string): void => {
     describe('key pair - test vector', () => {

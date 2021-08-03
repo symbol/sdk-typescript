@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { Key } from '@core';
 import { expect } from 'chai';
 import * as crypto from 'crypto';
-import { Key } from '../src/core/Key';
 
 export const BasicKeyPairTester = (KeyPair: any, deterministicPrivateKey: Key, expectedPublicKey: Key): void => {
     describe('key pair', () => {

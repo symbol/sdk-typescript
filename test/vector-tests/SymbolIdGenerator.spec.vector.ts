@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { SymbolAddress, SymbolIdGenerator, SymbolNetwork } from '@core';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
 import * as fs from 'fs';
 import * as JSONStream from 'JSONStream';
 import * as path from 'path';
-import { SymbolAddress, SymbolNetwork } from '../../src/core/symbol';
-import { SymbolIdGenerator } from '../../src/core/symbol/SymbolIdGenerator';
 
 describe('Symbol IdGenerator - TestVector', () => {
     it('Can generate mosaic id', (done) => {

@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Key } from '../../../src/core/Key';
-import { SymbolKeyPair } from '../../../src/core/symbol';
+import { Key, SymbolKeyPair } from '@core';
 import { BasicKeyPairTester } from '../../BasicKeyPairTest.template';
 
 describe('Symbol key pair', () => {

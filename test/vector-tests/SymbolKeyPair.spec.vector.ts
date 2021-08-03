@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import { SymbolKeyPair } from '@core';
 import * as path from 'path';
-import { SymbolKeyPair } from '../../src/core/symbol';
 import { KeyPairVectorTester, SignAndVerifyTester } from '../BasicVectorTest.template';
 
 describe('Symbol', () => {
