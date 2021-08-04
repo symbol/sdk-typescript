@@ -19,7 +19,7 @@ import { Key } from '../../src/core/Key';
 import { SymbolKeyPair } from '../../src/core/symbol';
 import { VotingKeysGenerator } from '../../src/core/symbol/VotingKeysGenerator';
 import { Converter } from '../../src/core/utils/Converter';
-import * as VotkingKeyVector from './resouces/VotingKeyTestVector.json';
+import * as votingKeyVector from './resouces/VotingKeyTestVector.json';
 
 const fibPrivateKeyGenerator = (fillPrivateKey = false) => {
     let value1 = 1;
@@ -37,7 +37,7 @@ const fibPrivateKeyGenerator = (fillPrivateKey = false) => {
                 return new SymbolKeyPair(new Key(Converter.numberToUint8(seedValue, 32).reverse()));
             }
 
-            for (let i = 0; i < 32; i++) {
+            for (let i = 0; i < buffer.length; i++) {
                 buffer[i] = (seedValue + i) % 256;
             }
             return new SymbolKeyPair(new Key(buffer));
@@ -69,15 +69,15 @@ const runTest = (vectorItem: any, keyGenerator: any): void => {
 };
 
 describe('VotingKeyGenerator Vector', () => {
-    it('Can generate votking keys from test vector_1', () => {
-        runTest(VotkingKeyVector[0], fibPrivateKeyGenerator());
+    it('Can generate voting keys from test vector_1', () => {
+        runTest(votingKeyVector[0], fibPrivateKeyGenerator());
     });
 
-    it('Can generate votking keys from test vector_2', () => {
-        runTest(VotkingKeyVector[1], fibPrivateKeyGenerator(true));
+    it('Can generate voting keys from test vector_2', () => {
+        runTest(votingKeyVector[1], fibPrivateKeyGenerator(true));
     });
 
-    it('Can generate votking keys from test vector_3', () => {
+    it('Can generate voting keys from test vector_3', () => {
         // Arrange:
         const generator = seededPrivateKeyGenerator([
             '12F98B7CB64A6D840931A2B624FB1EACAFA2C25C3EF0018CD67E8D470A248B2F',
@@ -86,6 +86,6 @@ describe('VotingKeyGenerator Vector', () => {
         ]);
 
         // Act + Assert:
-        runTest(VotkingKeyVector[2], generator);
+        runTest(votingKeyVector[2], generator);
     });
 });

@@ -22,9 +22,9 @@ export class VotingKeysGenerator {
     /**
      * Constructor
      * @param {KePair} rootKeyPair The root keypair
-     * @param privateKeyGenerator Private key generator
+     * @param keyPairGenerator Symbol key pair generator
      */
-    constructor(private readonly rootKeyPair: KeyPair, private readonly privateKeyGenerator = SymbolKeyPair.generate) {}
+    constructor(private readonly rootKeyPair: KeyPair, private readonly keyPairGenerator = SymbolKeyPair.generate) {}
 
     /**
      * Generate Symbol voting keys
@@ -37,36 +37,22 @@ export class VotingKeysGenerator {
         const headerSize = 64 + 16;
         const itemSize = 32 + 64;
         const totalSize = headerSize + items * itemSize;
-        const result = new Uint8Array(totalSize);
-
-        let offset = 0;
-        offset = this.append(result, Converter.numberToUint8(startEpoch, 8), offset);
-        offset = this.append(result, Converter.numberToUint8(endEpoch, 8), offset);
-        offset = this.append(result, Converter.hexToUint8('FFFFFFFFFFFFFFFF'), offset);
-        offset = this.append(result, Converter.hexToUint8('FFFFFFFFFFFFFFFF'), offset);
-        offset = this.append(result, this.rootKeyPair.publicKey.toBytes(), offset);
-        offset = this.append(result, Converter.numberToUint8(startEpoch, 8), offset);
-        offset = this.append(result, Converter.numberToUint8(endEpoch, 8), offset);
+        const buffer = Buffer.alloc(totalSize)
+            .fill(Converter.numberToUint8(startEpoch, 8), 0)
+            .fill(Converter.numberToUint8(endEpoch, 8), 8)
+            .fill(Converter.hexToUint8('FFFFFFFFFFFFFFFF'), 16)
+            .fill(Converter.hexToUint8('FFFFFFFFFFFFFFFF'), 24)
+            .fill(this.rootKeyPair.publicKey.toBytes(), 32)
+            .fill(Converter.numberToUint8(startEpoch, 8), 64)
+            .fill(Converter.numberToUint8(endEpoch, 8), 72);
 
         for (let i = 0; i < items; i++) {
-            const randomKeyPair = this.privateKeyGenerator();
-            offset = this.append(result, randomKeyPair.privateKey.toBytes(), offset);
+            const randomKeyPair = this.keyPairGenerator();
+            buffer.fill(randomKeyPair.privateKey.toBytes(), 80 + i * itemSize);
             const identifier = Converter.numberToUint8(endEpoch - i, 8);
             const signature = this.rootKeyPair.sign(Uint8Array.from([...randomKeyPair.publicKey.toBytes(), ...identifier]));
-            offset = this.append(result, signature, offset);
+            buffer.fill(signature, 80 + 32 + i * itemSize);
         }
-        return result;
-    }
-
-    /**
-     * Append bytes to another one and return the new offset index
-     * @param {Uint8Array} target The target buffer
-     * @param {Uint8Array} value The buffer to be appended
-     * @param {number} index Offset
-     * @returns {number}
-     */
-    private append(target: Uint8Array, value: Uint8Array, index: number): number {
-        target.set(value, index);
-        return index + value.length;
+        return buffer;
     }
 }

@@ -51,7 +51,7 @@ describe('VotingKeysGenerator', () => {
 
         // Act:
         const votingKeys = generator.generate(7, 11);
-        let bytesWithoutHeader = votingKeys.subarray(32 + 32 + 16, votingKeys.length);
+        let bytesWithoutHeader = votingKeys.subarray(32 + 32 + 16);
 
         // Assert:
         expect(votingKeys.length).equal(32 + 32 + 16 + 5 * (32 + 64));
@@ -65,7 +65,7 @@ describe('VotingKeysGenerator', () => {
             payload.set(toBufferLE(BigInt(7 + i), 8), 32);
 
             expect(rootKeyPair.verify(payload, signature)).to.be.true;
-            bytesWithoutHeader = bytesWithoutHeader.subarray(32 + 64, bytesWithoutHeader.length);
+            bytesWithoutHeader = bytesWithoutHeader.subarray(32 + 64);
         }
     });
 });
