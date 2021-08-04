@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Converter } from './utils/Converter';
+import { Converter } from '@utils';
 
 export class Key {
     /**

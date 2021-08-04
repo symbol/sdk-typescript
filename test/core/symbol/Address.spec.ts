@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Key, SymbolAddress, SymbolNetwork } from '@core';
+import { Converter } from '@utils';
 import { expect } from 'chai';
-import { Key } from '../../../src/core/Key';
-import { SymbolAddress } from '../../../src/core/symbol';
-import { SymbolNetwork } from '../../../src/core/symbol/SymbolNetwork';
-import { Converter } from '../../../src/core/utils/Converter';
 
 describe('Symbol Address', () => {
     const testKeyAddressPair = {

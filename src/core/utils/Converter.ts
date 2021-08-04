@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Nibble_To_Char_Map } from '@core';
 import { decode } from 'utf8';
-import { Nibble_To_Char_Map } from '../constants';
 import { tryParseByte } from './Utilities';
 
 export class Converter {
@@ -87,11 +87,27 @@ export class Converter {
     };
 
     /**
+     * Reversed convertion hex string to a uint8 array.
+     * @param {string} input A hex encoded string.
+     * @returns {Uint8Array} A uint8 array corresponding to the input.
+     */
+    public static hexToUint8Reverse = (input: string): Uint8Array => {
+        if (0 !== input.length % 2) {
+            throw Error(`hex string has unexpected size '${input.length}'`);
+        }
+        const output = new Uint8Array(input.length / 2);
+        for (let i = 0; i < input.length; i += 2) {
+            output[output.length - 1 - i / 2] = Converter.toByte(input[i], input[i + 1]);
+        }
+        return output;
+    };
+
+    /**
      * Converts a uint8 array to a hex string.
      * @param {Uint8Array} input A uint8 array.
      * @returns {string} A hex encoded string corresponding to the input.
      */
-    public static uint8ToHex = (input): string => {
+    public static uint8ToHex = (input: Uint8Array): string => {
         let s = '';
         for (const byte of input) {
             s += Nibble_To_Char_Map[byte >> 4];
@@ -105,7 +121,7 @@ export class Converter {
      * @param {Uint8Array} input A uint8 array.
      * @returns {Uint32Array} A uint32 array created from the input.
      */
-    public static uint8ToUint32 = (input): Uint32Array => new Uint32Array(input.buffer);
+    public static uint8ToUint32 = (input: Uint8Array): Uint32Array => new Uint32Array(input.buffer);
 
     /**
      * Converts a uint32 array to a uint8 array.

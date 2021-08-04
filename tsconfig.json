@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "module": "commonjs",
     "target": "es2016",
     "noImplicitAny": false,
@@ -20,7 +21,11 @@
     ],
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "paths": {
+      "@core": ["src/core"],
+      "@utils": ["src/core/utils"],
+    },
   },
   "files": [
     "index.ts"

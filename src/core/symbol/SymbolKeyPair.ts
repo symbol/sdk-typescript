@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { Key, KeyPair } from '@core';
 import * as Crypto from 'crypto';
 import * as nacl from 'tweetnacl';
-import { Key } from '../Key';
-import { KeyPair } from '../KeyPair';
 /**
  * Represents an ED25519 private and public key.
  */
