@@ -1,7 +1,6 @@
+import { SymbolAddress } from '@core';
+import { arrayDeepEqual, Base32, Converter } from '@utils';
 import { sha3_256 } from 'js-sha3';
-import { SymbolAddress } from './symbol/SymbolAddress';
-import { arrayDeepEqual, Converter } from './utils';
-import { Base32 } from './utils/Base32';
 
 export interface RawAddress {
     addressWithoutChecksum: Uint8Array;

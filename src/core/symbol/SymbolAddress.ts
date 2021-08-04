@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { Address, RawAddress } from '../Address';
-import { Base32 } from '../utils/Base32';
-import { Converter } from '../utils/Converter';
+import { Address, RawAddress } from '@core';
+import { Base32, Converter } from '@utils';
 
 /**
  * The address structure describes an address with its network

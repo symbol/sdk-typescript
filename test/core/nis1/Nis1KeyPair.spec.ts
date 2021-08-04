@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Key } from '../../../src/core/Key';
-import { Nis1KeyPair } from '../../../src/core/nis1';
+import { Key, Nis1KeyPair } from '@core';
 import { BasicKeyPairTester } from '../../BasicKeyPairTest.template';
 
 describe('NIS1 key pair', () => {

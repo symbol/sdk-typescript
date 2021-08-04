@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Address, NamespaceConst } from '@core';
 import { toBigIntLE, toBufferLE } from 'bigint-buffer';
 import * as Crypto from 'crypto';
 import { sha3_256 } from 'js-sha3';
-import { Address } from '../Address';
-import { NamespaceConst } from '../constants';
 
 export class SymbolIdGenerator {
     /**

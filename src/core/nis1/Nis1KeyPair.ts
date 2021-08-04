@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Key, KeyPair } from '@core';
+import { keccakHash, KeccakHasher } from '@utils';
 import * as Crypto from 'crypto';
-import { Key } from '../Key';
-import { KeyPair } from '../KeyPair';
-import { keccakHash, KeccakHasher } from '../utils/Utilities';
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 

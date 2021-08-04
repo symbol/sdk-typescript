@@ -15,9 +15,8 @@
  */
 
 import ripemd160 = require('ripemd160');
+import { Key, RawAddress } from '@core';
 import { Hash } from 'js-sha3';
-import { RawAddress } from './Address';
-import { Key } from './Key';
 
 export abstract class Network {
     /**

@@ -1,5 +1,5 @@
+import { arrayDeepEqual, Converter } from '@utils';
 import { expect } from 'chai';
-import { arrayDeepEqual, Converter } from '../../../src/core/utils';
 describe('arrayDeepEqual', () => {
     it('returns true if typed arrays are equal', () => {
         // Arrange:

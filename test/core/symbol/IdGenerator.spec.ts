@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { SymbolIdGenerator } from '@core';
 import { expect } from 'chai';
-import { SymbolIdGenerator } from '../../../src/core/symbol/SymbolIdGenerator';
 
 describe('Symbol IdGenerator - TestVector', () => {
     it('Can generate a random nonce', () => {

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Alphabet, Encoded_Block_Size } from '@core';
 import { keccak512, sha3_256 } from 'js-sha3';
-import { Alphabet, Encoded_Block_Size } from '../constants';
 
 export const createBuilder = (): any => {
     const map = {};

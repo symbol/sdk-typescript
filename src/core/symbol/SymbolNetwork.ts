@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
+import { Network, SymbolNetworkList } from '@core';
 import { Hash, sha3_256 } from 'js-sha3';
-import { SymbolNetworkList } from '../constants';
-import { Network } from '../Network';
 
 export class SymbolNetwork extends Network {
     /**

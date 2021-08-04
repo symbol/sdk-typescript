@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Decoded_Block_Size, Encoded_Block_Size } from '../constants';
+import { Decoded_Block_Size, Encoded_Block_Size } from '@core';
 import * as utilities from './Utilities';
 
 export class Base32 {
