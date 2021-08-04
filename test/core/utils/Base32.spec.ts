@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { expect } from 'chai';
-import { Base32, Converter } from '../../src/core/utils';
+import { Base32, Converter } from '../../../src/core/utils';
 
 describe('base32', () => {
     const Test_Vectors = [

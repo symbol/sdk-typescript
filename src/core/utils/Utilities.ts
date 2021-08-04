@@ -181,6 +181,7 @@ export const keccakHash = (data: Uint8Array): number[] => {
  * Create keccak 512 Hasher object used to hash data.
  * @returns KeccakHasher object
  **/
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const KeccakHasher = () => {
     let hasher = keccak512.create();
     return {

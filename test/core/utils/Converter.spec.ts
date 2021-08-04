@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { expect } from 'chai';
-import { Converter } from '../../src/core/utils';
+import { Converter } from '../../../src/core/utils';
 
 describe('Converter', () => {
     describe('toByte', () => {
