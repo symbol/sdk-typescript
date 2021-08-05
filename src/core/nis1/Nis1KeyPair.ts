@@ -22,6 +22,7 @@ const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 export class Nis1KeyPair extends KeyPair {
     /**
      * Constructor
+     *
      * @param {string} privateKey Private Key
      */
     constructor(privateKey: Key) {
@@ -30,6 +31,7 @@ export class Nis1KeyPair extends KeyPair {
 
     /**
      * Generate a random new keypair
+     *
      * @returns {KeyPair} New keypair
      */
     public static generate(): Nis1KeyPair {
@@ -38,7 +40,8 @@ export class Nis1KeyPair extends KeyPair {
 
     /**
      * Derive public key from private key
-     * @returns {key}
+     *
+     * @returns {Key} Public key
      */
     protected getPublicKey(): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
@@ -51,6 +54,7 @@ export class Nis1KeyPair extends KeyPair {
 
     /**
      * Signs a data buffer with a key pair.
+     *
      * @param {Uint8Array} data The data to sign.
      * @returns {Uint8Array} The signature.
      */
@@ -74,6 +78,7 @@ export class Nis1KeyPair extends KeyPair {
 
     /**
      * Verifies a signature.
+     *
      * @param {Uint8Array} data The data to verify.
      * @param {Uint8Array} signature The signature to verify.
      * @returns {boolean} true if the signature is verifiable, false otherwise.

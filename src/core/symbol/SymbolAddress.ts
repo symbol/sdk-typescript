@@ -23,6 +23,7 @@ import { Base32, Converter } from '@utils';
 export class SymbolAddress extends Address {
     /**
      * Constructor
+     *
      * @param {RawAddress}rawAddress Raw address bytes
      */
     constructor(rawAddress: RawAddress) {
@@ -31,7 +32,8 @@ export class SymbolAddress extends Address {
 
     /**
      * Get the raw address byte with checksum bytes for Symbol Address
-     * @returns {Uint8Array}
+     *
+     * @returns {Uint8Array} Address bytes
      */
     public getAddressBytes(): Uint8Array {
         const address = new Uint8Array(this.rawAddress.addressWithoutChecksum.length + 3);
@@ -42,8 +44,9 @@ export class SymbolAddress extends Address {
 
     /**
      * Create SymbolAddress object from encoded address string
+     *
      * @param {string} encodedAddress Encoded address
-     * @returns {SymbolAddress}
+     * @returns {SymbolAddress} SymbolAddress object
      */
     public static createFromString(encodedAddress: string): SymbolAddress {
         const decoded = Base32.Base32Decode(`${encodedAddress}A`).subarray(0, 24);
@@ -55,8 +58,9 @@ export class SymbolAddress extends Address {
 
     /**
      * Create SymbolAddress object from encoded address bytes
+     *
      * @param {Uint8Array} addressBytes address bytes
-     * @returns {SymbolAddress}
+     * @returns {SymbolAddress} SymbolAddress object
      */
     public static createFromBytes(addressBytes: Uint8Array): SymbolAddress {
         const padded = new Uint8Array(25);
@@ -69,8 +73,9 @@ export class SymbolAddress extends Address {
 
     /**
      * Create SymbolAddress object from decoded
+     *
      * @param {string} addressHex address hex string
-     * @returns {SymbolAddress}
+     * @returns {SymbolAddress} SymbolAddress object
      */
     public static createFromHex(addressHex: string): SymbolAddress {
         const bytes = Converter.hexToUint8(addressHex);

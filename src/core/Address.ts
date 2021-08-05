@@ -28,13 +28,15 @@ export abstract class Address {
 
     /**
      * Ge address bytes
+     *
      * @returns {Uint8Array}
      */
     public abstract getAddressBytes(): Uint8Array;
 
     /**
      * Get address in the encoded format ex: NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFH.
-     * @returns {string}
+     *
+     * @returns {string} Encoded addres string
      */
     public get encoded(): string {
         const padded = new Uint8Array(25);
@@ -45,7 +47,8 @@ export abstract class Address {
 
     /**
      * Get address in plain format ex: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
-     * @returns {string}
+     *
+     * @returns {string} Decoded address string (Hexadecimal)
      */
     public get decode(): string {
         return Converter.uint8ToHex(this.getAddressBytes());
@@ -53,7 +56,8 @@ export abstract class Address {
 
     /**
      * Get address in pretty format ex: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
-     * @returns {string}
+     *
+     * @returns {string} Encoded address tring with seperators
      */
     public pretty(): string {
         return this.encoded.match(/.{1,6}/g)!.join('-');
@@ -61,8 +65,9 @@ export abstract class Address {
 
     /**
      * Compares addresses for equality
-     * @param address - Address to compare
-     * @returns {boolean}
+     *
+     * @param {string} address - Encoded address to to compare
+     * @returns {boolean} True if the two addresses are the same
      */
     public equals(address: string): boolean {
         return this.encoded.toUpperCase() === address.toUpperCase();
@@ -70,6 +75,7 @@ export abstract class Address {
 
     /**
      * Retun encoded address string.
+     *
      * @returns {string} Encoded address string
      */
     public toString(): string {
@@ -78,7 +84,8 @@ export abstract class Address {
 
     /**
      * Determines the validity of an raw address string.
-     * @param {string} rawAddress The raw address string. Expected format VATNE7Q5BITMUTRRN6IB4I7FLSDRDWZA35C4KNQ
+     *
+     * @param {string} encodedAddress The raw address string. Expected format VATNE7Q5BITMUTRRN6IB4I7FLSDRDWZA35C4KNQ
      * @returns {boolean} true if the raw address string is valid, false otherwise.
      */
     public static isValid(encodedAddress: string): boolean {

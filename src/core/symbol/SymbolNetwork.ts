@@ -20,6 +20,7 @@ import { Hash, sha3_256 } from 'js-sha3';
 export class SymbolNetwork extends Network {
     /**
      * Constructor
+     *
      * @param {string} name Network name
      * @param {number} identifier Network identifier
      * @param {string} generationHash Symbol network generation hash
@@ -30,7 +31,8 @@ export class SymbolNetwork extends Network {
 
     /**
      * Get hasher for address generation based on selected network type
-     * @returns {SHA3}
+     *
+     * @returns {Hash} SHA3 hasher
      */
     public addressHasher(): Hash {
         return sha3_256;
@@ -38,8 +40,9 @@ export class SymbolNetwork extends Network {
 
     /**
      * Get network by its name
+     *
      * @param {string} name Network name
-     * @returns {Network | undefined}
+     * @returns {Network | undefined} The Network object or undefined
      */
     public static findByName(name: string): SymbolNetwork | undefined {
         const network = SymbolNetworkList.find((n) => n.name.toLowerCase() === name.toLowerCase());
@@ -51,8 +54,9 @@ export class SymbolNetwork extends Network {
 
     /**
      * Get network by its identifier
+     *
      * @param {number} identifier Network identifier
-     * @returns {Network | undefined}
+     * @returns {Network | undefined} The Network object or undefined
      */
     public static findByIdentifier(identifier: number): SymbolNetwork | undefined {
         const network = SymbolNetworkList.find((n) => n.identifier === identifier);
@@ -64,7 +68,8 @@ export class SymbolNetwork extends Network {
 
     /**
      * List all networks
-     * @returns {SymbolNetwork[]}
+     *
+     * @returns {SymbolNetwork[]} Symbol network list
      */
     public static list(): SymbolNetwork[] {
         return SymbolNetworkList.map((n) => new SymbolNetwork(n.name, n.identifier, n.generationHash));

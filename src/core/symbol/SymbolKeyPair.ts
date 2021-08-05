@@ -23,6 +23,7 @@ import * as nacl from 'tweetnacl';
 export class SymbolKeyPair extends KeyPair {
     /**
      * Constructor
+     *
      * @param {string} privateKey Private Key
      */
     constructor(privateKey: Key) {
@@ -31,6 +32,7 @@ export class SymbolKeyPair extends KeyPair {
 
     /**
      * Generate a random new keypair
+     *
      * @returns {KeyPair} New keypair
      */
     public static generate(): SymbolKeyPair {
@@ -39,7 +41,8 @@ export class SymbolKeyPair extends KeyPair {
 
     /**
      * Derive public key from private key
-     * @returns {Key}
+     *
+     * @returns {Key} Public key
      */
     protected getPublicKey(): Key {
         return new Key(nacl.sign.keyPair.fromSeed(this.privateKey.toBytes()).publicKey);
@@ -47,6 +50,7 @@ export class SymbolKeyPair extends KeyPair {
 
     /**
      * Signs a data buffer with a key pair.
+     *
      * @param {Uint8Array} data The data to sign.
      * @returns {Uint8Array} The signature.
      */
@@ -59,6 +63,7 @@ export class SymbolKeyPair extends KeyPair {
 
     /**
      * Verifies a signature.
+     *
      * @param {Uint8Array} data The data to verify.
      * @param {Uint8Array} signature The signature to verify.
      * @returns {boolean} true if the signature is verifiable, false otherwise.
