@@ -71,7 +71,7 @@ export class SymbolNetwork extends Network {
      *
      * @returns Symbol network list
      */
-    public static list(): SymbolNetwork[] {
+    public static list(): ReadonlyArray<SymbolNetwork> {
         return SymbolNetworkList.map((n) => new SymbolNetwork(n.name, n.identifier, n.generationHash));
     }
 }

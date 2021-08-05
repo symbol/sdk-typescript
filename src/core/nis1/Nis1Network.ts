@@ -66,7 +66,7 @@ export class Nis1Network extends Network {
      * List all networks
      * @returns {Nis1Network[]}
      */
-    public static list(): Nis1Network[] {
+    public static list(): ReadonlyArray<Nis1Network> {
         return NIS1NetworkList.map((n) => new Nis1Network(n.name, n.identifier));
     }
 }
