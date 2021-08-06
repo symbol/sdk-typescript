@@ -37,32 +37,6 @@ export class Nis1Network extends Network {
     }
 
     /**
-     * Get network by its name
-     * @param {string} name Network name
-     * @returns {Network | undefined}
-     */
-    public static findByName(name: string): Nis1Network | undefined {
-        const network = NIS1NetworkList.find((n) => n.name.toLowerCase() === name.toLowerCase());
-        if (network) {
-            return new Nis1Network(network.name, network.identifier);
-        }
-        return undefined;
-    }
-
-    /**
-     * Get network by its identifier
-     * @param {number} identifier Network identifier
-     * @returns {Network | undefined}
-     */
-    public static findByIdentifier(identifier: number): Nis1Network | undefined {
-        const network = NIS1NetworkList.find((n) => n.identifier === identifier);
-        if (network) {
-            return new Nis1Network(network.name, network.identifier);
-        }
-        return undefined;
-    }
-
-    /**
      * List all networks
      * @returns {Nis1Network[]}
      */

@@ -15,7 +15,7 @@
  */
 
 import ripemd160 = require('ripemd160');
-import { Key, RawAddress } from '@core';
+import { Key, Nis1Network, RawAddress, SymbolNetwork } from '@core';
 import { Hash } from 'js-sha3';
 
 export abstract class Network {
@@ -57,4 +57,31 @@ export abstract class Network {
      * Abstract method to gets the primary hasher to use in the public key to address conversion.
      */
     public abstract addressHasher(): Hash;
+
+    /**
+     * Get network by its name
+     * @param {networks} networks
+     * @returns Nis1Network | SymbolNetwork | undefined
+     */
+    public static findByName(networks: Nis1Network[] | SymbolNetwork[], name: string): Nis1Network | SymbolNetwork | undefined {
+        const network = networks.find((n) => n.name.toLowerCase() === name.toLowerCase());
+
+        if (!network) return undefined;
+
+        return network;
+    }
+
+    /**
+     * Get network by its identifier
+     * @param {networks} networks
+     * @returns Nis1Network | SymbolNetwork | undefined
+     *
+     */
+    public static findByIdentifier(networks: Nis1Network[] | SymbolNetwork[], identifier: number): Nis1Network | SymbolNetwork | undefined {
+        const network = networks.find((n) => n.identifier === identifier);
+
+        if (!network) return undefined;
+
+        return network;
+    }
 }

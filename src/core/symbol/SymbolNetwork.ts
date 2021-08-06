@@ -39,34 +39,6 @@ export class SymbolNetwork extends Network {
     }
 
     /**
-     * Get network by its name
-     *
-     * @param name - Network name
-     * @returns The Network object or undefined
-     */
-    public static findByName(name: string): SymbolNetwork | undefined {
-        const network = SymbolNetworkList.find((n) => n.name.toLowerCase() === name.toLowerCase());
-        if (network) {
-            return new SymbolNetwork(network.name, network.identifier, network.generationHash);
-        }
-        return undefined;
-    }
-
-    /**
-     * Get network by its identifier
-     *
-     * @param identifier - Network identifier
-     * @returns The Network object or undefined
-     */
-    public static findByIdentifier(identifier: number): SymbolNetwork | undefined {
-        const network = SymbolNetworkList.find((n) => n.identifier === identifier);
-        if (network) {
-            return new SymbolNetwork(network.name, network.identifier, network.generationHash);
-        }
-        return undefined;
-    }
-
-    /**
      * List all networks
      *
      * @returns Symbol network list
