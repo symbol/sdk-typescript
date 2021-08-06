@@ -24,7 +24,7 @@ export class SymbolAddress extends Address {
     /**
      * Constructor
      *
-     * @param {RawAddress}rawAddress Raw address bytes
+     * @param rawAddress - Raw address bytes
      */
     constructor(rawAddress: RawAddress) {
         super(rawAddress);
@@ -33,7 +33,7 @@ export class SymbolAddress extends Address {
     /**
      * Get the raw address byte with checksum bytes for Symbol Address
      *
-     * @returns {Uint8Array} Address bytes
+     * @returns Address bytes
      */
     public getAddressBytes(): Uint8Array {
         const address = new Uint8Array(this.rawAddress.addressWithoutChecksum.length + 3);
@@ -45,8 +45,8 @@ export class SymbolAddress extends Address {
     /**
      * Create SymbolAddress object from encoded address string
      *
-     * @param {string} encodedAddress Encoded address
-     * @returns {SymbolAddress} SymbolAddress object
+     * @param encodedAddress - Encoded address
+     * @returns SymbolAddress object
      */
     public static createFromString(encodedAddress: string): SymbolAddress {
         const decoded = Base32.Base32Decode(`${encodedAddress}A`).subarray(0, 24);
@@ -59,8 +59,8 @@ export class SymbolAddress extends Address {
     /**
      * Create SymbolAddress object from encoded address bytes
      *
-     * @param {Uint8Array} addressBytes address bytes
-     * @returns {SymbolAddress} SymbolAddress object
+     * @param addressBytes - address bytes
+     * @returns SymbolAddress object
      */
     public static createFromBytes(addressBytes: Uint8Array): SymbolAddress {
         const padded = new Uint8Array(25);
@@ -74,8 +74,8 @@ export class SymbolAddress extends Address {
     /**
      * Create SymbolAddress object from decoded
      *
-     * @param {string} addressHex address hex string
-     * @returns {SymbolAddress} SymbolAddress object
+     * @param addressHex - address hex string
+     * @returns SymbolAddress object
      */
     public static createFromHex(addressHex: string): SymbolAddress {
         const bytes = Converter.hexToUint8(addressHex);

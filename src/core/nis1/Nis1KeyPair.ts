@@ -23,7 +23,7 @@ export class Nis1KeyPair extends KeyPair {
     /**
      * Constructor
      *
-     * @param {string} privateKey Private Key
+     * @param privateKey - Private Key
      */
     constructor(privateKey: Key) {
         super(privateKey);
@@ -32,7 +32,7 @@ export class Nis1KeyPair extends KeyPair {
     /**
      * Generate a random new keypair
      *
-     * @returns {KeyPair} New keypair
+     * @returns New keypair
      */
     public static generate(): Nis1KeyPair {
         return new Nis1KeyPair(new Key(Crypto.randomBytes(32)));
@@ -41,7 +41,7 @@ export class Nis1KeyPair extends KeyPair {
     /**
      * Derive public key from private key
      *
-     * @returns {Key} Public key
+     * @returns Public key
      */
     protected getPublicKey(): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
@@ -55,8 +55,8 @@ export class Nis1KeyPair extends KeyPair {
     /**
      * Signs a data buffer with a key pair.
      *
-     * @param {Uint8Array} data The data to sign.
-     * @returns {Uint8Array} The signature.
+     * @param data - The data to sign.
+     * @returns The signature.
      */
     public sign(data: Uint8Array): Uint8Array {
         const signature = new Uint8Array(64);
@@ -79,9 +79,9 @@ export class Nis1KeyPair extends KeyPair {
     /**
      * Verifies a signature.
      *
-     * @param {Uint8Array} data The data to verify.
-     * @param {Uint8Array} signature The signature to verify.
-     * @returns {boolean} true if the signature is verifiable, false otherwise.
+     * @param data - The data to verify.
+     * @param signature - The signature to verify.
+     * @returns true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
         const hasher = KeccakHasher();

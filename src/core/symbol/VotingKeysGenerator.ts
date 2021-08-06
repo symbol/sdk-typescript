@@ -22,17 +22,17 @@ export class VotingKeysGenerator {
     /**
      * Constructor
      *
-     * @param {KeyPair} rootKeyPair The root keypair
-     * @param {object} keyPairGenerator Symbol key pair generator
+     * @param rootKeyPair - The root keypair
+     * @param keyPairGenerator - Symbol key pair generator
      */
     constructor(private readonly rootKeyPair: KeyPair, private readonly keyPairGenerator = SymbolKeyPair.generate) {}
 
     /**
      * Generate Symbol voting keys
      *
-     * @param {number} startEpoch Start voting key epoch
-     * @param {number} endEpoch End voting key epoch
-     * @returns {Uint8Array} Voting keys buffer
+     * @param startEpoch - Start voting key epoch
+     * @param endEpoch - End voting key epoch
+     * @returns Voting keys buffer
      */
     public generate(startEpoch: number, endEpoch: number): Uint8Array {
         const items = endEpoch - startEpoch + 1;

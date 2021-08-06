@@ -24,7 +24,7 @@ export class SymbolKeyPair extends KeyPair {
     /**
      * Constructor
      *
-     * @param {string} privateKey Private Key
+     * @param privateKey - Private Key
      */
     constructor(privateKey: Key) {
         super(privateKey);
@@ -33,7 +33,7 @@ export class SymbolKeyPair extends KeyPair {
     /**
      * Generate a random new keypair
      *
-     * @returns {KeyPair} New keypair
+     * @returns New keypair
      */
     public static generate(): SymbolKeyPair {
         return new SymbolKeyPair(new Key(Crypto.randomBytes(32)));
@@ -42,7 +42,7 @@ export class SymbolKeyPair extends KeyPair {
     /**
      * Derive public key from private key
      *
-     * @returns {Key} Public key
+     * @returns Public key
      */
     protected getPublicKey(): Key {
         return new Key(nacl.sign.keyPair.fromSeed(this.privateKey.toBytes()).publicKey);
@@ -51,8 +51,8 @@ export class SymbolKeyPair extends KeyPair {
     /**
      * Signs a data buffer with a key pair.
      *
-     * @param {Uint8Array} data The data to sign.
-     * @returns {Uint8Array} The signature.
+     * @param data - The data to sign.
+     * @returns The signature.
      */
     public sign(data: Uint8Array): Uint8Array {
         const secretKey = new Uint8Array(64);
@@ -64,9 +64,9 @@ export class SymbolKeyPair extends KeyPair {
     /**
      * Verifies a signature.
      *
-     * @param {Uint8Array} data The data to verify.
-     * @param {Uint8Array} signature The signature to verify.
-     * @returns {boolean} true if the signature is verifiable, false otherwise.
+     * @param data - The data to verify.
+     * @param signature - The signature to verify.
+     * @returns true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
         return nacl.sign.detached.verify(data, signature, this.publicKey.toBytes());

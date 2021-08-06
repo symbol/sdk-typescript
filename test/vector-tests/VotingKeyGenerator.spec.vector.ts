@@ -19,7 +19,7 @@ import { Key } from '../../src/core/Key';
 import { SymbolKeyPair } from '../../src/core/symbol';
 import { VotingKeysGenerator } from '../../src/core/symbol/VotingKeysGenerator';
 import { Converter } from '../../src/core/utils/Converter';
-import * as votingKeyVector from './resouces/VotingKeyTestVector.json';
+import * as votingKeyVector from './resources/VotingKeyTestVector.json';
 
 const fibPrivateKeyGenerator = (fillPrivateKey = false) => {
     let value1 = 1;

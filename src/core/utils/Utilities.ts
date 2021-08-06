@@ -23,11 +23,9 @@ export const createBuilder = (): any => {
         /**
          * Adds a range mapping to the map.
          *
-         * @param {string} start The start character.
-         * @param {string} end The end character.
-         * @param {number} base The value corresponding to the start character.
-         * @memberof module:utils/charMapping~CharacterMapBuilder
-         * @instance
+         * @param start - The start character.
+         * @param end - The end character.
+         * @param base - The value corresponding to the start character.
          */
         addRange: (start: string, end: string, base: number): void => {
             const startCode = start.charCodeAt(0);
@@ -64,8 +62,8 @@ export const tryParseByte = (char1: string, char2: string): any => {
 /**
  * Tries to parse a string representing an unsigned integer.
  *
- * @param {string} str The string to parse.
- * @returns { number | undefined} The number represented by the input or undefined.
+ * @param str -The string to parse.
+ * @returns The number represented by the input or undefined.
  */
 export const tryParseUint = (str: string): number | undefined => {
     if ('0' === str) {
@@ -173,8 +171,8 @@ export const decodeBlock = (input: string, inputOffset: number, output: Uint8Arr
 /**
  * Generate keccak 512 hash given by data.
  *
- * @param {Uint8Array} data The data to hash.
- * @returns {number[]} The hash value.
+ * @param data - The data to hash.
+ * @returns The hash value.
  */
 export const keccakHash = (data: Uint8Array): number[] => {
     return keccak512.digest(data);
@@ -183,7 +181,7 @@ export const keccakHash = (data: Uint8Array): number[] => {
 /**
  * Create keccak 512 Hasher object used to hash data.
  *
- * @returns {object} KeccakHasher object
+ * @returns KeccakHasher object
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const KeccakHasher = () => {

@@ -18,7 +18,7 @@ import { expect } from 'chai';
 import { keccak256, sha3_256 } from 'js-sha3';
 
 describe('Symbol Network', () => {
-    it('can list all symbol netwroks', () => {
+    it('can list all symbol networks', () => {
         const list = SymbolNetwork.list();
         expect(list.length).to.equal(2);
         expect(list.find((l) => l.name === 'public')).not.to.be.undefined;
