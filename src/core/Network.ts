@@ -59,9 +59,11 @@ export abstract class Network {
     public abstract addressHasher(): Hash;
 
     /**
-     * Get network by its name
-     * @param {networks} networks
-     * @returns Nis1Network | SymbolNetwork | undefined
+     * Get network by its name.
+     *
+     * @param networks - Nis1Network[] | SymbolNetwork[]
+     * @param name - name of network, example: 'mainnet'
+     * @returns filtered network
      */
     public static findByName(networks: Nis1Network[] | SymbolNetwork[], name: string): Nis1Network | SymbolNetwork | undefined {
         const network = networks.find((n) => n.name.toLowerCase() === name.toLowerCase());
@@ -72,10 +74,11 @@ export abstract class Network {
     }
 
     /**
-     * Get network by its identifier
-     * @param {networks} networks
-     * @returns Nis1Network | SymbolNetwork | undefined
+     * Get network by its identifier.
      *
+     * @param networks - List of Networks
+     * @param identifier - identifier of network, example: '0x68'
+     * @returns filtered network
      */
     public static findByIdentifier(networks: Nis1Network[] | SymbolNetwork[], identifier: number): Nis1Network | SymbolNetwork | undefined {
         const network = networks.find((n) => n.identifier === identifier);

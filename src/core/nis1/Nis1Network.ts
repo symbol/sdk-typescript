@@ -21,8 +21,9 @@ import { Network } from '../Network';
 export class Nis1Network extends Network {
     /**
      * Constructor
-     * @param {string} name Nis1 Network name
-     * @param {number} identifier Nis1 Network identifier
+     *
+     * @param name - Nis1 Network name
+     * @param identifier - Nis1 Network identifier
      */
     constructor(name: string, identifier: number) {
         super(name, identifier);
@@ -30,7 +31,8 @@ export class Nis1Network extends Network {
 
     /**
      * Get hasher for address generation based on selected network type
-     * @returns {SHA3}
+     *
+     * @returns hasher
      */
     public addressHasher(): Hash {
         return keccak256;
@@ -38,7 +40,8 @@ export class Nis1Network extends Network {
 
     /**
      * List all networks
-     * @returns {Nis1Network[]}
+     *
+     * @returns read array of networks
      */
     public static list(): ReadonlyArray<Nis1Network> {
         return NIS1NetworkList.map((n) => new Nis1Network(n.name, n.identifier));
