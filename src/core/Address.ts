@@ -34,7 +34,7 @@ export abstract class Address {
     /**
      * Get address in the encoded format ex: NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFH.
      *
-     * @returns Encoded addres string
+     * @returns Encoded address string
      */
     public get encoded(): string {
         const padded = new Uint8Array(25);
