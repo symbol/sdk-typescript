@@ -19,15 +19,13 @@ import { sha3_256 } from 'js-sha3';
 export class MerkleHashBuilder {
     /**
      * The list of hashes used to calculate root hash.
-     *
-     * @member {Uint8Array}
      */
     private hashes: Uint8Array[] = new Array<Uint8Array>();
 
     /**
      * Calculates the merkle hash.
      *
-     * @returns {Uint8Array} Root merkle hash
+     * @returns Root merkle hash
      */
     public final(): Uint8Array {
         if (this.hashes.length === 0) {
@@ -54,8 +52,8 @@ export class MerkleHashBuilder {
     /**
      * Update hashes array (add hash)
      *
-     * @param {Uint8Array} hash Inner transaction hash buffer
-     * @returns {MerkleHashBuilder} MerkleHashBuilder object
+     * @param hash - Inner transaction hash buffer
+     * @returns MerkleHashBuilder object
      */
     public update(hash: Uint8Array): MerkleHashBuilder {
         this.hashes.push(hash);
@@ -65,8 +63,8 @@ export class MerkleHashBuilder {
     /**
      * Hash inner transactions
      *
-     * @param {Uint8Array} hashes Inner transaction hashes
-     * @returns {Uint8Array} Hashed bytes
+     * @param hashes - Inner transaction hashes
+     * @returns Hashed bytes
      */
     private hash(hashes: Uint8Array[]): Uint8Array {
         const hasher = sha3_256.create();
