@@ -66,7 +66,7 @@ export class MerkleHashBuilder {
      * Hash inner transactions
      *
      * @param {Uint8Array} hashes Inner transaction hashes
-     * @returns {Uint8Array} Hashsed bytes
+     * @returns {Uint8Array} Hashed bytes
      */
     private hash(hashes: Uint8Array[]): Uint8Array {
         const hasher = sha3_256.create();
