@@ -38,15 +38,15 @@ export class MerkleHashBuilder {
         while (numRemainingHashes > 1) {
             for (let i = 0; i < numRemainingHashes; i += 2) {
                 if (i + 1 < numRemainingHashes) {
-                    this.hashes.splice(i / 2, 0, this.hash([this.hashes[i], this.hashes[i + 1]]));
+                    this.hashes.splice(Math.floor(i / 2), 0, this.hash([this.hashes[i], this.hashes[i + 1]]));
                     continue;
                 }
 
                 // if there is an odd number of hashes, duplicate the last one
-                this.hashes.splice(i / 2, 0, this.hash([this.hashes[i], this.hashes[i]]));
+                this.hashes.splice(Math.floor(i / 2), 0, this.hash([this.hashes[i], this.hashes[i]]));
                 ++numRemainingHashes;
             }
-            numRemainingHashes /= 2;
+            numRemainingHashes = Math.floor(numRemainingHashes / 2);
         }
         return this.hashes[0];
     }
