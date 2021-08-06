@@ -9,8 +9,8 @@ describe('NIS 1', () => {
     });
 
     describe('test-sign vector', () => {
-        const testsign = path.join(__dirname, '../test-vector/nis1/2.test-sign.json');
-        SignAndVerifyTester(Nis1KeyPair, testsign);
+        const testSign = path.join(__dirname, '../test-vector/nis1/2.test-sign.json');
+        SignAndVerifyTester(Nis1KeyPair, testSign);
     });
 });
 
@@ -21,8 +21,8 @@ describe('Symbol', () => {
     });
 
     describe('test-sign vector', () => {
-        const testsign = path.join(__dirname, '../test-vector/2.test-sign.json');
-        SignAndVerifyTester(SymbolKeyPair, testsign);
+        const testSign = path.join(__dirname, '../test-vector/2.test-sign.json');
+        SignAndVerifyTester(SymbolKeyPair, testSign);
     });
 
     describe('test-address vector', () => {

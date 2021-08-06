@@ -32,7 +32,7 @@ export abstract class KeyPair {
     }
 
     /**
-     * Abastrct method to derive public key from private key
+     * Abstract method to derive public key from private key
      */
     protected abstract getPublicKey(): Key;
 

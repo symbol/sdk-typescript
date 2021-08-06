@@ -26,12 +26,12 @@ export class SymbolDeadline {
     public adjustedValue: number;
 
     /**
-     * Create deadinline.
+     * Create deadline.
      *
      * @param epochAdjustment - the network's epoch adjustment (seconds). Defined in the network/properties. e.g. 1573430400;
      * @param deadline - the deadline unit value.
-     * @param chronoUnit - the crhono unit. e.g ChronoUnit.HOURS
-     * @returns Symbol dealine object
+     * @param chronoUnit - the chrono unit. e.g ChronoUnit.HOURS
+     * @returns Symbol deadline object
      */
     public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): SymbolDeadline {
         const deadlineDateTime = Instant.now().plus(deadline, chronoUnit);
@@ -47,7 +47,7 @@ export class SymbolDeadline {
      * Create a Deadline where the adjusted values was externally calculated.
      *
      * @param adjustedValue - Adjusted value. (Local datetime minus nemesis epoch adjustment)
-     * @returns Symbol dealine object
+     * @returns Symbol deadline object
      */
     public static createFromAdjustedValue(adjustedValue: number): SymbolDeadline {
         return new SymbolDeadline(adjustedValue);

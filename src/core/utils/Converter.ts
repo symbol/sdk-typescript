@@ -91,7 +91,7 @@ export class Converter {
     };
 
     /**
-     * Reversed convertion hex string to a uint8 array.
+     * Reversed conversion hex string to a uint8 array.
      *
      * @param input - A hex encoded string.
      * @returns A uint8 array corresponding to the input.

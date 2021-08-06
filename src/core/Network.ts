@@ -28,7 +28,7 @@ export abstract class Network {
     constructor(public readonly name: string, public readonly identifier: number) {}
 
     /**
-     * Generate raw address bytes and chechsum from public key.
+     * Generate raw address bytes and checksum from public key.
      *
      * @param publicKey - Public key
      * @returns Raw address and its checksum bytes
