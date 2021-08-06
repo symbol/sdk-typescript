@@ -49,7 +49,7 @@ describe('MerkleHashBuilder should', () => {
         expect(Converter.uint8ToHex(rootHash)).equal('215B158F0BD416B596271BCE527CD9DC8E4A639CC271D896F9156AF6F441EEB9');
     });
 
-    it('Can build from blanced tree', () => {
+    it('Can build from balanced tree', () => {
         // Arrange:
         const builder = new MerkleHashBuilder()
             .update(Converter.hexToUint8('215b158f0bd416b596271bce527cd9dc8e4a639cc271d896f9156af6f441eeb9'))
@@ -64,23 +64,7 @@ describe('MerkleHashBuilder should', () => {
         );
     });
 
-    it('Can build from unblanced tree', () => {
-        // Arrange:
-        const builder = new MerkleHashBuilder()
-            .update(Converter.hexToUint8('215b158f0bd416b596271bce527cd9dc8e4a639cc271d896f9156af6f441eeb9'))
-            .update(Converter.hexToUint8('976c5ce6bf3f797113e5a3a094c7801c885daf783c50563ffd3ca6a5ef580e25'))
-            .update(Converter.hexToUint8('e926cc323886d47234bb0b49219c81e280e8a65748b437c2ae83b09b37a5aaf2'));
-
-        // Act:
-        const rootHash = builder.final();
-
-        // Assert:
-        expect(Converter.uint8ToHex(rootHash).toLocaleLowerCase()).equal(
-            '5dc17b2409d50bcc7c1faa720d0ec8b79a1705d0c517bcc0bdbd316540974d5e',
-        );
-    });
-
-    it('Can build from unblanced tree', () => {
+    it('Can build from unbalanced tree', () => {
         // Arrange:
         const builder = new MerkleHashBuilder()
             .update(Converter.hexToUint8('215b158f0bd416b596271bce527cd9dc8e4a639cc271d896f9156af6f441eeb9'))
