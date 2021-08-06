@@ -23,7 +23,7 @@ export abstract class KeyPair {
     /**
      * Constructor
      *
-     * @param {string} privateKey Private Key
+     * @param privateKey - Private Key
      */
     constructor(public readonly privateKey: Key) {
         // sanity
@@ -32,26 +32,24 @@ export abstract class KeyPair {
     }
 
     /**
-     * Abastrct method to derive public key from private key
-     *
-     * @returns {Key}
+     * Abstract method to derive public key from private key
      */
     protected abstract getPublicKey(): Key;
 
     /**
      * Abstract method to signs a data buffer with a key pair.
      *
-     * @param {Uint8Array} data The data to sign.
-     * @returns {Uint8Array} The signature.
+     * @param data - The data to sign.
+     * @returns The signature.
      */
     public abstract sign(data: Uint8Array): Uint8Array;
 
     /**
      * Abstract method to verifies a signature.
      *
-     * @param {Uint8Array} data The data to verify.
-     * @param {Uint8Array} signature The signature to verify.
-     * @returns {boolean} true if the signature is verifiable, false otherwise.
+     * @param data - The data to verify.
+     * @param signature - The signature to verify.
+     * @returns true if the signature is verifiable, false otherwise.
      */
     public abstract verify(data: Uint8Array, signature: Uint8Array): boolean;
 }

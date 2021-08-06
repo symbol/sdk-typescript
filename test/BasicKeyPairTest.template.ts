@@ -165,7 +165,7 @@ export const BasicKeyPairTester = (KeyPair: any, deterministicPrivateKey: Key, e
 
         it('verify non canonical signature', () => {
             /**
-             * @param {Uint8Array} scalar scalar
+             * @param scalar - scalar
              */
             function scalarAddGroupOrder(scalar: Uint8Array): void {
                 // 2^252 + 27742317777372353535851937790883648493, little endian

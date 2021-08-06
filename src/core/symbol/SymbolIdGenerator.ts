@@ -22,9 +22,9 @@ export class SymbolIdGenerator {
     /**
      * Generate a mosaic id
      *
-     * @param {Address} ownerAddress Mosaic owner's address bytes
-     * @param {Uint8Array} nonce Mosaic nonce bytes
-     * @returns {bigint} Mosaic id bigint value
+     * @param ownerAddress - Mosaic owner's address bytes
+     * @param nonce - Mosaic nonce bytes
+     * @returns Mosaic id bigint value
      */
     public static generateMosaicId(ownerAddress: Address, nonce: Uint8Array): bigint {
         const hash = sha3_256.create();
@@ -37,7 +37,7 @@ export class SymbolIdGenerator {
     /**
      * Generate a random 4 bytes nonce
      *
-     * @returns {Uint8Array} Mosaic nonce bytes
+     * @returns Mosaic nonce bytes
      */
     public static generateRandomMosaicNonce(): Uint8Array {
         return Crypto.randomBytes(4);
@@ -46,9 +46,9 @@ export class SymbolIdGenerator {
     /**
      * Generate namespace id
      *
-     * @param {string} name Namespace name
-     * @param {bigint} parentId Parent namespace id
-     * @returns {bigint} Namespace id bigint value
+     * @param name - Namespace name
+     * @param parentId - Parent namespace id
+     * @returns Namespace id bigint value
      */
     public static generateNamespaceId(name: string, parentId = BigInt(0)): bigint {
         const hash = sha3_256.create();
@@ -62,8 +62,8 @@ export class SymbolIdGenerator {
     /**
      * Generate a namespace path.
      *
-     * @param {string} fullName The fully qualified namespace name. e.g. abc.def.ghi
-     * @returns {Array<module:coders/uint64~uint64>} The namespace path.
+     * @param fullName - The fully qualified namespace name. e.g. abc.def.ghi
+     * @returns The namespace path.
      */
     public static generateNamespacePath = (fullName: string): bigint[] => {
         if (0 >= fullName.length) {
@@ -84,8 +84,8 @@ export class SymbolIdGenerator {
     /**
      * Returns true if a name is a valid namespace name.
      *
-     * @param {string} name Namespace name
-     * @returns {boolean} The namespace name is valid or not
+     * @param name - Namespace name
+     * @returns The namespace name is valid or not
      */
     public static isValidNamespaceName(name: string): boolean {
         return NamespaceConst.name_pattern.test(name);

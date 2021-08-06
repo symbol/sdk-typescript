@@ -158,7 +158,7 @@ describe('base32', () => {
         });
     });
 
-    describe('roundtrip', () => {
+    describe('roundtrips', () => {
         it('decode -> encode', () => {
             // Arrange:
             const inputs = ['BDS73DQ5NC33MKYI3K6GXLJ53C2HJ35A', '46FNYP7T4DD3SWAO6C4NX62FJI5CBA26'];

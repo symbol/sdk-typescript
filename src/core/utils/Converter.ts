@@ -21,9 +21,9 @@ export class Converter {
     /**
      * Decodes two hex characters into a byte.
      *
-     * @param {string} char1 The first hex digit.
-     * @param {string} char2 The second hex digit.
-     * @returns {number} The decoded byte.
+     * @param char1 - The first hex digit.
+     * @param char2 - The second hex digit.
+     * @returns The decoded byte.
      */
     public static toByte(char1: string, char2: string): number {
         const byte = tryParseByte(char1, char2);
@@ -36,9 +36,9 @@ export class Converter {
     /**
      * Determines whether or not a string is a hex string.
      *
-     * @param {string} input The string to test.
-     * @param {string} expectedSize the expected size of the input
-     * @returns {boolean} true if the input is a hex string, false otherwise.
+     * @param input - The string to test.
+     * @param expectedSize - the expected size of the input
+     * @returns true if the input is a hex string, false otherwise.
      */
     public static isHexString(input: string, expectedSize = 0): boolean {
         if (0 !== input.length % 2) {
@@ -58,9 +58,9 @@ export class Converter {
     /**
      * Validates if a string is a valid hex of the expected size.
      *
-     * @param {string} input The string to test.
-     * @param {string} expectedSize the expected size of the input
-     * @param {string} message error message.
+     * @param input - The string to test.
+     * @param expectedSize - the expected size of the input
+     * @param message - error message.
      */
     public static validateHexString(input: string, expectedSize: number, message: string): void {
         if (!Converter.isHexString(input, expectedSize)) {
@@ -71,9 +71,9 @@ export class Converter {
     /**
      * Converts a hex string to a uint8 array.
      *
-     * @param {string} input A hex encoded string.
-     * @param {boolean} reversed Is reversed (default false).
-     * @returns {Uint8Array} A uint8 array corresponding to the input.
+     * @param input - A hex encoded string.
+     * @param reversed - Is reversed (default false).
+     * @returns A uint8 array corresponding to the input.
      */
     public static hexToUint8 = (input: string, reversed = false): Uint8Array => {
         if (0 !== input.length % 2) {
@@ -91,10 +91,10 @@ export class Converter {
     };
 
     /**
-     * Reversed convertion hex string to a uint8 array.
+     * Reversed conversion hex string to a uint8 array.
      *
-     * @param {string} input A hex encoded string.
-     * @returns {Uint8Array} A uint8 array corresponding to the input.
+     * @param input - A hex encoded string.
+     * @returns A uint8 array corresponding to the input.
      */
     public static hexToUint8Reverse = (input: string): Uint8Array => {
         if (0 !== input.length % 2) {
@@ -110,8 +110,8 @@ export class Converter {
     /**
      * Converts a uint8 array to a hex string.
      *
-     * @param {Uint8Array} input A uint8 array.
-     * @returns {string} A hex encoded string corresponding to the input.
+     * @param input - A uint8 array.
+     * @returns A hex encoded string corresponding to the input.
      */
     public static uint8ToHex = (input: Uint8Array): string => {
         let s = '';
@@ -125,24 +125,24 @@ export class Converter {
     /**
      * Converts a uint8 array to a uint32 array.
      *
-     * @param {Uint8Array} input A uint8 array.
-     * @returns {Uint32Array} A uint32 array created from the input.
+     * @param input - A uint8 array.
+     * @returns A uint32 array created from the input.
      */
     public static uint8ToUint32 = (input: Uint8Array): Uint32Array => new Uint32Array(input.buffer);
 
     /**
      * Converts a uint32 array to a uint8 array.
      *
-     * @param {Uint32Array} input A uint32 array.
-     * @returns {Uint8Array} A uint8 array created from the input.
+     * @param input - A uint32 array.
+     * @returns A uint8 array created from the input.
      */
     public static uint32ToUint8 = (input: Uint32Array): Uint8Array => new Uint8Array(input.buffer);
 
     /**
      * Converts an unsigned byte to a signed byte with the same binary representation.
      *
-     * @param {number} input An unsigned byte.
-     * @returns {number} A signed byte with the same binary representation as the input.
+     * @param input - An unsigned byte.
+     * @returns  A signed byte with the same binary representation as the input.
      */
     public static uint8ToInt8 = (input: number): number => {
         if (0xff < input) {
@@ -154,8 +154,8 @@ export class Converter {
     /**
      * Converts a signed byte to an unsigned byte with the same binary representation.
      *
-     * @param {number} input A signed byte.
-     * @returns {number} An unsigned byte with the same binary representation as the input.
+     * @param input - A signed byte.
+     * @returns  An unsigned byte with the same binary representation as the input.
      */
     public static int8ToUint8 = (input: number): number => {
         if (127 < input || -128 > input) {
@@ -168,8 +168,8 @@ export class Converter {
      * Converts a raw javascript string into a string of single byte characters using utf8 encoding.
      * This makes it easier to perform other encoding operations on the string.
      *
-     * @param {string} input A raw string
-     * @returns {string} UTF-8 string
+     * @param input - A raw string
+     * @returns UTF-8 string
      */
     public static rstr2utf8 = (input: string): string => {
         let output = '';
@@ -195,8 +195,8 @@ export class Converter {
     /**
      * Convert UTF-8 to hex
      *
-     * @param {string} input UTF-8 string
-     * @returns {string} hexadecimal string
+     * @param input - UTF-8 string
+     * @returns hexadecimal string
      */
     public static utf8ToHex = (input: string): string => {
         return Buffer.from(input, 'utf-8').toString('hex').toUpperCase();
@@ -205,8 +205,8 @@ export class Converter {
     /**
      * Convert UTF-8 string to Uint8Array
      *
-     * @param {string} input - string with UTF-8 encoding
-     * @returns {Uint8Array} Buffer
+     * @param input - string with UTF-8 encoding
+     * @returns Buffer
      */
     public static utf8ToUint8 = (input: string): Uint8Array => {
         const hex = Converter.utf8ToHex(Converter.rstr2utf8(input));
@@ -216,8 +216,8 @@ export class Converter {
     /**
      * Convert Uint8Array to string with UTF-8 encoding
      *
-     * @param {Uint8Array} input Uint8 array
-     * @returns {string} UTF-8 string
+     * @param input - Uint8 array
+     * @returns UTF-8 string
      */
     public static uint8ToUtf8 = (input: Uint8Array): string => {
         const hex = Converter.uint8ToHex(input);
@@ -227,8 +227,8 @@ export class Converter {
     /**
      * decode hex to uft8 string
      *
-     * @param {string} hex - Hexadecimal string
-     * @returns {string} UTF-8 string
+     * @param hex - Hexadecimal string
+     * @returns UTF-8 string
      */
     public static decodeHex = (hex: string): string => {
         let str = '';
@@ -245,9 +245,9 @@ export class Converter {
     /**
      * Generate xor for two byte arrays and return in hex string
      *
-     * @param {Uint8Array} value1 Value 1 bytes
-     * @param {Uint8Array} value2 Value 2 bytes
-     * @returns {string} delta value in Hex
+     * @param value1 - Value 1 bytes
+     * @param value2 - Value 2 bytes
+     * @returns delta value in Hex
      */
     public static xor(value1: Uint8Array, value2: Uint8Array): string {
         const buffer1 = Buffer.from(value1.buffer as ArrayBuffer);
@@ -264,9 +264,9 @@ export class Converter {
     /**
      * It splits the number's bytes into a an array.
      *
-     * @param {number} number the number
-     * @param {number} arraySize the expected size of the array.
-     * @returns {Uint8Array} Uint8 array
+     * @param number - the number
+     * @param arraySize - the expected size of the array.
+     * @returns Uint8 array
      */
     public static numberToUint8(number: number, arraySize: number): Uint8Array {
         const uint8Array = new Uint8Array(arraySize);
@@ -281,8 +281,8 @@ export class Converter {
     /**
      * It creates a number from the bytes in the array.
      *
-     * @param {Uint8Array} array Uint8 array
-     * @returns {number} number
+     * @param array - Uint8 array
+     * @returns  number
      */
     public static uint8ToNumber(array: Uint8Array): number {
         let value = 0;
