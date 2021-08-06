@@ -22,16 +22,16 @@ export abstract class Network {
     /**
      * Constructor
      *
-     * @param {string} name Network name
-     * @param {number} identifier Network identifier
+     * @param name - Network name
+     * @param identifier - Network identifier
      */
     constructor(public readonly name: string, public readonly identifier: number) {}
 
     /**
      * Generate raw address bytes and chechsum from public key.
      *
-     * @param {string} publicKey Public key
-     * @returns {RawAddress} Raw address and its checksum bytes
+     * @param publicKey - Public key
+     * @returns Raw address and its checksum bytes
      */
     public createAddressFromPublicKey(publicKey: Key): RawAddress {
         const publicKeyBytes = publicKey.toBytes();
@@ -55,8 +55,6 @@ export abstract class Network {
 
     /**
      * Abstract method to gets the primary hasher to use in the public key to address conversion.
-     *
-     * @returns {Hash}
      */
     public abstract addressHasher(): Hash;
 }

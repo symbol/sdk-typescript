@@ -20,15 +20,15 @@ export class Key {
     /**
      * Constructor
      *
-     * @param {Uint8Array} key public/private key bytes
+     * @param key - public/private key bytes
      */
     constructor(public readonly key: Uint8Array) {}
 
     /**
      * Create Public/Private key from hexadecimal string
      *
-     * @param {string} key Public key string
-     * @returns {Key} The Key object
+     * @param key - Public key string
+     * @returns The Key object
      */
     public static createFromHex(key: string): Key {
         return new Key(Converter.hexToUint8(key));
@@ -37,7 +37,7 @@ export class Key {
     /**
      * Return key bytes.
      *
-     * @returns {Uint8Array} Bytes of the key
+     * @returns Bytes of the key
      */
     public toBytes(): Uint8Array {
         return this.key;
@@ -46,7 +46,7 @@ export class Key {
     /**
      * Return key hexadecimal string.
      *
-     * @returns {string} Hexadecimal string
+     * @returns Hexadecimal string
      */
     public toString(): string {
         return Converter.uint8ToHex(this.key);
@@ -55,7 +55,7 @@ export class Key {
     /**
      * Key length property
      *
-     * @returns {number} Key length
+     * @returns  Key length
      */
     public get length(): number {
         return this.key.length;

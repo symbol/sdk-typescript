@@ -28,10 +28,10 @@ export class SymbolDeadline {
     /**
      * Create deadinline.
      *
-     * @param {number} epochAdjustment the network's epoch adjustment (seconds). Defined in the network/properties. e.g. 1573430400;
-     * @param {number} deadline the deadline unit value.
-     * @param {ChronoUnit} chronoUnit the crhono unit. e.g ChronoUnit.HOURS
-     * @returns {SymbolDeadline} Symbol dealine object
+     * @param epochAdjustment - the network's epoch adjustment (seconds). Defined in the network/properties. e.g. 1573430400;
+     * @param deadline - the deadline unit value.
+     * @param chronoUnit - the crhono unit. e.g ChronoUnit.HOURS
+     * @returns Symbol dealine object
      */
     public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): SymbolDeadline {
         const deadlineDateTime = Instant.now().plus(deadline, chronoUnit);
@@ -46,8 +46,8 @@ export class SymbolDeadline {
      *
      * Create a Deadline where the adjusted values was externally calculated.
      *
-     * @param {number} adjustedValue Adjusted value. (Local datetime minus nemesis epoch adjustment)
-     * @returns {SymbolDeadline} Symbol dealine object
+     * @param adjustedValue - Adjusted value. (Local datetime minus nemesis epoch adjustment)
+     * @returns Symbol dealine object
      */
     public static createFromAdjustedValue(adjustedValue: number): SymbolDeadline {
         return new SymbolDeadline(adjustedValue);
@@ -56,7 +56,7 @@ export class SymbolDeadline {
     /**
      * Constructor
      *
-     * @param { number} adjustedValue Adjusted value. (Local datetime minus nemesis epoch adjustment)
+     * @param adjustedValue - Adjusted value. (Local datetime minus nemesis epoch adjustment)
      */
     private constructor(adjustedValue: number) {
         this.adjustedValue = adjustedValue;
@@ -65,8 +65,8 @@ export class SymbolDeadline {
     /**
      * Returns deadline as local date time.
      *
-     * @param {number} epochAdjustment the network's epoch adjustment (seconds). Defined in the network/properties.
-     * @returns {LocalDateTime} Local date time
+     * @param epochAdjustment - the network's epoch adjustment (seconds). Defined in the network/properties.
+     * @returns Local date time
      */
     public toLocalDateTime(epochAdjustment: number): LocalDateTime {
         return this.toLocalDateTimeGivenTimeZone(epochAdjustment, ZoneId.SYSTEM);
@@ -75,9 +75,9 @@ export class SymbolDeadline {
     /**
      * Returns deadline as local date time.
      *
-     * @param {number} epochAdjustment the network's epoch adjustment (seconds). Defined in the network/properties.
-     * @param {ZoneId} zoneId the Zone Id.
-     * @returns {LocalDateTime} Local date time
+     * @param epochAdjustment - the network's epoch adjustment (seconds). Defined in the network/properties.
+     * @param zoneId - the Zone Id.
+     * @returns Local date time
      */
     public toLocalDateTimeGivenTimeZone(epochAdjustment: number, zoneId: ZoneId): LocalDateTime {
         return LocalDateTime.ofInstant(
