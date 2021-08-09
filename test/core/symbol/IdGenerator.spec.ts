@@ -74,21 +74,20 @@ describe('Symbol IdGenerator - TestVector', () => {
             // Assert:
             expect(xempath.length).to.equal(2);
             expect(xempath[0]).to.equal(BigInt('0x84B3552D375FFA4B').valueOf());
-            expect(xempath[1]).to.equal(BigInt('0xA60FC7C97DB58AFC').valueOf());
+            expect(xempath[1]).to.equal(BigInt('0xD525AD41D95FCF29').valueOf());
             expect(xympath.length).to.equal(2);
             expect(xympath[0]).to.equal(BigInt('0xA95F1F8A96159516').valueOf());
-            expect(xympath[1]).to.equal(BigInt('0x84CB6A45853E78C4').valueOf());
+            expect(xympath[1]).to.equal(BigInt('0xE74B99BA41F4AFEE').valueOf()); // The known symbol.xym namespace id
         });
 
         it('supports multi level namespaces', () => {
             // Arrange:
-            const expected: bigint[] = [];
-            expected.push(SymbolIdGenerator.generateNamespaceId('foo'));
-            expected.push(SymbolIdGenerator.generateNamespaceId('bar'));
-            expected.push(SymbolIdGenerator.generateNamespaceId('baz'));
+            const foo = SymbolIdGenerator.generateNamespaceId('foo');
+            const bar = SymbolIdGenerator.generateNamespaceId('bar', foo);
+            const baz = SymbolIdGenerator.generateNamespaceId('baz', bar);
 
             // Assert:
-            expect(SymbolIdGenerator.generateNamespacePath('foo.bar.baz')).to.deep.equal(expected);
+            expect(SymbolIdGenerator.generateNamespacePath('foo.bar.baz')).to.deep.equal([foo, bar, baz]);
         });
 
         it('rejects improper qualified names', () => {
