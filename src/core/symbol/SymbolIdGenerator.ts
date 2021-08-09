@@ -76,7 +76,7 @@ export class SymbolIdGenerator {
                 throw new Error(`fully qualified name is invalid due to invalid part name (${fullName})`);
             }
             path.push(SymbolIdGenerator.generateNamespaceId(name, parentId));
-            parentId = path[-1];
+            parentId = path[path.length - 1];
         });
         return path;
     };
