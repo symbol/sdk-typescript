@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-import { Network, SymbolNetworkList } from '@core';
-import { Hash, sha3_256 } from 'js-sha3';
+import { Hash, keccak256 } from 'js-sha3';
+import { NIS1NetworkList } from '../constants';
+import { Network } from '../Network';
 
-export class SymbolNetwork extends Network {
+export class Nis1Network extends Network {
     /**
      * Constructor
      *
-     * @param name - Network name
-     * @param identifier - Network identifier
-     * @param generationHash - Symbol network generation hash
+     * @param name - Nis1 Network name
+     * @param identifier - Nis1 Network identifier
      */
-    constructor(name: string, identifier: number, public readonly generationHash: string) {
+    constructor(name: string, identifier: number) {
         super(name, identifier);
     }
 
     /**
      * Get hasher for address generation based on selected network type
      *
-     * @returns SHA3 hasher
+     * @returns hasher
      */
     public addressHasher(): Hash {
-        return sha3_256;
+        return keccak256;
     }
 
     /**
      * List all networks
      *
-     * @returns Symbol network list
+     * @returns read array of networks
      */
-    public static list(): ReadonlyArray<SymbolNetwork> {
-        return SymbolNetworkList.map((n) => new SymbolNetwork(n.name, n.identifier, n.generationHash));
+    public static list(): ReadonlyArray<Nis1Network> {
+        return NIS1NetworkList.map((n) => new Nis1Network(n.name, n.identifier));
     }
 }

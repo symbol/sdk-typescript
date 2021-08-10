@@ -18,8 +18,8 @@
  * Network types for both Symbol & NIS1
  */
 export const SymbolNetworkList = [
-    { name: 'public', identifier: 0x68, generationHash: '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6' },
-    { name: 'public_test', identifier: 0x98, generationHash: '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155' },
+    { name: 'mainnet', identifier: 0x68, generationHash: '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6' },
+    { name: 'testnet', identifier: 0x98, generationHash: '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155' },
 ];
 
 export const NIS1NetworkList = [

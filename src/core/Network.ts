@@ -57,4 +57,26 @@ export abstract class Network {
      * Abstract method to gets the primary hasher to use in the public key to address conversion.
      */
     public abstract addressHasher(): Hash;
+
+    /**
+     * Get network by its name.
+     *
+     * @param networks - Nis1Network[] | SymbolNetwork[]
+     * @param name - name of network, example: 'mainnet'
+     * @returns filtered network
+     */
+    public static findByName<T extends Network>(networks: readonly T[], name: string): T | undefined {
+        return networks.find((n) => n.name.toLowerCase() === name.toLowerCase());
+    }
+
+    /**
+     * Get network by its identifier.
+     *
+     * @param networks - List of Networks
+     * @param identifier - identifier of network, example: '0x68'
+     * @returns filtered network
+     */
+    public static findByIdentifier<T extends Network>(networks: readonly T[], identifier: number): T | undefined {
+        return networks.find((n) => n.identifier === identifier);
+    }
 }
