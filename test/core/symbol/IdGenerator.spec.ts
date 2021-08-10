@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import { Converter, SymbolIdGenerator } from '@core';
-import { NetworkTypeDto } from 'catbuffer-typescript';
 import { expect } from 'chai';
 
 describe('Symbol IdGenerator - TestVector', () => {
@@ -55,21 +54,6 @@ describe('Symbol IdGenerator - TestVector', () => {
         expect(SymbolIdGenerator.isValidNamespaceName('-')).to.be.false;
         expect(SymbolIdGenerator.isValidNamespaceName(' ')).to.be.false;
         expect(SymbolIdGenerator.isValidNamespaceName('')).to.be.false;
-    });
-
-    it('can convert bigint to hex', () => {
-        const id = SymbolIdGenerator.namespaceId('symbol.xym');
-        expect(id.toString()).eq('16666583871264174062');
-        expect(id.toString(16).toUpperCase()).eq('E74B99BA41F4AFEE');
-    });
-
-    it('NamespaceId to unresolvedAddress', () => {
-        const namespace = SymbolIdGenerator.namespaceId('i.am.alice');
-        expect(Converter.uint8ToHex(SymbolIdGenerator.encodeUnresolvedAddress(NetworkTypeDto.PUBLIC_TEST, namespace))).eq(
-            '99C1ED94FF2D65C0AF000000000000000000000000000000',
-        );
-        expect(namespace.toString(16).toUpperCase()).eq('AFC0652DFF94EDC1');
-        expect(namespace.toString()).eq('12664233400401718721');
     });
 
     describe('Encode Unresolved Addresses', () => {

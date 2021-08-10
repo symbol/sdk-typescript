@@ -83,15 +83,6 @@ export class SymbolIdGenerator {
     };
 
     /**
-     * The namespace id based on the full alias name.
-     * @param fullName - the full namespace
-     */
-    public static namespaceId = (fullName: string): bigint => {
-        const path = SymbolIdGenerator.generateNamespacePath(fullName);
-        return path[path.length - 1];
-    };
-
-    /**
      * Returns true if a name is a valid namespace name.
      *
      * @param name - Namespace name

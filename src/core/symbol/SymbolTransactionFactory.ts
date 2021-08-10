@@ -157,8 +157,9 @@ export class SymbolTransactionFactory {
      *
      * @param fullName - the full namespace
      */
-    public namespaceId(fullName: string): bigint {
-        return SymbolIdGenerator.namespaceId(fullName);
+    public fullNameToNamespaceId(fullName: string): bigint {
+        const path = SymbolIdGenerator.generateNamespacePath(fullName);
+        return path[path.length - 1];
     }
 
     /**

@@ -48,7 +48,7 @@ describe('Symbol Aggregate Transaction', () => {
     const alice = new SymbolKeyPair(Key.createFromHex(alicePrivateKey));
     // const aliceAddress = new SymbolAddress(network.createAddressFromPublicKey(alice.publicKey));
     // Example: Use alias.
-    const aliceAlias: SymbolUnresolvedAddress = factory.namespaceId('i.am.alice');
+    const aliceAlias: SymbolUnresolvedAddress = factory.fullNameToNamespaceId('i.am.alice');
 
     const msgA = 'Hello Alice, I have sent you 1 XYM!';
     const msgB = 'Hello Bob, I have sent you 2 XYM!';
