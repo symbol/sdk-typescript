@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    Converter,
-    Key,
-    SymbolAddress,
-    SymbolDeadline,
-    SymbolKeyPair,
-    SymbolMessageUtils,
-    SymbolNetwork,
-    SymbolUnresolvedAddress,
-} from '@core';
+import { Converter, Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork, SymbolUnresolvedAddress } from '@core';
 import {
     AmountDto,
     BlockDurationDto,
@@ -64,6 +55,12 @@ describe('Symbol Aggregate Transaction', () => {
 
     const maxFee = BigInt(10000);
 
+    // This could be in a helper class, maybe SymbolMessageUtils/Helper/Factory etc.
+    function plain(plainText: string): Uint8Array {
+        //0x00 is the message type for plain utf-8 encoded texts.
+        return Converter.concat(Uint8Array.of(0x00), Converter.utf8ToUint8(plainText));
+    }
+
     // Static deadline for payload assertions.
     const deadline = SymbolDeadline.createFromAdjustedValue(100);
 
@@ -76,7 +73,7 @@ describe('Symbol Aggregate Transaction', () => {
                 amount: new AmountDto(BigInt(1000000)),
             }),
         ],
-        SymbolMessageUtils.plain(msgA),
+        plain(msgA),
     );
 
     // Option two, constructor with object param.
@@ -88,7 +85,7 @@ describe('Symbol Aggregate Transaction', () => {
                 amount: new AmountDto(BigInt(2000000)),
             }),
         ],
-        message: SymbolMessageUtils.plain(msgB),
+        message: plain(msgB),
     });
 
     it('Create simple transfer transaction complete', () => {

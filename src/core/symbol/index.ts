@@ -4,7 +4,6 @@ export * from './SymbolDeadline';
 export * from './SymbolEnums';
 export * from './SymbolIdGenerator';
 export * from './SymbolKeyPair';
-export * from './SymbolMessageUtils';
 export * from './SymbolNetwork';
 export * from './SymbolTransaction';
 export * from './SymbolTransactionFactory';
