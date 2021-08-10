@@ -15,7 +15,7 @@
  */
 
 import ripemd160 = require('ripemd160');
-import { Key, Nis1Network, RawAddress, SymbolNetwork } from '@core';
+import { Key, RawAddress } from '@core';
 import { Hash } from 'js-sha3';
 
 export abstract class Network {
@@ -65,12 +65,8 @@ export abstract class Network {
      * @param name - name of network, example: 'mainnet'
      * @returns filtered network
      */
-    public static findByName(networks: Nis1Network[] | SymbolNetwork[], name: string): Nis1Network | SymbolNetwork | undefined {
-        const network = networks.find((n) => n.name.toLowerCase() === name.toLowerCase());
-
-        if (!network) return undefined;
-
-        return network;
+    public static findByName<T extends Network>(networks: readonly T[], name: string): T | undefined {
+        return networks.find((n) => n.name.toLowerCase() === name.toLowerCase());
     }
 
     /**
@@ -80,11 +76,7 @@ export abstract class Network {
      * @param identifier - identifier of network, example: '0x68'
      * @returns filtered network
      */
-    public static findByIdentifier(networks: Nis1Network[] | SymbolNetwork[], identifier: number): Nis1Network | SymbolNetwork | undefined {
-        const network = networks.find((n) => n.identifier === identifier);
-
-        if (!network) return undefined;
-
-        return network;
+    public static findByIdentifier<T extends Network>(networks: readonly T[], identifier: number): T | undefined {
+        return networks.find((n) => n.identifier === identifier);
     }
 }
