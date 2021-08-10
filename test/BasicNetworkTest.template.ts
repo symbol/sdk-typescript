@@ -14,13 +14,47 @@
  * limitations under the License.
  */
 
-import { Nis1Network, SymbolNetwork } from '@core';
+import { Network } from '@core';
 import { expect } from 'chai';
 
-export const BasicNetworkTester = (network: Nis1Network | SymbolNetwork, expectedName: string, expectedIdentifier: number): void => {
+export const AssertNetwork = (network: Network, expectedName: string, expectedIdentifier: number): void => {
     it('correct predefined networks are registered', () => {
         // Assert:
         expect(network.name).to.be.equal(expectedName);
         expect(network.identifier).to.be.equal(expectedIdentifier);
+    });
+};
+
+export const BasicNetworkTester = <T extends Network>(networks: readonly T[], name: string, identifier: number): void => {
+    it('can find well known network by name', () => {
+        // Act:
+        const network = Network.findByName(networks, name);
+
+        // Assert:
+        AssertNetwork(network!, name, identifier);
+    });
+
+    it('cannot find other network given name not exist', () => {
+        // Act:
+        const foo = Network.findByName(networks, '0x00');
+
+        // Assert:
+        expect(foo).to.be.undefined;
+    });
+
+    it('can find well known network by identifier', () => {
+        // Act:
+        const network = Network.findByIdentifier(networks, identifier);
+
+        // Assert:
+        AssertNetwork(network!, name, identifier);
+    });
+
+    it('cannot find other network given identifier not exist', () => {
+        // Act:
+        const foo = Network.findByIdentifier(networks, 0x00);
+
+        // Assert:
+        expect(foo).to.be.undefined;
     });
 };

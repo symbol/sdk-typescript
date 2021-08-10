@@ -16,104 +16,61 @@
 
 import { SymbolNetwork } from '@core';
 import { expect } from 'chai';
-import { keccak256, sha3_256 } from 'js-sha3';
-import { BasicNetworkTester } from '../../BasicNetworkTest.template';
+import { sha3_256 } from 'js-sha3';
+import { AssertNetwork, BasicNetworkTester } from '../../BasicNetworkTest.template';
 
 describe('Symbol Network', () => {
-    // Arrange:
-    const networks = [
-        new SymbolNetwork('public', 0x68, '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6'),
-        new SymbolNetwork('public_test', 0x98, '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155'),
-    ];
+    const mainnetGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
+    const testnetGenerationHash = '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155';
 
-    describe('correct networks are registered', () => {
-        it('predefined network', () => {
-            // Assert:
-            expect(['public', 'public_test']).to.be.deep.equal(networks.map((n) => n.name));
-            expect(networks.length).to.be.equal(2);
-        });
+    describe('Network Constructor', () => {
+        // Arrange:
+        const network = new SymbolNetwork('mainnet', 0x68, mainnetGenerationHash);
 
-        it('mainnet', () => {
-            BasicNetworkTester(networks[0], 'public', 0x68);
-
-            // Assert:
-            expect(networks[0].generationHash).to.be.equal('57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6');
-        });
-
-        it('testnet', () => {
-            BasicNetworkTester(networks[1], 'public_test', 0x98);
-
-            // Assert:
-            expect(networks[1].generationHash).to.be.equal('3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155');
-        });
+        // Assert:
+        expect(network.generationHash).to.be.equal(mainnetGenerationHash);
+        AssertNetwork(network, 'mainnet', 0x68);
     });
 
-    describe('Network finder', () => {
-        it('can find well known network by name', () => {
+    describe('Correct networks are registered', () => {
+        it('predefined network', () => {
             // Act:
-            const mainnet = SymbolNetwork.findByName(networks, 'public');
-            const testnet = SymbolNetwork.findByName(networks, 'public_test');
+            const networks = SymbolNetwork.list();
 
             // Assert:
-            expect(mainnet).not.to.be.undefined;
-            expect(mainnet).to.be.deep.equal(networks[0]);
-            expect(testnet).not.to.be.undefined;
-            expect(testnet).to.be.deep.equal(networks[1]);
-        });
-
-        it('cannot find other network by name', () => {
-            // Act:
-            const foo = SymbolNetwork.findByName(networks, 'foo');
-
-            // Assert:
-            expect(foo).to.be.undefined;
-        });
-
-        it('can find well known network by identifier', () => {
-            // Act:
-            const mainnet = SymbolNetwork.findByIdentifier(networks, 0x68);
-            const testnet = SymbolNetwork.findByIdentifier(networks, 0x98);
-
-            // Assert:
-            expect(mainnet).not.to.be.undefined;
-            expect(mainnet).to.be.deep.equal(networks[0]);
-            expect(testnet).not.to.be.undefined;
-            expect(testnet).to.be.deep.equal(networks[1]);
-        });
-
-        it('cannot find other network by identifier', () => {
-            // Act:
-            const foo = SymbolNetwork.findByIdentifier(networks, 0x00);
-
-            // Assert:
-            expect(foo).to.be.undefined;
+            expect(['mainnet', 'testnet']).to.be.deep.equal(networks.map((n) => n.name));
+            AssertNetwork(networks[0], 'mainnet', 0x68);
+            expect(networks[0].generationHash).to.be.equal(mainnetGenerationHash);
+            AssertNetwork(networks[1], 'testnet', 0x98);
+            expect(networks[1].generationHash).to.be.equal(testnetGenerationHash);
         });
     });
 
     describe('Address Hasher', () => {
         it('can create correct hasher', () => {
             // Arrange:
-            const expected = sha3_256.arrayBuffer(networks[0].generationHash);
-            const unexpected = keccak256.arrayBuffer(networks[0].generationHash);
+            const network = new SymbolNetwork('mainnet', 0x68, mainnetGenerationHash);
+            const expected = sha3_256.arrayBuffer(network.generationHash);
 
             // Act:
-            const hasher = networks[0].addressHasher();
-            const hash = hasher.arrayBuffer(networks[0].generationHash);
+            const hasher = network.addressHasher();
+            const hash = hasher.arrayBuffer(network.generationHash);
 
             // Assert:
             expect(hash).to.be.deep.equal(expected);
-            expect(hash).not.to.be.deep.equal(unexpected);
         });
     });
 
-    describe('Get Networks', () => {
-        it('can get correct network list', () => {
-            // Act:
-            const list = SymbolNetwork.list();
+    describe('Network finder', () => {
+        // Arrange:
+        const networks = SymbolNetwork.list();
 
-            // Assert:
-            expect(networks).to.be.deep.equal(list);
-            expect(networks.length).to.be.equal(2);
+        describe('Assert first network', () => {
+            BasicNetworkTester(networks, 'mainnet', 0x68);
+        });
+
+        describe('Assert second network', () => {
+            BasicNetworkTester(networks, 'testnet', 0x98);
         });
     });
 });
