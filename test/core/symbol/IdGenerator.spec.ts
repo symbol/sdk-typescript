@@ -61,17 +61,6 @@ describe('Symbol IdGenerator - TestVector', () => {
         const id = SymbolIdGenerator.namespaceId('symbol.xym');
         expect(id.toString()).eq('16666583871264174062');
         expect(id.toString(16).toUpperCase()).eq('E74B99BA41F4AFEE');
-
-        expect(SymbolIdGenerator.toHex(id)).eq('E74B99BA41F4AFEE');
-        expect(SymbolIdGenerator.toHex(BigInt('16666583871264174062'))).eq('E74B99BA41F4AFEE');
-        expect(SymbolIdGenerator.toHex(BigInt('0xE74B99BA41F4AFEE'))).eq('E74B99BA41F4AFEE');
-    });
-
-    it('can convert hex to bigInt', () => {
-        const id = SymbolIdGenerator.namespaceId('symbol.xym');
-        expect(id.toString()).eq('16666583871264174062');
-        expect(id.toString(16).toUpperCase()).eq('E74B99BA41F4AFEE');
-        expect(SymbolIdGenerator.fromHex('E74B99BA41F4AFEE')).eq(id);
     });
 
     it('NamespaceId to unresolvedAddress', () => {
@@ -79,7 +68,7 @@ describe('Symbol IdGenerator - TestVector', () => {
         expect(Converter.uint8ToHex(SymbolIdGenerator.encodeUnresolvedAddress(NetworkTypeDto.PUBLIC_TEST, namespace))).eq(
             '99C1ED94FF2D65C0AF000000000000000000000000000000',
         );
-        expect(SymbolIdGenerator.toHex(namespace)).eq('AFC0652DFF94EDC1');
+        expect(namespace.toString(16).toUpperCase()).eq('AFC0652DFF94EDC1');
         expect(namespace.toString()).eq('12664233400401718721');
     });
 
@@ -133,7 +122,7 @@ describe('Symbol IdGenerator - TestVector', () => {
             it(`Namespace Is ${item.namespaceHex} Network Type ${item.networkType}`, () => {
                 const namespaceId = BigInt(item.namespaceId);
                 // Act + Assert:
-                expect(SymbolIdGenerator.toHex(namespaceId)).equal(item.namespaceHex);
+                expect(namespaceId.toString(16).toUpperCase()).equal(item.namespaceHex);
                 const encoded = SymbolIdGenerator.encodeUnresolvedAddress(item.networkType, namespaceId);
                 expect(Converter.uint8ToHex(encoded)).eq(item.encoded);
             });

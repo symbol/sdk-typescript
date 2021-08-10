@@ -16,7 +16,6 @@
 
 import { Converter, Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork, SymbolTransactionUtils } from '@core';
 import {
-    AggregateCompleteTransactionBuilder,
     AmountDto,
     KeyDto,
     NetworkTypeDto,
@@ -31,7 +30,7 @@ import {
 import { expect } from 'chai';
 
 describe('Symbol Transfer Transaction', () => {
-    const network = SymbolNetwork.findByName('public');
+    const network = SymbolNetwork.findByName(SymbolNetwork.list(), 'mainnet');
     if (!network) {
         throw new Error('Network must be found!');
     }
@@ -132,13 +131,14 @@ describe('Symbol Transfer Transaction', () => {
     it('Transaction to Aggregate, sign', () => {
         const transaction = factory.createAggregateComplete(deadline, fee.amount, [builder]);
         expect(transaction.isAggregate).eq(true);
+        expect(transaction.size).eq(264);
         expect(Converter.uint8ToHex(transaction.payload)).eq(
             '080100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF000001000000000001000000020000000100000000000000',
         );
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('879697DEA66ED22E3EC0136BD77352037BAEFC6DE56D1BA9B9B8A61F9E463BB2');
         transaction.sign(signer);
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('04B1BCD281D9EBB5C5FC13190410514D9A279ED502A988E285622CCCD977B975');
-        const aggregateBuilder = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilder = transaction.builder;
         expect(aggregateBuilder.transactions.length).deep.eq(1);
         expect(aggregateBuilder.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilder.cosignatures.length).deep.eq(0);
@@ -146,11 +146,13 @@ describe('Symbol Transfer Transaction', () => {
         expect(Converter.uint8ToHex(transaction.payload)).eq(
             '0801000000000000FEE908835B3B4DBDC46A52536FA01ADC6C563D3FAFB3F41CD6193CFAD14E011EE389B88707EA9BE79D07ECCF0FE02E8DF277E3E55F957A972C1FD1E463564105462B2DF6B9D310A467CE8EBAFB1624E47152327E869DDBA0EBB6313AF1FA50F300000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF000001000000000001000000020000000100000000000000',
         );
+        expect(transaction.size).eq(264);
     });
 
     it('Transaction to Aggregate, sign and cosign', () => {
         const transaction = factory.createAggregateComplete(deadline, fee.amount, [builder]);
         expect(transaction.isAggregate).eq(true);
+        expect(transaction.size).eq(264);
         expect(Converter.uint8ToHex(transaction.payload)).eq(
             '080100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF000001000000000001000000020000000100000000000000',
         );
@@ -162,17 +164,19 @@ describe('Symbol Transfer Transaction', () => {
             'D801000000000000FEE908835B3B4DBDC46A52536FA01ADC6C563D3FAFB3F41CD6193CFAD14E011EE389B88707EA9BE79D07ECCF0FE02E8DF277E3E55F957A972C1FD1E463564105462B2DF6B9D310A467CE8EBAFB1624E47152327E869DDBA0EBB6313AF1FA50F300000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF00000100000000000100000002000000010000000000000000000000000000004164E826351CC1BE074A384729EAC54D5FDE53BAF48EFE8F431B675CD11ACB68A9283775173B54FB75B47CCBD0EC7E77C282DE6F496B684A605DCDAACEFC26641B7177A33EFF63589944A5951321768778AD0CDED22FC8A814352FE4FD953F0C000000000000000001AA3E0E38371A4F53CE30B61C9FE2D8E8CDC2E578509BFF5FDFFE72CD4B090FD75ED22BAE3DA059618EFA25EB036BD06E2540097920202493EC56408F20E648BFBB47EE996B784380CAE3E52FC32C7044F0459E4D3627DAEE2DEC1CC4351C00',
         );
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('04B1BCD281D9EBB5C5FC13190410514D9A279ED502A988E285622CCCD977B975');
-        const aggregateBuilder = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilder = transaction.builder;
         expect(aggregateBuilder.transactions.length).deep.eq(1);
         expect(aggregateBuilder.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilder.cosignatures.length).deep.eq(2);
         expect(aggregateBuilder.cosignatures[0].signerPublicKey.serialize()).deep.eq(cosigner1.publicKey.toBytes());
         expect(aggregateBuilder.cosignatures[1].signerPublicKey.serialize()).deep.eq(cosigner2.publicKey.toBytes());
+        expect(transaction.size).eq(264 + 104 * 2);
     });
 
     it('Transaction to Aggregate, sign and cosign 2 operations', () => {
         const transaction = factory.createAggregateComplete(deadline, fee.amount, [builder]);
         expect(transaction.isAggregate).eq(true);
+        expect(transaction.size).eq(264);
 
         expect(Converter.uint8ToHex(transaction.payload)).eq(
             '080100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF000001000000000001000000020000000100000000000000',
@@ -186,7 +190,7 @@ describe('Symbol Transfer Transaction', () => {
         );
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('04B1BCD281D9EBB5C5FC13190410514D9A279ED502A988E285622CCCD977B975');
 
-        const aggregateBuilderFirst = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilderFirst = transaction.builder;
         expect(aggregateBuilderFirst.transactions.length).deep.eq(1);
         expect(aggregateBuilderFirst.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilderFirst.cosignatures.length).deep.eq(1);
@@ -197,18 +201,19 @@ describe('Symbol Transfer Transaction', () => {
             'D801000000000000FEE908835B3B4DBDC46A52536FA01ADC6C563D3FAFB3F41CD6193CFAD14E011EE389B88707EA9BE79D07ECCF0FE02E8DF277E3E55F957A972C1FD1E463564105462B2DF6B9D310A467CE8EBAFB1624E47152327E869DDBA0EBB6313AF1FA50F300000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF00000100000000000100000002000000010000000000000000000000000000004164E826351CC1BE074A384729EAC54D5FDE53BAF48EFE8F431B675CD11ACB68A9283775173B54FB75B47CCBD0EC7E77C282DE6F496B684A605DCDAACEFC26641B7177A33EFF63589944A5951321768778AD0CDED22FC8A814352FE4FD953F0C000000000000000001AA3E0E38371A4F53CE30B61C9FE2D8E8CDC2E578509BFF5FDFFE72CD4B090FD75ED22BAE3DA059618EFA25EB036BD06E2540097920202493EC56408F20E648BFBB47EE996B784380CAE3E52FC32C7044F0459E4D3627DAEE2DEC1CC4351C00',
         );
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('04B1BCD281D9EBB5C5FC13190410514D9A279ED502A988E285622CCCD977B975');
-        const aggregateBuilderSecond = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilderSecond = transaction.builder;
         expect(aggregateBuilderSecond.transactions.length).deep.eq(1);
         expect(aggregateBuilderSecond.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilderSecond.cosignatures.length).deep.eq(2);
         expect(aggregateBuilderSecond.cosignatures[0].signerPublicKey.serialize()).deep.eq(cosigner1.publicKey.toBytes());
         expect(aggregateBuilderSecond.cosignatures[1].signerPublicKey.serialize()).deep.eq(cosigner2.publicKey.toBytes());
+        expect(transaction.size).eq(264 + 104 * 2);
     });
 
     it('Transaction to Aggregate, sign and add cosignatures 2 operations', () => {
         const transaction = factory.createAggregateComplete(deadline, fee.amount, [builder]);
         expect(transaction.isAggregate).eq(true);
-
+        expect(transaction.size).eq(264);
         expect(Converter.uint8ToHex(transaction.payload)).eq(
             '080100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF000001000000000001000000020000000100000000000000',
         );
@@ -226,11 +231,12 @@ describe('Symbol Transfer Transaction', () => {
         );
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('04B1BCD281D9EBB5C5FC13190410514D9A279ED502A988E285622CCCD977B975');
 
-        const aggregateBuilderFirst = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilderFirst = transaction.builder;
         expect(aggregateBuilderFirst.transactions.length).deep.eq(1);
         expect(aggregateBuilderFirst.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilderFirst.cosignatures.length).deep.eq(1);
         expect(aggregateBuilderFirst.cosignatures[0].signerPublicKey.serialize()).deep.eq(cosigner1.publicKey.toBytes());
+        expect(transaction.size).eq(264 + 104 * 1);
 
         transaction.addCosignatures([
             {
@@ -242,17 +248,19 @@ describe('Symbol Transfer Transaction', () => {
             'D801000000000000FEE908835B3B4DBDC46A52536FA01ADC6C563D3FAFB3F41CD6193CFAD14E011EE389B88707EA9BE79D07ECCF0FE02E8DF277E3E55F957A972C1FD1E463564105462B2DF6B9D310A467CE8EBAFB1624E47152327E869DDBA0EBB6313AF1FA50F300000000016841410A0000000000000064000000000000006CACCBBF35736A9C198B816D0744AF851B1DC7B80318842EF0A2440D22A1F7B06000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000001685441681EA8552582BDC72DFE53EB4C791DF63994033CD21051DF00000100000000000100000002000000010000000000000000000000000000004164E826351CC1BE074A384729EAC54D5FDE53BAF48EFE8F431B675CD11ACB68A9283775173B54FB75B47CCBD0EC7E77C282DE6F496B684A605DCDAACEFC26641B7177A33EFF63589944A5951321768778AD0CDED22FC8A814352FE4FD953F0C000000000000000001AA3E0E38371A4F53CE30B61C9FE2D8E8CDC2E578509BFF5FDFFE72CD4B090FD75ED22BAE3DA059618EFA25EB036BD06E2540097920202493EC56408F20E648BFBB47EE996B784380CAE3E52FC32C7044F0459E4D3627DAEE2DEC1CC4351C00',
         );
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('04B1BCD281D9EBB5C5FC13190410514D9A279ED502A988E285622CCCD977B975');
-        const aggregateBuilderSecond = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilderSecond = transaction.builder;
         expect(aggregateBuilderSecond.transactions.length).deep.eq(1);
         expect(aggregateBuilderSecond.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilderSecond.cosignatures.length).deep.eq(2);
         expect(aggregateBuilderSecond.cosignatures[0].signerPublicKey.serialize()).deep.eq(cosigner1.publicKey.toBytes());
         expect(aggregateBuilderSecond.cosignatures[1].signerPublicKey.serialize()).deep.eq(cosigner2.publicKey.toBytes());
+        expect(transaction.size).eq(264 + 104 * 2);
     });
 
     it('Transaction to Aggregate, signWithCosigners', () => {
         const transaction = factory.createAggregateBonded(deadline, fee.amount, [builder]);
         expect(transaction.isAggregate).eq(true);
+        expect(transaction.size).eq(264);
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('2CCE4B254E575D21BCAB344735F55888256A4542721848D8F5D141599BCB0485');
 
         expect(Converter.uint8ToHex(transaction.payload)).eq(
@@ -266,11 +274,12 @@ describe('Symbol Transfer Transaction', () => {
 
         expect(Converter.uint8ToHex(transaction.transactionHash)).eq('FC67D196C44F82CBFF19E61828020D963E7D06068A54ACAE27D8DB5DA570BBAA');
 
-        const aggregateBuilder = transaction.builder as AggregateCompleteTransactionBuilder;
+        const aggregateBuilder = transaction.builder;
         expect(aggregateBuilder.transactions.length).deep.eq(1);
         expect(aggregateBuilder.transactions[0]).deep.eq(SymbolTransactionUtils.toEmbedded(builder));
         expect(aggregateBuilder.cosignatures.length).deep.eq(2);
         expect(aggregateBuilder.cosignatures[0].signerPublicKey.serialize()).deep.eq(cosigner1.publicKey.toBytes());
         expect(aggregateBuilder.cosignatures[1].signerPublicKey.serialize()).deep.eq(cosigner2.publicKey.toBytes());
+        expect(transaction.size).eq(264 + 104 * 2);
     });
 });

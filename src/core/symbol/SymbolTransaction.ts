@@ -14,162 +14,8 @@
  * limitations under the License.
  */
 
-import {
-    Converter,
-    Cosignature,
-    Key,
-    KeyPair,
-    SymbolAddress,
-    SymbolDeadline,
-    SymbolIdGenerator,
-    SymbolNetwork,
-    SymbolTransactionUtils,
-} from '@core';
-import {
-    AggregateTransactionBodyBuilder,
-    AmountDto,
-    EmbeddedTransactionBuilder,
-    EntityTypeDto,
-    Hash256Dto,
-    KeyDto,
-    Serializer,
-    TimestampDto,
-    TransactionBuilder,
-    TransactionHelper,
-} from 'catbuffer-typescript';
-
-/**
- * An unresolved address is when either address or an alias of the address (aka namespaceId) is provided
- */
-export type SymbolUnresolvedAddress = bigint | SymbolAddress;
-
-/**
- * Factory class to create SymbolTransaction objects from low level builders.
- */
-export class SymbolTransactionFactory {
-    /**
-     * @param network - the network used when network type and generation hash are required.
-     */
-    constructor(private readonly network: SymbolNetwork) {}
-
-    /**
-     * It creates a top level transaction from a body builder, eg: catapult's TransferTransactionBuilder.
-     *
-     * @param deadline - the deadline
-     * @param fee - the fee
-     * @param bodyBuilder - the body builder, eg: catapult's TransferTransactionBuilder.
-     */
-    public create(deadline: SymbolDeadline, fee: bigint, bodyBuilder: Serializer): SymbolTransaction {
-        const builder = SymbolTransactionUtils.createFromBodyBuilder({
-            fee: new AmountDto(fee),
-            deadline: new TimestampDto(BigInt(deadline.adjustedValue)),
-            network: this.network.identifier,
-            bodyBuilder: bodyBuilder,
-        });
-        return this.createFromBuilder(builder);
-    }
-
-    /**
-     * It creates an aggregate complete transaction.
-     *
-     * @param deadline - the deadline
-     * @param fee - the fee
-     * @param builders - a list of subclasses ofs EmbeddedTransactionBuilder
-     */
-    public createAggregateComplete(deadline: SymbolDeadline, fee: bigint, builders: EmbeddedTransactionBuilder[]): SymbolTransaction {
-        return this.createAggregate(EntityTypeDto.AGGREGATE_COMPLETE_TRANSACTION, deadline, fee, builders);
-    }
-    /**
-     * It creates an aggregate bonded transaction.
-     *
-     * @param deadline - the deadline
-     * @param fee - the fee
-     * @param builders - a list of subclasses ofs EmbeddedTransactionBuilder
-     */
-    public createAggregateBonded(deadline: SymbolDeadline, fee: bigint, builders: EmbeddedTransactionBuilder[]): SymbolTransaction {
-        return this.createAggregate(EntityTypeDto.AGGREGATE_BONDED_TRANSACTION, deadline, fee, builders);
-    }
-    /**
-     * It creates an aggregate transaction.
-     *
-     * @param type - the aggregate type, bonded or complete.
-     * @param deadline - the deadline
-     * @param fee - the fee
-     * @param builders - a list of subclasses ofs EmbeddedTransactionBuilder
-     */
-    public createAggregate(
-        type: EntityTypeDto.AGGREGATE_COMPLETE_TRANSACTION | EntityTypeDto.AGGREGATE_BONDED_TRANSACTION,
-        deadline: SymbolDeadline,
-        fee: bigint,
-        builders: EmbeddedTransactionBuilder[],
-    ): SymbolTransaction {
-        const embeddedBuilders = builders.map((b) => SymbolTransactionUtils.toEmbedded(b));
-
-        const bodyBuilder = new AggregateTransactionBodyBuilder({
-            transactionsHash: new Hash256Dto(this.calculateAggregateTransactionsHashFromPayloads(embeddedBuilders)),
-            transactions: embeddedBuilders,
-            cosignatures: [],
-        });
-        const builder = SymbolTransactionUtils.createFromBodyBuilder({
-            fee: new AmountDto(fee),
-            deadline: new TimestampDto(BigInt(deadline.adjustedValue)),
-            type: type,
-            network: this.network.identifier,
-            bodyBuilder: bodyBuilder,
-        });
-        return this.createFromBuilder(builder);
-    }
-
-    /**
-     * It converts an Body Builder (e.g: TransferTransactionBodyBuilder) to an Embedded Builder (e.g: EmbeddedTransferTransactionBuilder)to be used in an aggregate transaction
-     * @param bodyBuilder - the body builder
-     * @param signerPublicKey - the signer public key.
-     */
-    public toEmbedded(bodyBuilder: Serializer, signerPublicKey: Key): EmbeddedTransactionBuilder {
-        return SymbolTransactionUtils.createEmbeddedFromBodyBuilder({
-            network: this.network.identifier,
-            signerPublicKey: new KeyDto(signerPublicKey.key),
-            bodyBuilder: bodyBuilder,
-        });
-    }
-
-    /**
-     * Helper method that serializes an unresolved address to be used in Catbuffer builders.
-     * @param unresolvedAddressId - the unresolved address to serialize.
-     */
-    public toUnresolvedAddress(unresolvedAddressId: SymbolUnresolvedAddress): Uint8Array {
-        if (typeof unresolvedAddressId == 'bigint') {
-            return SymbolIdGenerator.encodeUnresolvedAddress(this.network.identifier, unresolvedAddressId);
-        } else {
-            return unresolvedAddressId.getAddressBytes();
-        }
-    }
-
-    /**
-     * Generic method to create transaction from a top level (simple or aggregate) builder.
-     * @param builder - the builder
-     */
-    public createFromBuilder<T extends TransactionBuilder>(builder: T): SymbolTransaction<T> {
-        return SymbolTransaction.createFromBuilder(this.network, builder);
-    }
-
-    /**
-     * Generic method to create transaction from a top level (simple or aggregate) payload.
-     *
-     * @param payload - the serialized payload.
-     */
-    public createFromPayload(payload: Uint8Array): SymbolTransaction {
-        return SymbolTransaction.createFromPayload(this.network, payload);
-    }
-
-    /**
-     * Hides how transactions hash is generated from the provided embedded transactions. Dev doesn't need to calculate at front.
-     * @param embeddedBuilders - the builders of the embedded transactions.
-     */
-    private calculateAggregateTransactionsHashFromPayloads(embeddedBuilders: EmbeddedTransactionBuilder[]): Uint8Array {
-        return SymbolTransactionUtils.calculateAggregateTransactionsHashFromPayloads(embeddedBuilders.map((b) => b.serialize()));
-    }
-}
+import { Converter, Cosignature, Key, KeyPair, SymbolNetwork, SymbolTransactionUtils } from '@core';
+import { AggregateTransactionBodyBuilder, TransactionBuilder, TransactionHelper } from 'catbuffer-typescript';
 
 /**
  * The mutable generic symbol transaction that wraps the signing over catbuffer builders.
@@ -186,13 +32,13 @@ export class SymbolTransaction<T extends TransactionBuilder = TransactionBuilder
      * This field changes when signing and cosigning the transaction.
      *
      */
-    private _payload: Uint8Array;
+    private internalPayload: Uint8Array;
     /**
      * The catbuffer builder of a top level simpler or aggregate transaction. Always in sync with the serialized payload.
      *
      * This field changes when signing and cosigning the transaction.
      */
-    private _builder: T;
+    private internalBuilder: T;
 
     /**
      * Internal constructor, please use the SymbolTransactionFactory
@@ -203,8 +49,8 @@ export class SymbolTransaction<T extends TransactionBuilder = TransactionBuilder
     public constructor(network: SymbolNetwork, builder: T, payload: Uint8Array) {
         SymbolTransactionUtils.validateBuilder(builder);
         this.generationHash = Converter.hexToUint8(network.generationHash);
-        this._payload = payload;
-        this._builder = builder;
+        this.internalPayload = payload;
+        this.internalBuilder = builder;
     }
 
     /**
@@ -228,21 +74,21 @@ export class SymbolTransaction<T extends TransactionBuilder = TransactionBuilder
      * @returns the transaction type of this transaction.
      */
     public get transactionType(): number {
-        return this._builder.type;
+        return this.builder.type;
     }
 
     /**
      * @returns The builder of the top level transaction.
      */
     public get builder(): T {
-        return this._builder;
+        return this.internalBuilder;
     }
 
     /**
      * @returns the serialized top level transaction
      */
     public get payload(): Uint8Array {
-        return this._payload;
+        return this.internalPayload;
     }
 
     /**
@@ -351,7 +197,7 @@ export class SymbolTransaction<T extends TransactionBuilder = TransactionBuilder
      * @param newPayload - the new payload
      */
     private updateBuilder(newPayload: Uint8Array) {
-        this._payload = newPayload;
-        this._builder = TransactionHelper.loadFromBinary(newPayload) as T;
+        this.internalPayload = newPayload;
+        this.internalBuilder = TransactionHelper.loadFromBinary(newPayload) as T;
     }
 }

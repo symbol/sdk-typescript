@@ -24,15 +24,17 @@ import {
     SignatureDto,
     TimestampDto,
     TransactionBuilder,
+    TransferTransactionBodyBuilder,
     TransferTransactionBuilder,
     UnresolvedAddressDto,
     UnresolvedMosaicBuilder,
     UnresolvedMosaicIdDto,
 } from 'catbuffer-typescript';
 import { expect } from 'chai';
+import * as Crypto from 'crypto';
 
 describe('SymbolTransactionUtils', () => {
-    const network = SymbolNetwork.findByName('public');
+    const network = SymbolNetwork.findByName(SymbolNetwork.list(), 'testnet');
     if (!network) {
         throw new Error('Network must be found!');
     }
@@ -125,6 +127,65 @@ describe('SymbolTransactionUtils', () => {
         });
         expect(() => SymbolTransactionUtils.toEmbedded(builder)).to.throw(
             'Builder EmbeddedTransactionBuilder is not a concrete transaction builder.',
+        );
+    });
+
+    it('createEmbeddedFromBodyBuilder creates embedded transfer', () => {
+        const message = Buffer.from([1, 2, 3, 4]);
+        const signerPublicKey = new KeyDto(Crypto.randomBytes(32));
+        const bodyBuilder = new TransferTransactionBodyBuilder({
+            recipientAddress: recipientAddress,
+            mosaics: mosaics,
+            message: message,
+        });
+        const builder = SymbolTransactionUtils.createEmbeddedFromBodyBuilder({
+            network: networkType,
+            signerPublicKey: signerPublicKey,
+            bodyBuilder: bodyBuilder,
+        });
+
+        expect(builder.constructor.name).eq('EmbeddedTransferTransactionBuilder');
+        expect(builder).deep.eq(
+            new EmbeddedTransferTransactionBuilder({
+                network: networkType,
+                signerPublicKey: signerPublicKey,
+                version: EmbeddedTransferTransactionBuilder.VERSION,
+                type: EmbeddedTransferTransactionBuilder.ENTITY_TYPE,
+                ...bodyBuilder,
+            }),
+        );
+    });
+
+    it('createFromBodyBuilder creates top level transfer', () => {
+        const message = Buffer.from([1, 2, 3, 4]);
+        const signerPublicKey = new KeyDto(Crypto.randomBytes(32));
+        const signature = new SignatureDto(Crypto.randomBytes(64));
+        const bodyBuilder = new TransferTransactionBodyBuilder({
+            recipientAddress: recipientAddress,
+            mosaics: mosaics,
+            message: message,
+        });
+        const builder = SymbolTransactionUtils.createFromBodyBuilder({
+            network: networkType,
+            signerPublicKey: signerPublicKey,
+            fee: fee,
+            signature: signature,
+            deadline: deadlineDto,
+            bodyBuilder: bodyBuilder,
+        });
+
+        expect(builder.constructor.name).eq('TransferTransactionBuilder');
+        expect(builder).deep.eq(
+            new TransferTransactionBuilder({
+                network: networkType,
+                fee: fee,
+                deadline: deadlineDto,
+                signature: signature,
+                signerPublicKey: signerPublicKey,
+                version: TransferTransactionBuilder.VERSION,
+                type: TransferTransactionBuilder.ENTITY_TYPE,
+                ...bodyBuilder,
+            }),
         );
     });
 });

@@ -19,7 +19,6 @@ import {
     Key,
     SymbolAddress,
     SymbolDeadline,
-    SymbolIdGenerator,
     SymbolKeyPair,
     SymbolMessageUtils,
     SymbolNetwork,
@@ -38,16 +37,17 @@ import {
 import { expect } from 'chai';
 
 describe('Symbol Aggregate Transaction', () => {
-    const network = SymbolNetwork.findByName('public_test');
+    const network = SymbolNetwork.findByName(SymbolNetwork.list(), 'testnet');
     if (!network) {
         throw new Error('Network must be found!');
     }
+    const factory = network.createTransactionFactory();
 
     // Too Many Symbol Prefixes, is it possible to use the network object to generate generic KeyPair, Address, mosaic id, namespce id, etc?
     //
     // Would NIS1 Transaction be super different?
 
-    const mosaicId = SymbolIdGenerator.fromHex('091F837E059AE13C'); // Testnet
+    const mosaicId = BigInt('0x091F837E059AE13C'); // Testnet mosaic id
 
     const bobPrivateKey = 'AAA80097FB6A1F287ED2736A597B8EA7F08D20F1ECDB9935DE6694ECF1C58900';
     const bob = new SymbolKeyPair(Key.createFromHex(bobPrivateKey));
@@ -57,7 +57,7 @@ describe('Symbol Aggregate Transaction', () => {
     const alice = new SymbolKeyPair(Key.createFromHex(alicePrivateKey));
     // const aliceAddress = new SymbolAddress(network.createAddressFromPublicKey(alice.publicKey));
     // Example: Use alias.
-    const aliceAlias: SymbolUnresolvedAddress = SymbolIdGenerator.namespaceId('i.am.alice');
+    const aliceAlias: SymbolUnresolvedAddress = factory.namespaceId('i.am.alice');
 
     const msgA = 'Hello Alice, I have sent you 1 XYM!';
     const msgB = 'Hello Bob, I have sent you 2 XYM!';
@@ -66,8 +66,6 @@ describe('Symbol Aggregate Transaction', () => {
 
     // Static deadline for payload assertions.
     const deadline = SymbolDeadline.createFromAdjustedValue(100);
-
-    const factory = network.createTransactionFactory();
 
     // Option one, create method with individual params.
     const bobTx = TransferTransactionBodyBuilder.createTransferTransactionBodyBuilder(

@@ -148,7 +148,11 @@ describe('transaction cosignatures - test vector', () => {
         expect(Converter.uint8ToHex(SymbolTransactionUtils.calculateAggregateTransactionsHash(payload))).equal(item.transactionsHash);
         expect(Converter.uint8ToHex(transactionHash)).equal(item.transactionHash);
 
-        function basicTest(cosigners: KeyPair[], expectedPayload?: string) {
+        const allCosigners = item.cosignatories.map((pair) => new SymbolKeyPair(Key.createFromHex(pair.privateKey)));
+
+        function basicTest(cosigners: KeyPair[]) {
+            // it tests the payload when some/all cosigners are provided.
+
             const signedTransaction = SymbolTransactionUtils.signWithCosigners(keyPair, payload, generationHash, cosigners);
 
             //Key Pair is fine
@@ -172,14 +176,14 @@ describe('transaction cosignatures - test vector', () => {
                 expect(signedPayloadHex.indexOf(Converter.uint8ToHex(cosignature))).gt(-1);
             });
 
-            // Same signed payload!!
-            if (expectedPayload) expect(signedPayloadHex).eq(expectedPayload);
+            // Same signed payload when all cosigners are provided!!
+            if (allCosigners.length == cosigners.length) expect(signedPayloadHex).eq(item.signedPayload.toUpperCase());
 
             // Same transaction hash after transaction is signed
             expect(Converter.uint8ToHex(signedTransaction.transactionHash)).equal(item.signedTransactionHash);
         }
-        const allCosigners = item.cosignatories.map((pair) => new SymbolKeyPair(Key.createFromHex(pair.privateKey)));
-        basicTest(allCosigners, item.signedPayload.toUpperCase());
-        basicTest([]);
+        basicTest([]); // if no cosigners are provided
+        basicTest(allCosigners.slice(0, 1)); // if only one cosigner is provided
+        basicTest(allCosigners); // if all cosigners are provided.
     });
 });

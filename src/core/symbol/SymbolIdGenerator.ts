@@ -92,27 +92,6 @@ export class SymbolIdGenerator {
     };
 
     /**
-     * Returns the bigint representation of an mosaic or namespace id.
-     *
-     * @param hexId - The hex id, like E74B99BA41F4AFEE (symbol.xym namespace) or 091F837E059AE13C (testnet mosaic id)
-     * @returns the bigint representation of the id
-     */
-    public static fromHex(hexId: string): bigint {
-        Converter.isHexString(hexId, 16);
-        return BigInt(`0x${hexId}`);
-    }
-
-    /**
-     * Returns the hex representation of an mosaic or namespace id.
-     *
-     * @param id - The bigint id, like 16666583871264174062 (symbol.xym namespace) or 657388647902535996 (testnet mosaic id)
-     * @returns the hex representation of the id
-     */
-    public static toHex(id: bigint): string {
-        return id.toString(16).toUpperCase().padStart(16, '0');
-    }
-
-    /**
      * Returns true if a name is a valid namespace name.
      *
      * @param name - Namespace name

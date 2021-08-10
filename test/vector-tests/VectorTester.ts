@@ -23,13 +23,14 @@ export class VectorTester {
      *
      * @param vectorFile - the vector file
      * @param test - the tests of the operation.
+     * @param description - optional description of the 'it' tests
      */
-    public run = <T>(vectorFile: string, test: (item: T, index: number) => void): void => {
+    public run = <T>(vectorFile: string, test: (item: T, index: number) => void, description?: string): void => {
         if (this.patchFileBeforeRun) {
             this.patchFile(vectorFile);
         }
-        if (this.streamMode) this.streamRun(vectorFile, test);
-        else this.syncRun(vectorFile, test);
+        if (this.streamMode) this.streamRun(vectorFile, test, description);
+        else this.syncRun(vectorFile, test, description);
     };
     /**
      * Runs all the vectors tests in one test using streams of data.
@@ -39,19 +40,21 @@ export class VectorTester {
      *
      * @param vectorFileName - the vector file
      * @param test - the tests of the operation.
+     * @param description - optional description
      */
-    private streamRun = <T>(vectorFileName: string, test: (item: T, index: number) => void): void => {
+    private streamRun = <T>(vectorFileName: string, test: (item: T, index: number) => void, description: string | undefined): void => {
         const stream = fs.createReadStream(this.resolveVectorFilePath(vectorFileName), { encoding: 'utf-8' });
-        it('all items', (done) => {
+        it(description || 'all items', (done) => {
+            let index = 0;
             stream.pipe(
-                JSONStream.parse([]).on('data', (vector) => {
-                    vector.forEach((item: T, index) => {
+                JSONStream.parse('*')
+                    .on('data', (item: T) => {
                         if (this.limit <= 0 || index < this.limit) {
                             this.runTest(test, item, index);
                         }
-                    });
-                    done();
-                }),
+                        index++;
+                    })
+                    .on('end', done),
             );
         });
     };
@@ -64,17 +67,25 @@ export class VectorTester {
      *
      * @param vectorFileName - the vector file
      * @param test - the tests of the operation.
+     * @param description - optional description
      */
-    syncRun = <T>(vectorFileName: string, test: (item: T, index: number) => void): void => {
+    syncRun = <T>(vectorFileName: string, test: (item: T, index: number) => void, description: string | undefined): void => {
         const data = fs.readFileSync(this.resolveVectorFilePath(vectorFileName), { encoding: 'utf-8' });
         const vector: T[] = JSON.parse(data);
         (this.limit > 0 ? vector.slice(0, this.limit) : vector).forEach((item: T, index) => {
-            it(`item ${index}`, () => this.runTest(test, item, index));
+            it(`${description || 'item'} ${index}`, () => this.runTest(test, item, index));
         });
     };
 
     private resolveVectorFilePath(vectorFileName: string): string {
-        return join('test/vector-tests', vectorFileName);
+        if (fs.existsSync(vectorFileName)) {
+            return vectorFileName;
+        }
+        const path = join('test/vector-tests', vectorFileName);
+        if (fs.existsSync(path)) {
+            return path;
+        }
+        throw new Error(`Cannot resolve vector file ${vectorFileName}`);
     }
 
     private patchFile = <T>(vectorFile: string): void => {

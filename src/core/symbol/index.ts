@@ -7,4 +7,5 @@ export * from './SymbolKeyPair';
 export * from './SymbolMessageUtils';
 export * from './SymbolNetwork';
 export * from './SymbolTransaction';
+export * from './SymbolTransactionFactory';
 export * from './SymbolTransactionUtils';

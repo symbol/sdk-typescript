@@ -20,20 +20,20 @@ import * as allBuilders from 'catbuffer-typescript';
 import {
     AggregateBondedTransactionBuilder,
     AggregateCompleteTransactionBuilder,
+    AmountDto,
     EmbeddedTransactionBuilder,
     EmbeddedTransactionBuilderParams,
     EntityTypeDto,
     GeneratorUtils,
     KeyDto,
+    NetworkTypeDto,
     Serializer,
     SignatureDto,
+    TimestampDto,
     TransactionBuilder,
     TransactionBuilderParams,
     TransactionHelper,
 } from 'catbuffer-typescript';
-import { AmountDto } from 'catbuffer-typescript/src/AmountDto';
-import { NetworkTypeDto } from 'catbuffer-typescript/src/NetworkTypeDto';
-import { TimestampDto } from 'catbuffer-typescript/src/TimestampDto';
 
 /**
  * Data required to attach a cosignature to an aggregate transaction.
@@ -53,6 +53,9 @@ export interface SignedTransaction {
     transactionHash: Uint8Array;
 }
 
+/**
+ * Params required to convert a transaction body builder into a top level transaction builder
+ */
 export interface CreateFromBodyParams extends Partial<TransactionBuilderParams> {
     fee: AmountDto;
     deadline: TimestampDto;
@@ -60,6 +63,9 @@ export interface CreateFromBodyParams extends Partial<TransactionBuilderParams> 
     bodyBuilder: Serializer;
 }
 
+/**
+ * Params required to convert a transaction body builder into a top embedded transaction builder
+ */
 export interface CreateEmbeddedFromBodyParams extends Partial<EmbeddedTransactionBuilderParams> {
     network: NetworkTypeDto;
     bodyBuilder: Serializer;
