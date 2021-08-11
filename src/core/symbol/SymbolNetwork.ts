@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Network, SymbolNetworkList } from '@core';
+import { Network, SymbolNetworkList, SymbolTransactionFactory } from '@core';
 import { Hash, sha3_256 } from 'js-sha3';
 
 export class SymbolNetwork extends Network {
@@ -27,6 +27,13 @@ export class SymbolNetwork extends Network {
      */
     constructor(name: string, identifier: number, public readonly generationHash: string) {
         super(name, identifier);
+    }
+
+    /**
+     * Creates a transaction factory for symbol transaction.
+     */
+    public createTransactionFactory(): SymbolTransactionFactory {
+        return new SymbolTransactionFactory(this);
     }
 
     /**

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { Nibble_To_Char_Map } from '@core';
+import { sha3_256 } from 'js-sha3';
 import { decode } from 'utf8';
 import { tryParseByte } from './Utilities';
 
@@ -97,14 +98,8 @@ export class Converter {
      * @returns A uint8 array corresponding to the input.
      */
     public static hexToUint8Reverse = (input: string): Uint8Array => {
-        if (0 !== input.length % 2) {
-            throw Error(`hex string has unexpected size '${input.length}'`);
-        }
-        const output = new Uint8Array(input.length / 2);
-        for (let i = 0; i < input.length; i += 2) {
-            output[output.length - 1 - i / 2] = Converter.toByte(input[i], input[i + 1]);
-        }
-        return output;
+        // Duplicated method?
+        return Converter.hexToUint8(input, true);
     };
 
     /**
@@ -290,5 +285,36 @@ export class Converter {
             value += array[index] << (index * 8);
         }
         return value >>> 0;
+    }
+
+    /**
+     * It concats a list of Uint8Array into a new one.
+     *
+     * @param arrays - the Uint8Array to concat.
+     */
+    public static concat(...arrays: Uint8Array[]): Uint8Array {
+        const totalLength = arrays.reduce((acc, value) => acc + value.length, 0);
+        const result = new Uint8Array(totalLength);
+        let length = 0;
+        for (const array of arrays) {
+            result.set(array, length);
+            length += array.length;
+        }
+        return result;
+    }
+
+    /**
+     * It hashes the list of Uint8Array into a Uint8Array.
+     *
+     * This method abstracts out the sha3 implementation, if for some reason the hash needs to be changed, it's centralized in one place.
+     *
+     * @param hashes - the list of Uint8Array to hash.
+     */
+    public static hash(...hashes: Uint8Array[]): Uint8Array {
+        const hasher = sha3_256.create();
+        hashes.forEach((hashVal: Uint8Array) => {
+            hasher.update(hashVal);
+        });
+        return new Uint8Array(hasher.arrayBuffer());
     }
 }

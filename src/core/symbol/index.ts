@@ -5,3 +5,6 @@ export * from './SymbolEnums';
 export * from './SymbolIdGenerator';
 export * from './SymbolKeyPair';
 export * from './SymbolNetwork';
+export * from './SymbolTransaction';
+export * from './SymbolTransactionFactory';
+export * from './SymbolTransactionUtils';

@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Address, NamespaceConst } from '@core';
+import { Address, Converter, NamespaceConst } from '@core';
 import { toBigIntLE, toBufferLE } from 'bigint-buffer';
+import { GeneratorUtils } from 'catbuffer-typescript';
 import * as Crypto from 'crypto';
 import { sha3_256 } from 'js-sha3';
 
@@ -89,5 +90,14 @@ export class SymbolIdGenerator {
      */
     public static isValidNamespaceName(name: string): boolean {
         return NamespaceConst.name_pattern.test(name);
+    }
+
+    /**
+     * It encodes a namespace id as an unresolved alias to be used when serializing unresolved addresses with catbuffer.
+     * @param networkType - the network type
+     * @param namespaceId - the network id as bigint.
+     */
+    public static encodeUnresolvedAddress(networkType: number, namespaceId: bigint): Uint8Array {
+        return Converter.concat(Uint8Array.of(networkType | 0x01), GeneratorUtils.bigIntToBuffer(namespaceId), Buffer.alloc(15));
     }
 }

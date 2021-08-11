@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SymbolIdGenerator } from '@core';
+import { Converter, SymbolIdGenerator } from '@core';
 import { expect } from 'chai';
 
 describe('Symbol IdGenerator - TestVector', () => {
@@ -54,6 +54,63 @@ describe('Symbol IdGenerator - TestVector', () => {
         expect(SymbolIdGenerator.isValidNamespaceName('-')).to.be.false;
         expect(SymbolIdGenerator.isValidNamespaceName(' ')).to.be.false;
         expect(SymbolIdGenerator.isValidNamespaceName('')).to.be.false;
+    });
+
+    describe('Encode Unresolved Addresses', () => {
+        interface EncodedUnresolvedAddressVectorItem {
+            networkType: number;
+            namespaceHex: string;
+            namespaceId: string;
+            encoded: string;
+        }
+        const inputs: EncodedUnresolvedAddressVectorItem[] = [
+            {
+                networkType: 168,
+                namespaceHex: 'E1499A8D01FCD82A',
+                namespaceId: '16233676262248077354',
+                encoded: 'A92AD8FC018D9A49E1000000000000000000000000000000',
+            },
+            {
+                networkType: 104,
+                namespaceHex: 'D401054C1965C26E',
+                namespaceId: '15276497235419185774',
+                encoded: '696EC265194C0501D4000000000000000000000000000000',
+            },
+            {
+                networkType: 120,
+                namespaceHex: 'FEEF99776CED53B0',
+                namespaceId: '18370070143275193264',
+                encoded: '79B053ED6C7799EFFE000000000000000000000000000000',
+            },
+            {
+                networkType: 144,
+                namespaceHex: '9550CA3FC9B41FC5',
+                namespaceId: '10759321885103890373',
+                encoded: '91C51FB4C93FCA5095000000000000000000000000000000',
+            },
+            {
+                networkType: 152,
+                namespaceHex: 'D85742D268617751',
+                namespaceId: '15589002106628044625',
+                encoded: '9951776168D24257D8000000000000000000000000000000',
+            },
+            {
+                networkType: 168,
+                namespaceHex: 'E7CA7E22727DDD88',
+                namespaceId: '16702300854471744904',
+                encoded: 'A988DD7D72227ECAE7000000000000000000000000000000',
+            },
+        ];
+
+        inputs.forEach((item: EncodedUnresolvedAddressVectorItem) => {
+            it(`Namespace Is ${item.namespaceHex} Network Type ${item.networkType}`, () => {
+                const namespaceId = BigInt(item.namespaceId);
+                // Act + Assert:
+                expect(namespaceId.toString(16).toUpperCase()).equal(item.namespaceHex);
+                const encoded = SymbolIdGenerator.encodeUnresolvedAddress(item.networkType, namespaceId);
+                expect(Converter.uint8ToHex(encoded)).eq(item.encoded);
+            });
+        });
     });
 
     describe('generate namespace paths', () => {
