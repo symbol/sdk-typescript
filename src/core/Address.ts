@@ -101,7 +101,7 @@ export abstract class Address {
                 return false;
             }
         }
-        // TODO: Implement NIS1 Logic here
+        // TODO: Implement Nis1 Logic here
         return false;
     }
 }
