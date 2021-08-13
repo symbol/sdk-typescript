@@ -13,7 +13,7 @@ export interface TransactionVectorItem {
     signerPublicKey: string;
 }
 
-const tester = new VectorTester(false);
+const tester = new VectorTester();
 
 describe('transaction hash - test vector', () => {
     tester.run<TransactionVectorItem>('test-transaction.json', (item) => {
