@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Deadline, Network, Nis1TransactionType } from '@core';
+import { Deadline, Network, Nis1KeyPair, Nis1TransactionType } from '@core';
 import { Duration, Instant } from '@js-joda/core';
 import { toBufferLE } from 'bigint-buffer';
 import { Key } from '../Key';
@@ -31,6 +31,11 @@ export class Nis1Transaction<T extends Serializer> {
     public version: number;
 
     /**
+     * Transaction payload (internal)
+     */
+    private internalPayload: Uint8Array;
+
+    /**
      * Constructor
      * @param network - Nis1 network
      * @param deadline - Transaction deadline
@@ -44,13 +49,7 @@ export class Nis1Transaction<T extends Serializer> {
         public body: T,
     ) {
         this.version = (this.network.identifier << 24) + 1;
-    }
-
-    /**
-     * Property: transaction size
-     */
-    public get size(): number {
-        return 4 + 4 + 4 + 4 + this.signerPublicKey.length + 8 + 4 + this.body.size;
+        this.internalPayload = this.serialize();
     }
 
     /**
@@ -68,11 +67,25 @@ export class Nis1Transaction<T extends Serializer> {
     }
 
     /**
+     * Property: Transaction payload
+     */
+    public get payload(): Uint8Array {
+        return this.internalPayload;
+    }
+
+    /**
+     * Property: Transaction signature
+     */
+    public get signature(): Uint8Array {
+        return this.payload.subarray(-64);
+    }
+
+    /**
      * Serialize transaction
      * @returns - Transaction payload bytes
      */
     public serialize(): Uint8Array {
-        return Buffer.alloc(this.size)
+        return Buffer.alloc(4 + 4 + 4 + 4 + this.signerPublicKey.length + 8 + 4 + this.body.size)
             .fill(Converter.numberToUint8(this.body.type, 4), 0)
             .fill(Converter.numberToUint8(this.version, 4), 4)
             .fill(Converter.numberToUint8(this.timestamp, 4), 8)
@@ -81,5 +94,20 @@ export class Nis1Transaction<T extends Serializer> {
             .fill(toBufferLE(this.body.fee, 8), 48)
             .fill(Converter.numberToUint8(this.deadline.adjustedValue, 4), 56)
             .fill(this.body.serialize(), 60);
+    }
+
+    /**
+     * Sign transaction and attach signature to the payload
+     * @param keyPair - Signer key pair
+     */
+    public sign(keyPair: Nis1KeyPair): void {
+        const payload = this.serialize();
+        const signature = keyPair.sign(payload);
+
+        this.internalPayload = Buffer.alloc(4 + payload.length + 4 + signature.length)
+            .fill(Converter.numberToUint8(payload.length, 4), 0)
+            .fill(this.serialize(), 4)
+            .fill(Converter.numberToUint8(signature.length, 4), payload.length + 4)
+            .fill(signature, payload.length + 8);
     }
 }
