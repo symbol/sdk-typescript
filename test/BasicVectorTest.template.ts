@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Key, SymbolAddress, SymbolIdGenerator, SymbolNetwork } from '@core';
+import { Key, SymbolIdGenerator, SymbolNetwork } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
@@ -76,9 +76,8 @@ export const AddressMosaicIdTester = (testSignVectorFile: string, testMosaicId =
                     const addressKeyName = `address_${networkName}`.replace('_t', 'T');
                     const mosaicKeyName = `mosaicId_${networkName}`.replace('_t', 'T');
 
-                    // Act + Assert:
-                    const rawAddress = network.createAddressFromPublicKey(Key.createFromHex(item.publicKey));
-                    const address = new SymbolAddress(rawAddress);
+                    // Act + address:
+                    const address = network.createAddressFromPublicKey(Key.createFromHex(item.publicKey));
                     expect(item[addressKeyName]).to.be.equal(address.encoded);
                     if (testMosaicId) {
                         const mosaicId = SymbolIdGenerator.generateMosaicId(address, toBufferLE(BigInt(item['mosaicNonce']), 4));
