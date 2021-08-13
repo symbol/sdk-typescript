@@ -12,11 +12,13 @@ const cosignatoryKeyPairs = [
 /**
  * Build Symbol transaction using the factory and sign.
  */
-const network = new SymbolNetwork('testnet', 0x98, '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155'); // Specify network
-const factory = network.createTransactionFactory();
+const network = SymbolNetwork.findByIdentifier(SymbolNetwork.list(), 0x98);
+
+// Specify network
+const factory = network!.createTransactionFactory();
 
 const addressAdditions = cosignatoryKeyPairs.map(
-    (keyPair) => new UnresolvedAddressDto(new SymbolAddress(network.createAddressFromPublicKey(keyPair.publicKey)).getAddressBytes()),
+    (keyPair) => new UnresolvedAddressDto(new SymbolAddress(network!.createAddressFromPublicKey(keyPair.publicKey)).getAddressBytes()),
 );
 
 const bodyBuilder = new MultisigAccountModificationTransactionBodyBuilder({

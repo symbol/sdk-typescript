@@ -1,3 +1,4 @@
+import { ChronoUnit } from '@js-joda/core';
 import {
     AmountDto,
     BlockDurationDto,
@@ -47,7 +48,10 @@ const bobTransaction = new TransferTransactionBodyBuilder({
     message: Converter.concat(Uint8Array.of(0x00), Converter.utf8ToUint8('This is Bob')),
 });
 
-const bondedTransaction = factory.createAggregateBonded(SymbolDeadline.createFromAdjustedValue(100), BigInt(100), [
+// Create deadline. 1616694977 is Symbol testnet epoch adjustment.
+const deadline = SymbolDeadline.create(1616694977, 2, ChronoUnit.HOURS);
+
+const bondedTransaction = factory.createAggregateBonded(deadline, BigInt(100), [
     factory.toEmbedded(aliceTransaction, aliceKeyPair.publicKey),
     factory.toEmbedded(bobTransaction, bobKeyPair.publicKey),
 ]); // Build bonded transaction using the factory
