@@ -31,7 +31,7 @@ export class Nis1TransactionFactory {
      * Create generic Nis1 transaction.
      *
      * @param deadline - Transaction deadline
-     * @param fee - Transaction fees
+     * @param signerPublicKey - Signer's public key
      * @param body - Nis1 transaction body.
      */
     public create(deadline: Deadline, signerPublicKey: Key, body: Nis1Serializer.Serializer): Nis1Transaction<Nis1Serializer.Serializer> {

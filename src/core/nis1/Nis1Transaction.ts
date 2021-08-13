@@ -42,12 +42,7 @@ export class Nis1Transaction<T extends Serializer> {
      * @param signerPublicKey - Signer's public key
      * @param body - Transaction body
      */
-    constructor(
-        public readonly network: Network,
-        public readonly deadline: Deadline,
-        public readonly signerPublicKey: Key,
-        public body: T,
-    ) {
+    constructor(public readonly network: Network, public readonly deadline: Deadline, public signerPublicKey: Key, public body: T) {
         this.version = (this.network.identifier << 24) + 1;
         this.internalPayload = this.serialize();
     }
@@ -101,6 +96,7 @@ export class Nis1Transaction<T extends Serializer> {
      * @param keyPair - Signer key pair
      */
     public sign(keyPair: Nis1KeyPair): void {
+        this.signerPublicKey = keyPair.publicKey; // Re-assign signer's public key
         const payload = this.serialize();
         const signature = keyPair.sign(payload);
 
