@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SymbolAddress, SymbolDeadline } from '@core';
+import { Deadline, SymbolAddress } from '@core';
 import { Converter } from '@utils';
 import {
     AggregateCompleteTransactionBuilder,
@@ -42,7 +42,7 @@ describe('Transfer Transaction Tests', () => {
     const recipientAddressString = 'NATNE7Q5BITMUTRRN6IB4I7FLSDRDWZA34SQ33Y';
     const addressBytes = SymbolAddress.createFromString(recipientAddressString).getAddressBytes();
     const recipientSymbolAddress = SymbolAddress.createFromBytes(addressBytes);
-    const deadline = SymbolDeadline.createFromAdjustedValue(100);
+    const deadline = Deadline.createFromAdjustedValue(100);
     const mosaicIdNumber = BigInt(8589934593);
 
     //Catbuffer Code

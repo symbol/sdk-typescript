@@ -17,6 +17,7 @@
 import { Hash, keccak256 } from 'js-sha3';
 import { NIS1NetworkList } from '../constants';
 import { Network } from '../Network';
+import { Nis1TransactionFactory } from './Nis1TransactionFactory';
 
 export class Nis1Network extends Network {
     /**
@@ -36,6 +37,13 @@ export class Nis1Network extends Network {
      */
     public addressHasher(): Hash {
         return keccak256;
+    }
+
+    /**
+     * Creates a transaction factory for Nis1 transaction.
+     */
+    public createTransactionFactory(): Nis1TransactionFactory {
+        return new Nis1TransactionFactory(this);
     }
 
     /**
