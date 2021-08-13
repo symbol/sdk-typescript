@@ -15,7 +15,7 @@
  */
 
 /**
- * Network types for both Symbol & NIS1
+ * Network types for both Symbol & Nis1
  */
 export const SymbolNetworkList = [
     { name: 'mainnet', identifier: 0x68, generationHash: '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6' },
