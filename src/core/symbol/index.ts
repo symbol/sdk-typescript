@@ -1,4 +1,3 @@
-export * from '../Deadline';
 export * from './MerkleHashBuilder';
 export * from './SymbolAddress';
 export * from './SymbolEnums';
