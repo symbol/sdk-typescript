@@ -20,7 +20,7 @@ import * as crypto from 'crypto';
 import { keccak256 } from 'js-sha3';
 import { AssertNetwork, BasicNetworkTester } from '../../BasicNetworkTest.template';
 
-describe('NIS1 Network', () => {
+describe('Nis1 Network', () => {
     describe('Network Constructor', () => {
         // Act:
         const network = new Nis1Network('testnet', 0x98);
