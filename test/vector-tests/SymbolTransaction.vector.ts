@@ -16,7 +16,7 @@ export interface TransactionVectorItem {
 const tester = new VectorTester();
 
 describe('transaction hash - test vector', () => {
-    tester.run<TransactionVectorItem>('test-transaction.json', (item) => {
+    tester.run<TransactionVectorItem>('resources/test-transaction.json', (item) => {
         const generationHash = Converter.hexToUint8(item.generationHash);
         const payload = Converter.hexToUint8(item.payload);
 
@@ -27,7 +27,7 @@ describe('transaction hash - test vector', () => {
 });
 
 describe('transaction builders - test vector', () => {
-    tester.run<TransactionVectorItem>('test-transaction.json', (item) => {
+    tester.run<TransactionVectorItem>('resources/test-transaction.json', (item) => {
         const payload = Converter.hexToUint8(item.payload);
         const builder = TransactionHelper.loadFromBinary(payload);
 
@@ -45,7 +45,7 @@ export interface TransactionsHashVectorItem {
 }
 
 describe('aggregate transactions hash - test vector', () => {
-    tester.run<TransactionsHashVectorItem>('test-transactions-hash.json', (item) => {
+    tester.run<TransactionsHashVectorItem>('resources/test-transactions-hash.json', (item) => {
         // Act + Assert:
         const transactionsHash = SymbolTransactionUtils.calculateAggregateTransactionsHashFromPayloads(
             item.transactionPayloads.map((p) => Converter.hexToUint8(p)),
@@ -68,7 +68,7 @@ export interface TransactionSignatureVectorItem {
 }
 
 describe('transaction signatures - test vector', () => {
-    tester.run<TransactionSignatureVectorItem>('test-transaction-signature.json', (item) => {
+    tester.run<TransactionSignatureVectorItem>('resources/test-transaction-signature.json', (item) => {
         const generationHash = Converter.hexToUint8(item.generationHash);
         const payload = Converter.hexToUint8(item.payload);
         const keyPair = new SymbolKeyPair(Key.createFromHex(item.signerPrivateKey));
@@ -138,7 +138,7 @@ export interface TransactionCosignatureVectorItem {
 }
 
 describe('transaction cosignatures - test vector', () => {
-    tester.run<TransactionCosignatureVectorItem>('test-transaction-cosignatures.json', (item) => {
+    tester.run<TransactionCosignatureVectorItem>('resources/test-transaction-cosignatures.json', (item) => {
         const generationHash = Converter.hexToUint8(item.generationHash);
         const payload = Converter.hexToUint8(item.payload);
         const keyPair = new SymbolKeyPair(Key.createFromHex(item.signerPrivateKey));
