@@ -15,7 +15,8 @@
  */
 
 import { Address, RawAddress } from '@core';
-import { Base32, Converter } from '@utils';
+import { arrayDeepEqual, Base32, Converter } from '@utils';
+import { keccak256 } from 'js-sha3';
 
 /**
  * The address structure describes an address with its network
@@ -81,5 +82,28 @@ export class Nis1Address extends Address {
     public static createFromHex(addressHex: string): Nis1Address {
         const bytes = Converter.hexToUint8(addressHex);
         return Nis1Address.createFromBytes(bytes);
+    }
+
+    /**
+     * Determines the validity of an raw address string.
+     *
+     * @param encodedAddress - The raw address string. Expected format TAZJ3KEPYAQ4G4Y6Q2IRZTQPU7RAKGYZULZURKTO
+     * @returns true if the raw address string is valid, false otherwise.
+     */
+    public static isValid(encodedAddress: string): boolean {
+        const formatAddress = encodedAddress.toUpperCase().replace(/-/g, '');
+
+        if (formatAddress.length !== 40) {
+            return false;
+        }
+
+        try {
+            const { rawAddress } = Nis1Address.createFromString(formatAddress);
+            const hasher = keccak256.create();
+            const hash = hasher.update(rawAddress.addressWithoutChecksum).arrayBuffer();
+            return arrayDeepEqual(new Uint8Array(hash).subarray(0, 4), rawAddress.checksum);
+        } catch (e) {
+            return false;
+        }
     }
 }
