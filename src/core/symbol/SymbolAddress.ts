@@ -28,6 +28,7 @@ export class SymbolAddress extends Address {
      * @param rawAddress - Raw address bytes
      */
     constructor(rawAddress: RawAddress) {
+        rawAddress.checksum = rawAddress.checksum.subarray(0, 3);
         super(rawAddress);
     }
 
