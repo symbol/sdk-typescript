@@ -8,15 +8,31 @@ import { join } from 'path';
  * - Limit the items for quick sanity checks (like in regular pr tests, not in main and dev branches)
  * - Remove duplicated items from vector (for sanitizing vector files in dev).
  * - Integrated with mocha
+ *
+ * If no configuration is provided, the default configuration is resolved according to the process.env.VECTOR_LIMIT.
+ *
  */
 export class VectorTester {
+    private readonly streamMode: boolean;
+
+    private readonly limit: number;
+
+    private readonly patchFileBeforeRun: boolean;
+
     /**
-     *
      * @param streamMode - if all the tests should run in stream mode (one big test) or individuals
      * @param limit - if you want to limit the amount of items to test. Useful for quick tests like in pull request, not main branches.
      * @param patchFileBeforeRun - should remove duplicated items? (Only for development)
      */
-    constructor(private readonly streamMode = true, private readonly limit = -1, private readonly patchFileBeforeRun = false) {}
+    constructor(streamMode?: boolean, limit?: number, patchFileBeforeRun = false) {
+        const vectorLimit = parseInt(process.env.VECTOR_LIMIT || '0');
+        if (vectorLimit) {
+            console.log(`Vector limit is ${vectorLimit}`);
+        }
+        this.patchFileBeforeRun = patchFileBeforeRun;
+        this.limit = limit === undefined ? vectorLimit : limit;
+        this.streamMode = streamMode === undefined ? !vectorLimit : streamMode;
+    }
 
     /**
      * Runs the test function for all the items in the vector file according to the configuration.
