@@ -72,7 +72,7 @@ export abstract class Address {
     }
 
     /**
-     * Retun encoded address string.
+     * Return encoded address string.
      *
      * @returns Encoded address string
      */
