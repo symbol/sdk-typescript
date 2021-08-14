@@ -304,7 +304,7 @@ export class SymbolTransactionUtils {
      */
     public static addCosignatures(originalPayload: Uint8Array, cosignatures: Cosignature[]): Uint8Array {
         if (!this.isAggregate(originalPayload)) {
-            throw new Error('Cannot add cosignatures to a a simple transaction.');
+            throw new Error('Cannot add cosignatures to a simple transaction.');
         }
         const newCosignatures = Converter.concat(
             ...cosignatures.map((cosignature) => {
