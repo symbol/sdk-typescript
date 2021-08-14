@@ -1,6 +1,6 @@
 /* eslint-disable tsdoc/syntax */
+import { Deadline, Key, SymbolAddress, SymbolKeyPair, SymbolNetwork } from '@core';
 import { MultisigAccountModificationTransactionBodyBuilder, UnresolvedAddressDto } from 'catbuffer-typescript';
-import { Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork } from '../../src/core';
 
 const multisigKeyPair = new SymbolKeyPair(Key.createFromHex('1C16D0C8804546EFB4B11584AFACB294DFABF0D41E8E345F1F74BB6CAD162066'));
 const cosignatoryKeyPairs = [
@@ -28,7 +28,7 @@ const bodyBuilder = new MultisigAccountModificationTransactionBodyBuilder({
     addressDeletions: [],
 }); // Build transaction body.
 
-const modifyMultisigTransaction = factory.createAggregateComplete(SymbolDeadline.createFromAdjustedValue(100), BigInt(100), [
+const modifyMultisigTransaction = factory.createAggregateComplete(Deadline.createFromAdjustedValue(100), BigInt(100), [
     factory.toEmbedded(bodyBuilder, multisigKeyPair.publicKey),
 ]); // Build aggregate transaction using the factory
 
