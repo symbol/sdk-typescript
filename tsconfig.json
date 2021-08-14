@@ -39,6 +39,7 @@
     "src/**/*.ts",
     "src/core/nis1/external/*.js",
     "test/vector-tests/*.ts",
-    "test/test-vector/*"
+    "test/test-vector/*",
+    "examples/**/*.ts",
   ]
 }
