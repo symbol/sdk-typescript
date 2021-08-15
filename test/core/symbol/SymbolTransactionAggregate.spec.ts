@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Converter, Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork, SymbolUnresolvedAddress } from '@core';
+import { Converter, Key, SymbolDeadline, SymbolKeyPair, SymbolNetwork, SymbolUnresolvedAddress } from '@core';
 import {
     AmountDto,
     BlockDurationDto,
@@ -42,7 +42,7 @@ describe('Symbol Aggregate Transaction', () => {
 
     const bobPrivateKey = 'AAA80097FB6A1F287ED2736A597B8EA7F08D20F1ECDB9935DE6694ECF1C58900';
     const bob = new SymbolKeyPair(Key.createFromHex(bobPrivateKey));
-    const bobAddress: SymbolUnresolvedAddress = new SymbolAddress(network.createAddressFromPublicKey(bob.publicKey));
+    const bobAddress: SymbolUnresolvedAddress = network.createAddressFromPublicKey(bob.publicKey);
 
     const alicePrivateKey = 'BBB80097FB6A1F287ED2736A597B8EA7F08D20F1ECDB9935DE6694ECF1C58900';
     const alice = new SymbolKeyPair(Key.createFromHex(alicePrivateKey));

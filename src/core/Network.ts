@@ -15,7 +15,7 @@
  */
 
 import ripemd160 = require('ripemd160');
-import { Key, RawAddress } from '@core';
+import { Address, Key, RawAddress } from '@core';
 import { Hash } from 'js-sha3';
 
 export abstract class Network {
@@ -33,7 +33,7 @@ export abstract class Network {
      * @param publicKey - Public key
      * @returns Raw address and its checksum bytes
      */
-    public createAddressFromPublicKey(publicKey: Key): RawAddress {
+    public createAddressFromPublicKey(publicKey: Key): Address {
         const publicKeyBytes = publicKey.toBytes();
         // step 1: sha3 hash of the public key
         const publicKeyHash = this.addressHasher().arrayBuffer(publicKeyBytes);
@@ -50,8 +50,15 @@ export abstract class Network {
         const hash = this.addressHasher().arrayBuffer(addressWithoutChecksum);
         const checksum = new Uint8Array(hash).subarray(0, 4);
 
-        return { addressWithoutChecksum, checksum };
+        return this.createAddress({ addressWithoutChecksum, checksum });
     }
+
+    /**
+     * Abstract method that creates the right address implementation for the given network.
+     * @param rawAddress - the raw address
+     * @returns the address instance for the current network.
+     */
+    protected abstract createAddress(rawAddress: RawAddress): Address;
 
     /**
      * Abstract method to gets the primary hasher to use in the public key to address conversion.

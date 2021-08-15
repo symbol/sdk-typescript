@@ -1,3 +1,4 @@
+import { Converter, Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork } from '@core';
 import {
     AmountDto,
     TransferTransactionBodyBuilder,
@@ -5,7 +6,6 @@ import {
     UnresolvedMosaicBuilder,
     UnresolvedMosaicIdDto,
 } from 'catbuffer-typescript';
-import { Converter, Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork } from '../../src/core';
 
 const testnetMosaicId = '091F837E059AE13C';
 const privateKey = '1C16D0C8804546EFB4B11584AFACB294DFABF0D41E8E345F1F74BB6CAD162066';
