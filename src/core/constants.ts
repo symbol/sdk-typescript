@@ -22,7 +22,7 @@ export const SymbolNetworkList = [
     { name: 'testnet', identifier: 0x98, generationHash: '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155' },
 ];
 
-export const NIS1NetworkList = [
+export const Nis1NetworkList = [
     { name: 'mainnet', identifier: 0x68 },
     { name: 'testnet', identifier: 0x98 },
 ];
