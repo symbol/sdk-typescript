@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
+import { Address, Network, NIS1NetworkList, RawAddress } from '@core';
 import { Hash, keccak256 } from 'js-sha3';
-import { NIS1NetworkList } from '../constants';
-import { Network } from '../Network';
 
 export class Nis1Network extends Network {
     /**
@@ -45,5 +44,14 @@ export class Nis1Network extends Network {
      */
     public static list(): ReadonlyArray<Nis1Network> {
         return NIS1NetworkList.map((n) => new Nis1Network(n.name, n.identifier));
+    }
+
+    /**
+     * It creates the address for the nis1 network.
+     * @param rawAddress - the raw address
+     * @returns the Nis1 address instance.
+     */
+    protected createAddress(rawAddress: RawAddress): Address {
+        throw new Error('Nis1Address not implemented!!!');
     }
 }
