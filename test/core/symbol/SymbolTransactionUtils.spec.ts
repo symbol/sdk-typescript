@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Deadline, Key, SymbolAddress, SymbolNetwork, SymbolTransactionUtils } from '@core';
+import { Deadline, Key, SymbolNetwork, SymbolTransactionUtils } from '@core';
 import {
     AmountDto,
     EmbeddedTransactionBuilder,
@@ -40,8 +40,8 @@ describe('SymbolTransactionUtils', () => {
     }
 
     const recipientAddressPublicKeyHex = 'BBB80097FB6A1F287ED2736A597B8EA7F08D20F1ECDB9935DE6694ECF1C58900';
-    const rawAddress = network.createAddressFromPublicKey(Key.createFromHex(recipientAddressPublicKeyHex));
-    const recipientSymbolAddress = new SymbolAddress(rawAddress);
+    const recipientSymbolAddress = network.createAddressFromPublicKey(Key.createFromHex(recipientAddressPublicKeyHex));
+
     const deadline = Deadline.createFromAdjustedValue(100);
     const mosaicIdNumber = BigInt(8589934593);
 

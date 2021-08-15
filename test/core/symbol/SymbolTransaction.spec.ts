@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Converter, Deadline, Key, SymbolAddress, SymbolKeyPair, SymbolNetwork, SymbolTransactionUtils } from '@core';
+import { Converter, Deadline, Key, SymbolKeyPair, SymbolNetwork, SymbolTransactionUtils } from '@core';
 import {
     AmountDto,
     KeyDto,
@@ -45,8 +45,7 @@ describe('Symbol Transfer Transaction', () => {
     const cosigner2 = new SymbolKeyPair(Key.createFromHex(cosigner2PrivateKeyHex));
 
     const recipientAddressPublicKeyHex = 'BBB80097FB6A1F287ED2736A597B8EA7F08D20F1ECDB9935DE6694ECF1C58900';
-    const rawAddress = network.createAddressFromPublicKey(Key.createFromHex(recipientAddressPublicKeyHex));
-    const recipientSymbolAddress = new SymbolAddress(rawAddress);
+    const recipientSymbolAddress = network.createAddressFromPublicKey(Key.createFromHex(recipientAddressPublicKeyHex));
     const deadline = Deadline.createFromAdjustedValue(100);
     const namespaceId = BigInt(8589934593);
 

@@ -1,5 +1,5 @@
 /* eslint-disable tsdoc/syntax */
-import { Deadline, Key, SymbolAddress, SymbolKeyPair, SymbolNetwork } from '@core';
+import { Deadline, Key, SymbolKeyPair, SymbolNetwork } from '@core';
 import { MultisigAccountModificationTransactionBodyBuilder, UnresolvedAddressDto } from 'catbuffer-typescript';
 
 const multisigKeyPair = new SymbolKeyPair(Key.createFromHex('1C16D0C8804546EFB4B11584AFACB294DFABF0D41E8E345F1F74BB6CAD162066'));
@@ -18,7 +18,7 @@ const network = SymbolNetwork.findByIdentifier(SymbolNetwork.list(), 0x98);
 const factory = network!.createTransactionFactory();
 
 const addressAdditions = cosignatoryKeyPairs.map(
-    (keyPair) => new UnresolvedAddressDto(new SymbolAddress(network!.createAddressFromPublicKey(keyPair.publicKey)).getAddressBytes()),
+    (keyPair) => new UnresolvedAddressDto(network!.createAddressFromPublicKey(keyPair.publicKey).getAddressBytes()),
 );
 
 const bodyBuilder = new MultisigAccountModificationTransactionBodyBuilder({

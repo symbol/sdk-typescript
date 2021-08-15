@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Network, SymbolNetworkList, SymbolTransactionFactory } from '@core';
+import { Network, RawAddress, SymbolAddress, SymbolNetworkList, SymbolTransactionFactory } from '@core';
 import { Hash, sha3_256 } from 'js-sha3';
 
 export class SymbolNetwork extends Network {
@@ -52,5 +52,13 @@ export class SymbolNetwork extends Network {
      */
     public static list(): ReadonlyArray<SymbolNetwork> {
         return SymbolNetworkList.map((n) => new SymbolNetwork(n.name, n.identifier, n.generationHash));
+    }
+    /**
+     * It creates the address for the symbol network.
+     * @param rawAddress - the raw address
+     * @returns the symbol address instance
+     */
+    protected createAddress(rawAddress: RawAddress): SymbolAddress {
+        return new SymbolAddress(rawAddress);
     }
 }

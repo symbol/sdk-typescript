@@ -1,4 +1,4 @@
-import { Converter, Deadline, Key, SymbolAddress, SymbolKeyPair, SymbolNetwork } from '@core';
+import { Converter, Deadline, Key, SymbolKeyPair, SymbolNetwork } from '@core';
 import { ChronoUnit } from '@js-joda/core';
 import {
     AmountDto,
@@ -23,7 +23,7 @@ const bobAddressAlias = 'bob.address'; // Bob's address alias namespace name
 const network = new SymbolNetwork('testnet', 0x98, '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155'); // Specify network
 const factory = network.createTransactionFactory();
 
-const aliceAddress = new SymbolAddress(network.createAddressFromPublicKey(aliceKeyPair.publicKey));
+const aliceAddress = network.createAddressFromPublicKey(aliceKeyPair.publicKey);
 const bobAddress = factory.fullNameToNamespaceId(bobAddressAlias); // Bob's unresolved address
 
 const aliceTransaction = new TransferTransactionBodyBuilder({
