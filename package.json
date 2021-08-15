@@ -32,7 +32,6 @@
     "devDependencies": {
         "@types/chai": "^4.2.21",
         "@types/jsonstream": "^0.8.30",
-        "@types/long": "^4.0.1",
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.4.6",
         "@types/ripemd160": "^2.0.0",
@@ -61,7 +60,6 @@
         "bigint-buffer": "^1.1.5",
         "catbuffer-typescript": "^1.0.1-alpha-202108062013",
         "js-sha3": "^0.8.0",
-        "long": "^4.0.0",
         "ripemd160": "^2.0.2",
         "tweetnacl": "^1.0.3",
         "utf8": "^3.0.0"
