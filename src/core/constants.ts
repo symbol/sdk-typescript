@@ -42,7 +42,7 @@ export const SymbolNetworkList = [
     },
 ];
 
-export const NIS1NetworkList = [
+export const Nis1NetworkList = [
     { name: 'mainnet', identifier: 0x68, epochAdjustment: Nis1MainnetEpoch },
     { name: 'testnet', identifier: 0x98, epochAdjustment: Nis1MainnetEpoch },
 ];
