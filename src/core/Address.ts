@@ -56,7 +56,11 @@ export abstract class Address {
      * @returns Encoded address tring with separators
      */
     public pretty(): string {
-        return this.encoded.match(/.{1,6}/g)!.join('-');
+        const match = this.encoded.match(/.{1,6}/g);
+        if (!match) {
+            throw new Error(`Address ${this.encoded} is not valid!`);
+        }
+        return match.join('-');
     }
 
     /**

@@ -15,12 +15,9 @@ import { SymbolKeyPair } from '../../../src/core/symbol/SymbolKeyPair';
  * limitations under the License.
  */
 
+import { Converter, Key, SymbolKeyPair, VotingKeysGenerator } from '@core';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
-import { Key } from '../../../src/core/Key';
-import { SymbolKeyPair } from '../../../src/core/symbol/SymbolKeyPair';
-import { VotingKeysGenerator } from '../../../src/core/symbol/VotingKeysGenerator';
-import { Converter } from '../../../src/core/utils/Converter';
 
 describe('VotingKeysGenerator', () => {
     it('can generate voting keys header', () => {
