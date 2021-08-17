@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Key, SymbolIdGenerator, SymbolNetwork } from '@core';
+import { Key, Network, SymbolIdGenerator } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
@@ -64,13 +64,16 @@ export const SignAndVerifyTester = (KeyPair: any, testSignVectorFile: string): v
     });
 };
 
-export const AddressMosaicIdTester = (testSignVectorFile: string, testMosaicId = false): void => {
+export const AddressMosaicIdTester = <T extends Network>(
+    networks: readonly T[],
+    testSignVectorFile: string,
+    testMosaicId = false,
+): void => {
     describe('address & mosaicId - test vector', () => {
         tester.run(
             testSignVectorFile,
             (item: { [x: string]: any }) => {
-                const networkList = SymbolNetwork.list();
-                networkList.forEach((network) => {
+                networks.forEach((network) => {
                     //Load test vector addresses
                     const networkName = network.name === 'testnet' ? 'PublicTest' : 'Public';
                     const addressKeyName = `address_${networkName}`.replace('_t', 'T');

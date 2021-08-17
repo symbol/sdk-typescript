@@ -16,92 +16,92 @@
 
 import { Address, RawAddress } from '@core';
 import { arrayDeepEqual, Base32, Converter } from '@utils';
-import { sha3_256 } from 'js-sha3';
+import { keccak256 } from 'js-sha3';
 
 /**
  * The address structure describes an address with its network
  */
-export class SymbolAddress extends Address {
+export class Nis1Address extends Address {
     /**
      * Constructor
      *
      * @param rawAddress - Raw address bytes
      */
     constructor(rawAddress: RawAddress) {
-        rawAddress.checksum = rawAddress.checksum.subarray(0, 3);
         super(rawAddress);
     }
 
     /**
-     * Get the raw address byte with checksum bytes for Symbol Address
+     * Get the raw address byte with checksum bytes for Nis1 Address
      *
      * @returns Address bytes
      */
     public getAddressBytes(): Uint8Array {
-        const address = new Uint8Array(this.rawAddress.addressWithoutChecksum.length + 3);
-        address.set(this.rawAddress.addressWithoutChecksum, 0);
-        address.set(this.rawAddress.checksum.subarray(0, 3), this.rawAddress.addressWithoutChecksum.length);
+        const { addressWithoutChecksum, checksum } = this.rawAddress;
+        const address = new Uint8Array(addressWithoutChecksum.length + 4);
+        address.set(addressWithoutChecksum, 0);
+        address.set(checksum.subarray(0, 4), addressWithoutChecksum.length);
         return address;
     }
 
     /**
-     * Create SymbolAddress object from encoded address string
+     * Create Nis1 Address object from encoded address string
      *
      * @param encodedAddress - Encoded address
-     * @returns SymbolAddress object
+     * @returns Nis1Address object
      */
-    public static createFromString(encodedAddress: string): SymbolAddress {
-        const decoded = Base32.Base32Decode(`${encodedAddress}A`).subarray(0, 24);
-        return new SymbolAddress({
+    public static createFromString(encodedAddress: string): Nis1Address {
+        const decoded = Base32.Base32Decode(encodedAddress);
+        return new Nis1Address({
             addressWithoutChecksum: decoded.subarray(0, 21),
-            checksum: decoded.subarray(21, 24),
+            checksum: decoded.subarray(21, 25),
         });
     }
 
     /**
-     * Create SymbolAddress object from encoded address bytes
+     * Create Nis1 Address object from encoded address bytes
      *
      * @param addressBytes - address bytes
-     * @returns SymbolAddress object
+     * @returns Nis1Address object
      */
-    public static createFromBytes(addressBytes: Uint8Array): SymbolAddress {
+    public static createFromBytes(addressBytes: Uint8Array): Nis1Address {
         const padded = new Uint8Array(25);
         padded.set(addressBytes);
-        return new SymbolAddress({
+        return new Nis1Address({
             addressWithoutChecksum: padded.subarray(0, 21),
-            checksum: padded.subarray(21, 24),
+            checksum: padded.subarray(21, 25),
         });
     }
 
     /**
-     * Create SymbolAddress object from decoded
+     * Create Nis1 Address object from decoded
      *
      * @param addressHex - address hex string
-     * @returns SymbolAddress object
+     * @returns Nis1Address object
      */
-    public static createFromHex(addressHex: string): SymbolAddress {
+    public static createFromHex(addressHex: string): Nis1Address {
         const bytes = Converter.hexToUint8(addressHex);
-        return SymbolAddress.createFromBytes(bytes);
+        return Nis1Address.createFromBytes(bytes);
     }
 
     /**
      * Determines the validity of an raw address string.
      *
-     * @param encodedAddress - The raw address string. Expected format VATNE7Q5BITMUTRRN6IB4I7FLSDRDWZA35C4KNQ
+     * @param encodedAddress - The raw address string. Expected format TAZJ3KEPYAQ4G4Y6Q2IRZTQPU7RAKGYZULZURKTO
      * @returns true if the raw address string is valid, false otherwise.
      */
     public static isValid(encodedAddress: string): boolean {
         const formatAddress = encodedAddress.toUpperCase().replace(/-/g, '');
 
-        if (formatAddress.length !== 39 || !['A', 'I', 'Q', 'Y'].includes(formatAddress.slice(-1))) {
+        if (formatAddress.length !== 40) {
             return false;
         }
 
         try {
-            const { rawAddress } = SymbolAddress.createFromString(formatAddress);
-            const hasher = sha3_256.create();
+            const { rawAddress } = Nis1Address.createFromString(formatAddress);
+            const hasher = keccak256.create();
             const hash = hasher.update(rawAddress.addressWithoutChecksum).arrayBuffer();
-            return arrayDeepEqual(new Uint8Array(hash).subarray(0, 3), rawAddress.checksum);
+            return arrayDeepEqual(new Uint8Array(hash).subarray(0, 4), rawAddress.checksum);
         } catch (e) {
             return false;
         }
