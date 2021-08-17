@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import { SymbolAddress } from '@core';
-import { arrayDeepEqual, Base32, Converter } from '@utils';
-import { sha3_256 } from 'js-sha3';
+import { Base32, Converter } from '@utils';
 
 export interface RawAddress {
     addressWithoutChecksum: Uint8Array;
@@ -78,30 +76,5 @@ export abstract class Address {
      */
     public toString(): string {
         return this.encoded;
-    }
-
-    /**
-     * Determines the validity of an raw address string.
-     *
-     * @param encodedAddress - The raw address string. Expected format VATNE7Q5BITMUTRRN6IB4I7FLSDRDWZA35C4KNQ
-     * @returns true if the raw address string is valid, false otherwise.
-     */
-    public static isValid(encodedAddress: string): boolean {
-        const isSymbol = encodedAddress.length === 39;
-        if (isSymbol) {
-            if (!['A', 'I', 'Q', 'Y'].includes(encodedAddress.slice(-1).toUpperCase())) {
-                return false;
-            }
-            try {
-                const address = SymbolAddress.createFromString(encodedAddress);
-                const hasher = sha3_256.create();
-                const hash = hasher.update(address.rawAddress.addressWithoutChecksum).arrayBuffer();
-                return arrayDeepEqual(new Uint8Array(hash).subarray(0, 3), address.rawAddress.checksum);
-            } catch {
-                return false;
-            }
-        }
-        // TODO: Implement Nis1 Logic here
-        return false;
     }
 }
