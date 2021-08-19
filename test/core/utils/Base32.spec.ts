@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Base32, Converter } from '@core';
 import { expect } from 'chai';
-import { Base32, Converter } from '../../../src/core/utils';
 
 describe('base32', () => {
     const Test_Vectors = [
@@ -64,13 +64,13 @@ describe('base32', () => {
 
         it('accepts all byte values', () => {
             // Arrange:
-            const data: any = [];
+            const data: number[] = [];
             for (let i = 0; 260 > i; ++i) {
                 data.push(i & 0xff);
             }
 
             // Act:
-            const encoded = Base32.Base32Encode(data);
+            const encoded = Base32.Base32Encode(new Uint8Array(data));
 
             // Assert:
             const expected =
