@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
+import { Converter, Key, SymbolKeyPair, VotingKeysGenerator } from '@core';
 import { expect } from 'chai';
-import { Key } from '../../src/core/Key';
-import { SymbolKeyPair } from '../../src/core/symbol';
-import { VotingKeysGenerator } from '../../src/core/symbol/VotingKeysGenerator';
-import { Converter } from '../../src/core/utils/Converter';
 import * as votingKeyVector from './resources/VotingKeyTestVector.json';
 
-const fibPrivateKeyGenerator = (fillPrivateKey = false) => {
+interface KeyGenerator {
+    generate: () => SymbolKeyPair;
+}
+
+const fibPrivateKeyGenerator = (fillPrivateKey = false): KeyGenerator => {
     let value1 = 1;
     let value2 = 2;
 
     return {
-        generate: () => {
+        generate: (): SymbolKeyPair => {
             const nextValue = value1 + value2;
             value1 = value2;
             value2 = nextValue;
@@ -45,7 +46,7 @@ const fibPrivateKeyGenerator = (fillPrivateKey = false) => {
     };
 };
 
-const seededPrivateKeyGenerator = (values: string[]) => {
+const seededPrivateKeyGenerator = (values: string[]): KeyGenerator => {
     let nextIndex = 0;
     return {
         generate: () => {
@@ -55,7 +56,10 @@ const seededPrivateKeyGenerator = (values: string[]) => {
     };
 };
 
-const runTest = (vectorItem: any, keyGenerator: any): void => {
+const runTest = (
+    vectorItem: { root_private_key: string; start_epoch: number; end_epoch: number; expected_file_hex: string },
+    keyGenerator: KeyGenerator,
+): void => {
     // Arrange:
     const item = vectorItem;
     const rootKeyPair = new SymbolKeyPair(Key.createFromHex(item.root_private_key));

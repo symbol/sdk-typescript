@@ -10,10 +10,6 @@ module.exports = {
         sourceType: 'module', // Allows for the use of imports
     },
     rules: {
-        '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/camelcase': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
         'tsdoc/syntax': 'warn',
     },
     plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
