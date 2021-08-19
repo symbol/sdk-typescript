@@ -18,7 +18,7 @@ import { Nis1Network } from '@core';
 import { expect } from 'chai';
 import * as crypto from 'crypto';
 import { keccak256 } from 'js-sha3';
-import { AssertNetwork, BasicNetworkTester } from '../../BasicNetworkTest.template';
+import { assertNetwork, basicNetworkTester } from '../../BasicNetworkTest.template';
 
 describe('Nis1 Network', () => {
     describe('Network Constructor', () => {
@@ -26,7 +26,7 @@ describe('Nis1 Network', () => {
         const network = new Nis1Network('testnet', 0x98);
 
         // Assert:
-        AssertNetwork(network, 'testnet', 0x98);
+        assertNetwork(network, 'testnet', 0x98);
     });
 
     describe('Correct networks are registered', () => {
@@ -36,8 +36,8 @@ describe('Nis1 Network', () => {
 
             // Assert:
             expect(['mainnet', 'testnet']).to.be.deep.equal(networks.map((n) => n.name));
-            AssertNetwork(networks[0], 'mainnet', 0x68);
-            AssertNetwork(networks[1], 'testnet', 0x98);
+            assertNetwork(networks[0], 'mainnet', 0x68);
+            assertNetwork(networks[1], 'testnet', 0x98);
         });
     });
 
@@ -62,11 +62,11 @@ describe('Nis1 Network', () => {
         const networks = Nis1Network.list();
 
         describe('Assert first network', () => {
-            BasicNetworkTester(networks, 'mainnet', 0x68);
+            basicNetworkTester(networks, 'mainnet', 0x68);
         });
 
         describe('Assert second network', () => {
-            BasicNetworkTester(networks, 'testnet', 0x98);
+            basicNetworkTester(networks, 'testnet', 0x98);
         });
     });
 });

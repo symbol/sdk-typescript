@@ -53,7 +53,7 @@ export abstract class Address {
     /**
      * Get address in pretty format ex: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
      *
-     * @returns Encoded address tring with separators
+     * @returns Encoded address string with separators
      */
     public pretty(): string {
         const match = this.encoded.match(/.{1,6}/g);
