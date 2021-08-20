@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Key, Network, SymbolIdGenerator } from '@core';
+import { Key, KeyPair, Network, SymbolIdGenerator } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
@@ -21,14 +21,17 @@ import { VectorTester } from './vector-tests/VectorTester';
 
 const tester = new VectorTester();
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const KeyPairVectorTester = (KeyPair: any, testKeysVectorFile: string): void => {
+interface KeyPairClass {
+    new (privateKey: Key): KeyPair;
+}
+
+export const KeyPairVectorTester = (keyPairClass: KeyPairClass, testKeysVectorFile: string): void => {
     describe('key pair - test vector', () => {
         tester.run(
             testKeysVectorFile,
             (item: { privateKey: string; publicKey: string }) => {
                 // Act:
-                const keyPair = new KeyPair(Key.createFromHex(item.privateKey));
+                const keyPair = new keyPairClass(Key.createFromHex(item.privateKey));
 
                 // Assert:
                 const message = ` from ${item.privateKey}`;
@@ -40,14 +43,13 @@ export const KeyPairVectorTester = (KeyPair: any, testKeysVectorFile: string): v
     });
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const SignAndVerifyTester = (KeyPair: any, testSignVectorFile: string): void => {
+export const SignAndVerifyTester = (keyPairClass: KeyPairClass, testSignVectorFile: string): void => {
     describe('sign & verify- test vector', () => {
         tester.run(
             testSignVectorFile,
             (item: { privateKey: string; data: string; signature: string }) => {
                 // Arrange:
-                const keyPair = new KeyPair(Key.createFromHex(item.privateKey));
+                const keyPair = new keyPairClass(Key.createFromHex(item.privateKey));
                 const payload = Converter.hexToUint8(item.data);
 
                 // Act:
@@ -72,7 +74,7 @@ export const AddressMosaicIdTester = <T extends Network>(
     describe('address & mosaicId - test vector', () => {
         tester.run(
             testSignVectorFile,
-            (item: { [x: string]: any }) => {
+            (item: { [x: string]: string }) => {
                 networks.forEach((network) => {
                     //Load test vector addresses
                     const networkName = network.name === 'testnet' ? 'PublicTest' : 'Public';

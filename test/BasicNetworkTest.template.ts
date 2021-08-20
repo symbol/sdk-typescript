@@ -17,21 +17,22 @@
 import { Network } from '@core';
 import { expect } from 'chai';
 
-export const AssertNetwork = (network: Network, expectedName: string, expectedIdentifier: number): void => {
-    it('correct predefined networks are registered', () => {
-        // Assert:
-        expect(network.name).to.be.equal(expectedName);
-        expect(network.identifier).to.be.equal(expectedIdentifier);
-    });
+export const assertNetwork = (network: Network | undefined, expectedName: string, expectedIdentifier: number): void => {
+    // Assert:
+    if (!network) {
+        throw new Error(`There is not network with name ${expectedName}`);
+    }
+    expect(network.name).to.be.equal(expectedName);
+    expect(network.identifier).to.be.equal(expectedIdentifier);
 };
 
-export const BasicNetworkTester = <T extends Network>(networks: readonly T[], name: string, identifier: number): void => {
+export const basicNetworkTester = <T extends Network>(networks: readonly T[], name: string, identifier: number): void => {
     it('can find well known network by name', () => {
         // Act:
         const network = Network.findByName(networks, name);
 
         // Assert:
-        AssertNetwork(network!, name, identifier);
+        assertNetwork(network, name, identifier);
     });
 
     it('cannot find other network given name not exist', () => {
@@ -47,7 +48,7 @@ export const BasicNetworkTester = <T extends Network>(networks: readonly T[], na
         const network = Network.findByIdentifier(networks, identifier);
 
         // Assert:
-        AssertNetwork(network!, name, identifier);
+        assertNetwork(network, name, identifier);
     });
 
     it('cannot find other network given identifier not exist', () => {

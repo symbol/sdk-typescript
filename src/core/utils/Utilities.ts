@@ -16,8 +16,19 @@
 import { Alphabet, Encoded_Block_Size } from '@core';
 import { keccak512, sha3_256 } from 'js-sha3';
 
-export const createBuilder = (): any => {
-    const map = {};
+export interface Hasher {
+    update(data: Uint8Array): void;
+    digest(): void;
+    reset(): void;
+}
+
+interface Builder {
+    map: Record<string, number>;
+    addRange: (start: string, end: string, base: number) => void;
+}
+
+export const createBuilder = (): Builder => {
+    const map: Record<string, number> = {};
     return {
         map,
         /**
@@ -38,7 +49,7 @@ export const createBuilder = (): any => {
     };
 };
 
-const Char_To_Nibble_Map = (): any => {
+const Char_To_Nibble_Map = (): Record<string, number> => {
     const builder = createBuilder();
     builder.addRange('0', '9', 0);
     builder.addRange('a', 'f', 10);
@@ -46,13 +57,13 @@ const Char_To_Nibble_Map = (): any => {
     return builder.map;
 };
 
-const Char_To_Digit_Map = (): any => {
+const Char_To_Digit_Map = (): Record<string, number> => {
     const builder = createBuilder();
     builder.addRange('0', '9', 0);
     return builder.map;
 };
 
-export const tryParseByte = (char1: string, char2: string): any => {
+export const tryParseByte = (char1: string, char2: string): number | undefined => {
     const charMap = Char_To_Nibble_Map();
     const nibble1 = charMap[char1];
     const nibble2 = charMap[char2];
@@ -107,8 +118,7 @@ export const extractPartName = (name: string, start: number, size: number): stri
     return partName;
 };
 
-// eslint-disable-next-line
-export const split = (name: string, processor: any): any => {
+export const split = (name: string, processor: (start: number, index: number) => void): number => {
     let start = 0;
     for (let index = 0; index < name.length; ++index) {
         if ('.' === name[index]) {
@@ -139,7 +149,7 @@ export const encodeBlock = (input: Uint8Array, inputOffset: number, output: stri
     output[outputOffset + 7] = Alphabet[input[inputOffset + 4] & 0x1f];
 };
 
-export const Char_To_Decoded_Char_Map = (): any => {
+export const Char_To_Decoded_Char_Map = (): Record<string, number> => {
     const builder = createBuilder();
     builder.addRange('A', 'Z', 0);
     builder.addRange('2', '7', 26);
@@ -155,7 +165,7 @@ export const decodeChar = (char: string): number => {
     throw Error(`illegal base32 character ${char}`);
 };
 
-export const decodeBlock = (input: string, inputOffset: number, output: Uint8Array, outputOffset: number): any => {
+export const decodeBlock = (input: string, inputOffset: number, output: Uint8Array, outputOffset: number): void => {
     const bytes = new Uint8Array(Encoded_Block_Size);
     for (let i = 0; i < Encoded_Block_Size; ++i) {
         bytes[i] = decodeChar(input[inputOffset + i]);
@@ -183,8 +193,8 @@ export const keccakHash = (data: Uint8Array): number[] => {
  *
  * @returns KeccakHasher object
  */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const KeccakHasher = () => {
+
+export const KeccakHasher = (): Hasher => {
     let hasher = keccak512.create();
     return {
         update: (data: Uint8Array) => hasher.update(data),

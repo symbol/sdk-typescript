@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Converter } from '@core';
 import { expect } from 'chai';
-import { Converter } from '../../../src/core/utils';
 
 describe('Converter', () => {
     describe('toByte', () => {
         it('can convert all valid hex char combinations to byte', () => {
             // Arrange:
-            const charToValueMappings: any = [];
+            const charToValueMappings: [string, number][] = [];
             for (let code = '0'.charCodeAt(0); code <= '9'.charCodeAt(0); ++code) {
                 charToValueMappings.push([String.fromCharCode(code), code - '0'.charCodeAt(0)]);
             }

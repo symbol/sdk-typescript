@@ -44,7 +44,7 @@ export class SymbolKeyPair extends KeyPair {
      *
      * @returns Public key
      */
-    protected getPublicKey(): Key {
+    public getPublicKey(): Key {
         return new Key(nacl.sign.keyPair.fromSeed(this.privateKey.toBytes()).publicKey);
     }
 
