@@ -19,7 +19,7 @@ import { ChronoUnit, Duration, Instant, LocalDateTime, ZoneId } from '@js-joda/c
  * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the nemesis block.
  * If a transaction does not get included in a block before the deadline is reached, it is deleted.
  */
-export class Deadline {
+export class SymbolDeadline {
     /**
      * Deadline value (without Nemesis epoch adjustment)
      */
@@ -33,13 +33,13 @@ export class Deadline {
      * @param chronoUnit - the chrono unit. e.g ChronoUnit.HOURS
      * @returns Symbol deadline object
      */
-    public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): Deadline {
+    public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): SymbolDeadline {
         const deadlineDateTime = Instant.now().plus(deadline, chronoUnit);
 
         if (deadline <= 0) {
             throw new Error('deadline should be greater than 0');
         }
-        return Deadline.createFromAdjustedValue(deadlineDateTime.minusSeconds(epochAdjustment).toEpochMilli());
+        return SymbolDeadline.createFromAdjustedValue(deadlineDateTime.minusSeconds(epochAdjustment).toEpochMilli());
     }
 
     /**
@@ -49,8 +49,8 @@ export class Deadline {
      * @param adjustedValue - Adjusted value. (Local datetime minus nemesis epoch adjustment)
      * @returns Symbol deadline object
      */
-    public static createFromAdjustedValue(adjustedValue: number): Deadline {
-        return new Deadline(adjustedValue);
+    public static createFromAdjustedValue(adjustedValue: number): SymbolDeadline {
+        return new SymbolDeadline(adjustedValue);
     }
 
     /**

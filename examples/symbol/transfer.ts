@@ -1,4 +1,4 @@
-import { Converter, Deadline, Key, SymbolAddress, SymbolKeyPair, SymbolNetwork } from '@core';
+import { Converter, Key, SymbolAddress, SymbolDeadline, SymbolKeyPair, SymbolNetwork } from '@core';
 import {
     AmountDto,
     TransferTransactionBodyBuilder,
@@ -36,7 +36,9 @@ const bodyBuilder = new TransferTransactionBodyBuilder({
     message: Converter.concat(Uint8Array.of(0x00), Converter.utf8ToUint8('Test message.')), //0x00 is the message type for plain utf-8 encoded texts.
 }); // Build TransferTransaction body.
 
-const transferTransaction = network.createTransactionFactory().create(Deadline.createFromAdjustedValue(100), BigInt(100), bodyBuilder); // Build transaction using the factory
+const transferTransaction = network
+    .createTransactionFactory()
+    .create(SymbolDeadline.createFromAdjustedValue(100), BigInt(100), bodyBuilder); // Build transaction using the factory
 
 /**
  * Sign transaction

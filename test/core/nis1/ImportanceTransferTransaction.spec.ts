@@ -13,7 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Deadline, ImportanceTransferMode, ImportanceTransferTransaction, Key, Nis1KeyPair, Nis1Network, Nis1TransactionType } from '@core';
+import {
+    ImportanceTransferMode,
+    ImportanceTransferTransaction,
+    Key,
+    Nis1Deadline,
+    Nis1KeyPair,
+    Nis1Network,
+    Nis1TransactionType,
+} from '@core';
 import { expect } from 'chai';
 
 describe('Nis1 ImportanceTransferTransaction', () => {
@@ -41,7 +49,7 @@ describe('Nis1 ImportanceTransferTransaction', () => {
         const remotePubicKey = Key.createFromHex('9764026AA71A3CD0189990D1B7B8275B8D80863CF271235DFC745F30651E93AA');
         const factory = network.createTransactionFactory();
         const body = new ImportanceTransferTransaction(signerPublicKey, ImportanceTransferMode.ACTIVATE);
-        const deadline = Deadline.createFromAdjustedValue(12345 + 24 * 60 * 60);
+        const deadline = Nis1Deadline.createFromAdjustedValue(12345 + 24 * 60 * 60);
         const transaction = factory.create(deadline, remotePubicKey, body);
 
         // Act:

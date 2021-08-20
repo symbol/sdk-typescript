@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Deadline, Key, Nis1Network, Nis1Serializer } from '@core';
+import { Key, Nis1Deadline, Nis1Network, Nis1Serializer } from '@core';
 import { Nis1Transaction } from './Nis1Transaction';
 
 /**
@@ -34,7 +34,11 @@ export class Nis1TransactionFactory {
      * @param signerPublicKey - Signer's public key
      * @param body - Nis1 transaction body.
      */
-    public create(deadline: Deadline, signerPublicKey: Key, body: Nis1Serializer.Serializer): Nis1Transaction<Nis1Serializer.Serializer> {
+    public create(
+        deadline: Nis1Deadline,
+        signerPublicKey: Key,
+        body: Nis1Serializer.Serializer,
+    ): Nis1Transaction<Nis1Serializer.Serializer> {
         return new Nis1Transaction(this.network, deadline, signerPublicKey, body);
     }
 }

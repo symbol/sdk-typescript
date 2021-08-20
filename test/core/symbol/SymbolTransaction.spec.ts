@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Converter, Deadline, Key, SymbolKeyPair, SymbolNetwork, SymbolTransactionUtils } from '@core';
+import { Converter, Key, SymbolDeadline, SymbolKeyPair, SymbolNetwork, SymbolTransactionUtils } from '@core';
 import {
     AmountDto,
     KeyDto,
@@ -46,7 +46,7 @@ describe('Symbol Transfer Transaction', () => {
 
     const recipientAddressPublicKeyHex = 'BBB80097FB6A1F287ED2736A597B8EA7F08D20F1ECDB9935DE6694ECF1C58900';
     const recipientSymbolAddress = network.createAddressFromPublicKey(Key.createFromHex(recipientAddressPublicKeyHex));
-    const deadline = Deadline.createFromAdjustedValue(100);
+    const deadline = SymbolDeadline.createFromAdjustedValue(100);
     const namespaceId = BigInt(8589934593);
 
     const mosaics = [new UnresolvedMosaicBuilder({ mosaicId: new UnresolvedMosaicIdDto(namespaceId), amount: new AmountDto(BigInt(1)) })];
