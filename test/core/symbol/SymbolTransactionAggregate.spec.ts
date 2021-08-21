@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Converter, Key, SymbolDeadline, SymbolKeyPair, SymbolNetwork, SymbolUnresolvedAddress } from '@core';
+import { Converter, Deadline, Key, SymbolKeyPair, SymbolNetwork, SymbolUnresolvedAddress } from '@core';
 import {
     AmountDto,
     BlockDurationDto,
@@ -62,7 +62,7 @@ describe('Symbol Aggregate Transaction', () => {
     }
 
     // Static deadline for payload assertions.
-    const deadline = SymbolDeadline.createFromAdjustedValue(100);
+    const deadline = Deadline.createFromAdjustedValue(100);
 
     // Option one, create method with individual params.
     const bobTx = TransferTransactionBodyBuilder.createTransferTransactionBodyBuilder(

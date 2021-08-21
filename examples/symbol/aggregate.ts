@@ -1,4 +1,4 @@
-import { Converter, Key, SymbolDeadline, SymbolKeyPair, SymbolNetwork } from '@core';
+import { Converter, Deadline, Key, SymbolKeyPair, SymbolNetwork } from '@core';
 import { ChronoUnit } from '@js-joda/core';
 import {
     AmountDto,
@@ -49,7 +49,7 @@ const bobTransaction = new TransferTransactionBodyBuilder({
 });
 
 // Create deadline. 1616694977 is Symbol testnet epoch adjustment.
-const deadline = SymbolDeadline.create(1616694977, 2, ChronoUnit.HOURS);
+const deadline = Deadline.create(1616694977, 2, ChronoUnit.HOURS);
 
 const bondedTransaction = factory.createAggregateBonded(deadline, BigInt(100), [
     factory.toEmbedded(aliceTransaction, aliceKeyPair.publicKey),
@@ -70,7 +70,7 @@ const lockTransactionBuilder = new HashLockTransactionBodyBuilder({
     duration: new BlockDurationDto(BigInt(100)),
     hash: new Hash256Dto(bondedTransaction.transactionHash),
 });
-const lock = factory.create(SymbolDeadline.createFromAdjustedValue(100), BigInt(100), lockTransactionBuilder);
+const lock = factory.create(Deadline.createFromAdjustedValue(100), BigInt(100), lockTransactionBuilder);
 lock.sign(aliceKeyPair);
 
 /**
