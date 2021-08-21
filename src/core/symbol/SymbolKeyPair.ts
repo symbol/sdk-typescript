@@ -27,7 +27,7 @@ export class SymbolKeyPair extends KeyPair {
      * @param privateKey - Private Key
      */
     constructor(privateKey: Key) {
-        super(privateKey);
+        super(privateKey, SymbolKeyPair.derivePublicKey(privateKey));
     }
 
     /**
@@ -42,10 +42,11 @@ export class SymbolKeyPair extends KeyPair {
     /**
      * Derive public key from private key
      *
+     * @param privateKey - The private key to derive the public key from.
      * @returns Public key
      */
-    protected getPublicKey(): Key {
-        return new Key(nacl.sign.keyPair.fromSeed(this.privateKey.toBytes()).publicKey);
+    private static derivePublicKey(privateKey: Key): Key {
+        return new Key(nacl.sign.keyPair.fromSeed(privateKey.toBytes()).publicKey);
     }
 
     /**
