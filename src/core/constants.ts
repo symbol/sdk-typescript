@@ -21,8 +21,8 @@ export const SymbolMainnetEpochTime = Date.UTC(2021, 2, 16, 0, 6, 25);
 export const SymbolTestnetEpochTime = Date.UTC(2021, 2, 25, 17, 56, 17);
 export const SymbolMainnetEpoch = 1615853185;
 export const SymbolTestnetEpoch = 1616694977;
-export const Nis1MainnetEpochTime = Date.UTC(2015, 2, 29, 0, 6, 25);
-export const Nis1MainnetEpoch = 1425859585;
+export const Nis1EpochTime = Date.UTC(2015, 2, 29, 0, 6, 25);
+export const Nis1Epoch = 1425859585;
 
 /**
  * Network types for both Symbol & Nis1
@@ -43,8 +43,8 @@ export const SymbolNetworkList = [
 ];
 
 export const Nis1NetworkList = [
-    { name: 'mainnet', identifier: 0x68, epochAdjustment: Nis1MainnetEpoch },
-    { name: 'testnet', identifier: 0x98, epochAdjustment: Nis1MainnetEpoch },
+    { name: 'mainnet', identifier: 0x68, epochAdjustment: Nis1Epoch },
+    { name: 'testnet', identifier: 0x98, epochAdjustment: Nis1Epoch },
 ];
 
 /**
