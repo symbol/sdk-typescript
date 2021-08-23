@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { SymbolDeadline } from '@core';
 import {
     AggregateBondedTransactionBuilder,
     AggregateCompleteTransactionBuilder,

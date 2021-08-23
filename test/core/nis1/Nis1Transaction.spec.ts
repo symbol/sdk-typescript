@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ImportanceTransferMode, ImportanceTransferTransaction, Nis1Deadline, Nis1KeyPair, Nis1Network, Nis1TransactionType } from '@core';
+import { Deadline, ImportanceTransferMode, ImportanceTransferTransaction, Nis1KeyPair, Nis1Network, Nis1TransactionType } from '@core';
 import { expect } from 'chai';
 import { Nis1Transaction } from '../../../src/core/nis1/Nis1Transaction';
 
@@ -21,7 +21,7 @@ describe('Nis1Transaction', () => {
     const network = new Nis1Network('foo', 0x54);
 
     const createTransaction = (keyPair: Nis1KeyPair) => {
-        const deadline = Nis1Deadline.createFromAdjustedValue(12345 + 24 * 60 * 60);
+        const deadline = Deadline.createFromAdjustedValue(12345 + 24 * 60 * 60);
         const body = new ImportanceTransferTransaction(keyPair.publicKey, ImportanceTransferMode.ACTIVATE);
         return new Nis1Transaction(network, deadline, keyPair.publicKey, body);
     };

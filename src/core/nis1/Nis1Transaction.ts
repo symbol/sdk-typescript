@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Network, Nis1Deadline, Nis1KeyPair, Nis1TransactionType } from '@core';
+import { Deadline, Network, Nis1KeyPair, Nis1TransactionType } from '@core';
 import { Duration, Instant } from '@js-joda/core';
 import { toBufferLE } from 'bigint-buffer';
 import { Key } from '../Key';
@@ -42,7 +42,7 @@ export class Nis1Transaction<T extends Serializer> {
      * @param signerPublicKey - Signer's public key
      * @param body - Transaction body
      */
-    constructor(public readonly network: Network, public readonly deadline: Nis1Deadline, public signerPublicKey: Key, public body: T) {
+    constructor(public readonly network: Network, public readonly deadline: Deadline, public signerPublicKey: Key, public body: T) {
         this.version = (this.network.identifier << 24) + 1;
         this.internalPayload = this.serialize();
     }
