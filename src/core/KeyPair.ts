@@ -18,23 +18,17 @@ import { Key } from '@core';
 import { Converter } from '@utils';
 
 export abstract class KeyPair {
-    public readonly publicKey: Key;
-
     /**
      * Constructor
      *
-     * @param privateKey - Private Key
+     * @param privateKey - The private key.
+     * @param publicKey - The derived public key from the provided private key.
      */
-    constructor(public readonly privateKey: Key) {
+    protected constructor(public readonly privateKey: Key, public readonly publicKey: Key) {
         // sanity
         Converter.validateHexString(privateKey.toString(), 64, 'Invalid PrivateKey');
-        this.publicKey = this.getPublicKey();
+        Converter.validateHexString(publicKey.toString(), 64, 'Invalid PublicKey');
     }
-
-    /**
-     * Abstract method to derive public key from private key
-     */
-    public abstract getPublicKey(): Key;
 
     /**
      * Abstract method to signs a data buffer with a key pair.

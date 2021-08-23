@@ -28,6 +28,7 @@ import {
     TimestampDto,
     TransactionBuilder,
 } from 'catbuffer-typescript';
+import { Deadline } from '../Deadline';
 import { Key } from '../Key';
 import { SymbolAddress } from './SymbolAddress';
 import { SymbolIdGenerator } from './SymbolIdGenerator';
@@ -56,7 +57,7 @@ export class SymbolTransactionFactory {
      * @param fee - the fee
      * @param bodyBuilder - the body builder, eg: catapult's TransferTransactionBuilder.
      */
-    public create(deadline: SymbolDeadline, fee: bigint, bodyBuilder: Serializer): SymbolTransaction {
+    public create(deadline: Deadline, fee: bigint, bodyBuilder: Serializer): SymbolTransaction {
         const builder = SymbolTransactionUtils.createFromBodyBuilder({
             fee: new AmountDto(fee),
             deadline: new TimestampDto(BigInt(deadline.adjustedValue)),
@@ -74,7 +75,7 @@ export class SymbolTransactionFactory {
      * @param builders - a list of subclasses ofs EmbeddedTransactionBuilder
      */
     public createAggregateComplete(
-        deadline: SymbolDeadline,
+        deadline: Deadline,
         fee: bigint,
         builders: EmbeddedTransactionBuilder[],
     ): SymbolTransaction<AggregateCompleteTransactionBuilder> {
@@ -94,7 +95,7 @@ export class SymbolTransactionFactory {
      * @param builders - a list of subclasses ofs EmbeddedTransactionBuilder
      */
     public createAggregateBonded(
-        deadline: SymbolDeadline,
+        deadline: Deadline,
         fee: bigint,
         builders: EmbeddedTransactionBuilder[],
     ): SymbolTransaction<AggregateBondedTransactionBuilder> {
@@ -116,7 +117,7 @@ export class SymbolTransactionFactory {
      */
     public createAggregate(
         type: EntityTypeDto.AGGREGATE_COMPLETE_TRANSACTION | EntityTypeDto.AGGREGATE_BONDED_TRANSACTION,
-        deadline: SymbolDeadline,
+        deadline: Deadline,
         fee: bigint,
         builders: EmbeddedTransactionBuilder[],
     ): SymbolTransaction {

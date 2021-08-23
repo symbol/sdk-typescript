@@ -30,7 +30,7 @@ export const BasicKeyPairTester = (keyPairClass: KeyPairClass, deterministicPriv
             const keyPair: KeyPair = new keyPairClass(deterministicPrivateKey);
 
             // Assert:
-            expect(expectedPublicKey).to.be.deep.equal(keyPair.getPublicKey());
+            expect(expectedPublicKey).to.be.deep.equal(keyPair.publicKey);
             expect(deterministicPrivateKey).to.be.deep.equal(keyPair.privateKey);
         });
     });

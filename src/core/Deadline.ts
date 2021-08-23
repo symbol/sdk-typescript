@@ -19,7 +19,7 @@ import { ChronoUnit, Duration, Instant, LocalDateTime, ZoneId } from '@js-joda/c
  * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the nemesis block.
  * If a transaction does not get included in a block before the deadline is reached, it is deleted.
  */
-export class SymbolDeadline {
+export class Deadline {
     /**
      * Deadline value (without Nemesis epoch adjustment)
      */
@@ -31,15 +31,15 @@ export class SymbolDeadline {
      * @param epochAdjustment - the network's epoch adjustment (seconds). Defined in the network/properties. e.g. 1573430400;
      * @param deadline - the deadline unit value.
      * @param chronoUnit - the chrono unit. e.g ChronoUnit.HOURS
-     * @returns Symbol deadline object
+     * @returns Deadline object
      */
-    public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): SymbolDeadline {
+    public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): Deadline {
         const deadlineDateTime = Instant.now().plus(deadline, chronoUnit);
 
         if (deadline <= 0) {
             throw new Error('deadline should be greater than 0');
         }
-        return SymbolDeadline.createFromAdjustedValue(deadlineDateTime.minusSeconds(epochAdjustment).toEpochMilli());
+        return Deadline.createFromAdjustedValue(deadlineDateTime.minusSeconds(epochAdjustment).toEpochMilli());
     }
 
     /**
@@ -47,10 +47,10 @@ export class SymbolDeadline {
      * Create a Deadline where the adjusted values was externally calculated.
      *
      * @param adjustedValue - Adjusted value. (Local datetime minus nemesis epoch adjustment)
-     * @returns Symbol deadline object
+     * @returns Deadline object
      */
-    public static createFromAdjustedValue(adjustedValue: number): SymbolDeadline {
-        return new SymbolDeadline(adjustedValue);
+    public static createFromAdjustedValue(adjustedValue: number): Deadline {
+        return new Deadline(adjustedValue);
     }
 
     /**
