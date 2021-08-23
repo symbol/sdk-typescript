@@ -26,7 +26,7 @@ export class Nis1KeyPair extends KeyPair {
      * @param privateKey - Private Key
      */
     constructor(privateKey: Key) {
-        super(privateKey);
+        super(privateKey, Nis1KeyPair.derivePublicKey(privateKey));
     }
 
     /**
@@ -41,11 +41,12 @@ export class Nis1KeyPair extends KeyPair {
     /**
      * Derive public key from private key
      *
+     * @param privateKey - The private key to derive the public key from.
      * @returns Public key
      */
-    public getPublicKey(): Key {
+    private static derivePublicKey(privateKey: Key): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
-        const reversedPrivateKey = [...this.privateKey.toBytes()].reverse();
+        const reversedPrivateKey = [...privateKey.toBytes()].reverse();
 
         Ed25519.crypto_sign_keypair_hash(publicKey.toBytes(), reversedPrivateKey, keccakHash);
 
