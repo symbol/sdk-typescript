@@ -47,7 +47,7 @@ export class Deadline {
      * Create a Deadline where the adjusted values was externally calculated.
      *
      * @param adjustedValue - Adjusted value. (Local datetime minus nemesis epoch adjustment)
-     * @returns Symbol deadline object
+     * @returns Deadline object
      */
     public static createFromAdjustedValue(adjustedValue: number): Deadline {
         return new Deadline(adjustedValue);
