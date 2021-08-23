@@ -31,7 +31,7 @@ export class Deadline {
      * @param epochAdjustment - the network's epoch adjustment (seconds). Defined in the network/properties. e.g. 1573430400;
      * @param deadline - the deadline unit value.
      * @param chronoUnit - the chrono unit. e.g ChronoUnit.HOURS
-     * @returns Symbol deadline object
+     * @returns Deadline object
      */
     public static create(epochAdjustment: number, deadline: number, chronoUnit: ChronoUnit): Deadline {
         const deadlineDateTime = Instant.now().plus(deadline, chronoUnit);
