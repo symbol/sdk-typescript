@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Address, Network, Nis1Address, Nis1NetworkList, RawAddress } from '@core';
+import { Address, Network, Nis1Address, Nis1NetworkList, Nis1TransactionFactory, RawAddress } from '@core';
 import { Hash, keccak256 } from 'js-sha3';
 
 export class Nis1Network extends Network {
@@ -35,6 +35,13 @@ export class Nis1Network extends Network {
      */
     public addressHasher(): Hash {
         return keccak256;
+    }
+
+    /**
+     * Creates a transaction factory for Nis1 transaction.
+     */
+    public createTransactionFactory(): Nis1TransactionFactory {
+        return new Nis1TransactionFactory(this);
     }
 
     /**
