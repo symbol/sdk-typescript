@@ -26,7 +26,7 @@ describe('Nis1Transaction', () => {
         return new Nis1Transaction(network, deadline, keyPair.publicKey, body);
     };
 
-    const veryTransactionCreation = (
+    const verifyTransactionCreation = (
         transaction: Nis1Transaction<ImportanceTransferTransaction>,
         keyPair: Nis1KeyPair,
         withoutSignature = true,
@@ -47,7 +47,7 @@ describe('Nis1Transaction', () => {
         const keyPair = Nis1KeyPair.generate();
 
         // Act + Assert:
-        veryTransactionCreation(createTransaction(keyPair), keyPair);
+        verifyTransactionCreation(createTransaction(keyPair), keyPair);
     });
 
     it('Can sign and attach signature', () => {
@@ -59,7 +59,7 @@ describe('Nis1Transaction', () => {
         transaction.sign(keyPair);
 
         // Assert:
-        veryTransactionCreation(transaction, keyPair, false);
+        verifyTransactionCreation(transaction, keyPair, false);
         expect(transaction.signature).deep.equal(keyPair.sign(transaction.serialize()));
         expect(transaction.payload.length).equal(transaction.serialize().length + 72);
     });
