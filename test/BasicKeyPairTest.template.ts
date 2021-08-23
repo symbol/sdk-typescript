@@ -175,7 +175,7 @@ export const BasicKeyPairTester = (keyPairClass: KeyPairClass, deterministicPriv
                 // 2^252 + 27742317777372353535851937790883648493, little endian
                 const Group_Order = [
                     0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                 ];
 
                 let r = 0;
@@ -197,12 +197,11 @@ export const BasicKeyPairTester = (keyPairClass: KeyPairClass, deterministicPriv
 
             // Act:
             const isCanonicalVerified = keyPair.verify(payload, canonicalSignature);
-            // const isNonCanonicalVerified = keyPair.verify(payload, nonCanonicalSignature);
+            const isNonCanonicalVerified = keyPair.verify(payload, nonCanonicalSignature);
 
             // Assert:
             expect(isCanonicalVerified).to.equal(true);
-            // TODO fix this assertion!
-            // expect(isNonCanonicalVerified).to.equal(true);
+            expect(isNonCanonicalVerified).to.equal(false);
         });
     });
 
