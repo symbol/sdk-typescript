@@ -187,8 +187,8 @@ export const BasicKeyPairTester = (keyPairClass: KeyPairClass, deterministicPriv
             }
 
             // Arrange:
-            const keyPair = keyPairClass.generate();
-            const payload = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+            const keyPair: KeyPair = new keyPairClass(deterministicPrivateKey);
+            const payload = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 11]);
             const canonicalSignature = keyPair.sign(payload);
 
             // this is signature with group order added to 'encodedS' part of signature
