@@ -18,25 +18,6 @@ import { Key, KeyPair } from '@core';
 import * as Crypto from 'crypto';
 import * as nacl from 'tweetnacl';
 
-function IsCanonicalS(signatureS : Uint8Array): boolean {
-    if (signatureS.every(x => 0 == x))
-        return false;
-
-    // copy to larger space
-    const x = new Float64Array(64)
-    const reduced = new Uint8Array(64);
-    for (let i = 0; i < 32; ++i)
-        x[i] = signatureS[i];
-
-    nacl.lowlevel.modL(reduced, x);
-
-    let result = 0;
-    for (let i = 0; i < 32; ++i)
-        result += reduced[i] ^ signatureS[i];
-
-    return 0 == result;
-}
-
 /**
  * Represents an ED25519 private and public key.
  */
@@ -90,8 +71,7 @@ export class SymbolKeyPair extends KeyPair {
      * @returns true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
-        if (!IsCanonicalS(signature.slice(signature.length / 2)))
-            return false;
+        if (!this.IsCanonicalS(signature.slice(signature.length / 2))) return false;
 
         return nacl.sign.detached.verify(data, signature, this.publicKey.toBytes());
     }

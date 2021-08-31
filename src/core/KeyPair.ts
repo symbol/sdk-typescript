@@ -46,4 +46,24 @@ export abstract class KeyPair {
      * @returns true if the signature is verifiable, false otherwise.
      */
     public abstract verify(data: Uint8Array, signature: Uint8Array): boolean;
+
+    /**
+     * To verify signature's encodedS.
+     * @param signature - The signature to verify.
+     * @returns true if the signature is canonical, false otherwise.
+     */
+    public IsCanonicalS(signatureS: Uint8Array): boolean {
+        if (signatureS.every((x) => 0 == x)) return false;
+
+        // copy to larger space
+        const x = new Float64Array(64);
+        const reduced = new Uint8Array(64);
+        for (let i = 0; i < 32; ++i) x[i] = signatureS[i];
+
+        Ed25519.crypto_modL(reduced, x);
+        let result = 0;
+        for (let i = 0; i < 32; ++i) result += reduced[i] ^ signatureS[i];
+
+        return 0 == result;
+    }
 }
