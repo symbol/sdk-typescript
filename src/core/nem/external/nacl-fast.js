@@ -820,7 +820,7 @@
       crypto_sign_keypair_hash: crypto_sign_keypair_hash,
       crypto_sign_hash: crypto_sign_hash,
       crypto_verify_hash: crypto_verify_hash,
-
+      crypto_modL: modL,
       crypto_sign_PUBLICKEYBYTES: crypto_sign_PUBLICKEYBYTES,
       crypto_sign_SECRETKEYBYTES: crypto_sign_SECRETKEYBYTES,
     };
