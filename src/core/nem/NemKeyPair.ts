@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 import { Key, KeyPair } from '@core';
+import Ed25519 from '@external';
 import { keccakHash, KeccakHasher } from '@utils';
 import * as Crypto from 'crypto';
-/* eslint @typescript-eslint/no-var-requires: "off" */
-const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
 export class NemKeyPair extends KeyPair {
     /**

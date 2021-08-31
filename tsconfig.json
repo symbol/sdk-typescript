@@ -25,6 +25,7 @@
     "paths": {
       "@core": ["src/core"],
       "@utils": ["src/core/utils"],
+      "@external": ["src/core/nis1/external"],
     },
   },
   "files": [
