@@ -15,6 +15,7 @@
  */
 
 import { Key } from '@core';
+import Ed25519 from '@external';
 import { Converter } from '@utils';
 
 export abstract class KeyPair {
