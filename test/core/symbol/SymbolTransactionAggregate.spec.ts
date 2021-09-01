@@ -36,7 +36,7 @@ describe('Symbol Aggregate Transaction', () => {
 
     // Too Many Symbol Prefixes, is it possible to use the network object to generate generic KeyPair, Address, mosaic id, namespce id, etc?
     //
-    // Would Nis1 Transaction be super different?
+    // Would Nem Transaction be super different?
 
     const mosaicId = BigInt('0x091F837E059AE13C'); // Testnet mosaic id
 

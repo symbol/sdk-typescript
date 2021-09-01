@@ -3,7 +3,7 @@ export * from './constants';
 export * from './Deadline';
 export * from './Key';
 export * from './KeyPair';
+export * from './nem';
 export * from './Network';
-export * from './nis1';
 export * from './symbol';
 export * from './utils';

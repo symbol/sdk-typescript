@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Nis1TransactionType as TransactionType } from '../Nis1Enums';
+import { NemTransactionType as TransactionType } from '../NemEnums';
 
 /**
- * Nis1 transaction serializer interface
+ * Nem transaction serializer interface
  */
 export interface Serializer {
     size: number;

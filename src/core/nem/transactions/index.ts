@@ -1,2 +1,2 @@
 export * from './ImportanceTransferTransaction';
-export * as Nis1Serializer from './Serializer';
+export * as NemSerializer from './Serializer';

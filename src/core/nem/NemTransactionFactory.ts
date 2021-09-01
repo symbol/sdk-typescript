@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import { Deadline, Key, Nis1Network, Nis1Serializer } from '@core';
-import { Nis1Transaction } from './Nis1Transaction';
+import { Deadline, Key, NemNetwork, NemSerializer } from '@core';
+import { NemTransaction } from './NemTransaction';
 
 /**
- * Nis1 transaction factory
+ * Nem transaction factory
  */
-export class Nis1TransactionFactory {
+export class NemTransactionFactory {
     /**
      * Constructor
-     * @param network - Nis1 network.
+     * @param network - Nem network.
      */
-    constructor(private readonly network: Nis1Network) {}
+    constructor(private readonly network: NemNetwork) {}
 
     /**
-     * Create generic Nis1 transaction.
+     * Create generic Nem transaction.
      *
      * @param deadline - Transaction deadline
      * @param signerPublicKey - Signer's public key
-     * @param body - Nis1 transaction body.
+     * @param body - Nem transaction body.
      */
-    public create(deadline: Deadline, signerPublicKey: Key, body: Nis1Serializer.Serializer): Nis1Transaction<Nis1Serializer.Serializer> {
-        return new Nis1Transaction(this.network, deadline, signerPublicKey, body);
+    public create(deadline: Deadline, signerPublicKey: Key, body: NemSerializer.Serializer): NemTransaction<NemSerializer.Serializer> {
+        return new NemTransaction(this.network, deadline, signerPublicKey, body);
     }
 }

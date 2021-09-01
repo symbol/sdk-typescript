@@ -37,7 +37,7 @@
   "include": [
     "test/**/*.spec.ts",
     "src/**/*.ts",
-    "src/core/nis1/external/*.js",
+    "src/core/nem/external/*.js",
     "test/vector-tests/*.ts",
     "test/test-vector/*",
     "examples/**/*.ts",

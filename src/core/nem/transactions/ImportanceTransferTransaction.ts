@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import { Key } from '@core';
-import { Converter } from '../../utils/Converter';
-import { ImportanceTransferMode, Nis1TransactionType as TransactionType } from '../Nis1Enums';
+import { ImportanceTransferMode, Key, NemTransactionType as TransactionType } from '@core';
+import { Converter } from '@utils';
 import { Serializer } from './Serializer';
 
 /**
- * Nis1 Importance transfer transaction
+ * Nem Importance transfer transaction
  */
 export class ImportanceTransferTransaction implements Serializer {
     /**

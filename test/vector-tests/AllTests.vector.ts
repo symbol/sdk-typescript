@@ -1,44 +1,44 @@
-import { Nis1KeyPair, Nis1Network, SymbolKeyPair, SymbolNetwork } from '@core';
+import { NemKeyPair, NemNetwork, SymbolKeyPair, SymbolNetwork } from '@core';
 import { AddressMosaicIdTester, KeyPairVectorTester, SignAndVerifyTester } from 'test/BasicVectorTest.template';
 import path = require('path');
 
-describe('NIS 1', () => {
+describe('Nem', () => {
     describe('test-keys vector', () => {
-        const testKeys = path.join(__dirname, '../test-vector/nis1/1.test-keys.json');
-        KeyPairVectorTester(Nis1KeyPair, testKeys);
+        const testKeys = path.join(__dirname, '../test-vector/nem/1.test-keys.json');
+        KeyPairVectorTester(NemKeyPair, testKeys);
     });
 
     describe('test-sign vector', () => {
-        const testSign = path.join(__dirname, '../test-vector/nis1/2.test-sign.json');
-        SignAndVerifyTester(Nis1KeyPair, testSign);
+        const testSign = path.join(__dirname, '../test-vector/nem/2.test-sign.json');
+        SignAndVerifyTester(NemKeyPair, testSign);
     });
 
     describe('test-address vector', () => {
-        const vectorFile = path.join(__dirname, '../test-vector/nis1/1.test-address.json');
-        const networks = Nis1Network.list();
+        const vectorFile = path.join(__dirname, '../test-vector/nem/1.test-address.json');
+        const networks = NemNetwork.list();
         AddressMosaicIdTester(networks, vectorFile);
     });
 });
 
 describe('Symbol', () => {
     describe('test-keys vector', () => {
-        const testKeys = path.join(__dirname, '../test-vector/1.test-keys.json');
+        const testKeys = path.join(__dirname, '../test-vector/symbol/1.test-keys.json');
         KeyPairVectorTester(SymbolKeyPair, testKeys);
     });
 
     describe('test-sign vector', () => {
-        const testSign = path.join(__dirname, '../test-vector/2.test-sign.json');
+        const testSign = path.join(__dirname, '../test-vector/symbol/2.test-sign.json');
         SignAndVerifyTester(SymbolKeyPair, testSign);
     });
 
     describe('test-address vector', () => {
-        const vectorFile = path.join(__dirname, '../test-vector/1.test-address.json');
+        const vectorFile = path.join(__dirname, '../test-vector/symbol/1.test-address.json');
         const networks = SymbolNetwork.list();
         AddressMosaicIdTester(networks, vectorFile);
     });
 
     describe('test-mosaic-id vector', () => {
-        const vectorFile = path.join(__dirname, '../test-vector/5.test-mosaic-id.json');
+        const vectorFile = path.join(__dirname, '../test-vector/symbol/5.test-mosaic-id.json');
         const networks = SymbolNetwork.list();
         AddressMosaicIdTester(networks, vectorFile, true);
     });

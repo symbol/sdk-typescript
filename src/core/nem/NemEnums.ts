@@ -15,9 +15,9 @@
  */
 
 /**
- * Enum containing transaction type constants for Nis1.
+ * Enum containing transaction type constants for Nem.
  */
-export enum Nis1TransactionType {
+export enum NemTransactionType {
     TRANSFER = 0x0101,
     IMPORTANCE_TRANSFER = 0x0801,
     MULTISIG_MODIFICATION = 0x1001,
@@ -29,7 +29,7 @@ export enum Nis1TransactionType {
 }
 
 /**
- * Enum containing importance transfer transaction mode constants for Nis1.
+ * Enum containing importance transfer transaction mode constants for Nem.
  */
 export enum ImportanceTransferMode {
     ACTIVATE = 1,

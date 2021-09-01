@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Deadline, ImportanceTransferMode, ImportanceTransferTransaction, Key, Nis1KeyPair, Nis1Network, Nis1TransactionType } from '@core';
+import { Deadline, ImportanceTransferMode, ImportanceTransferTransaction, Key, NemKeyPair, NemNetwork, NemTransactionType } from '@core';
 import { expect } from 'chai';
 
-describe('Nis1 ImportanceTransferTransaction', () => {
-    const network = new Nis1Network('foo', 0x54);
+describe('Nem ImportanceTransferTransaction', () => {
+    const network = new NemNetwork('foo', 0x54);
 
     it('Can create transaction object', () => {
         // Arrange:
-        const keyPair = Nis1KeyPair.generate();
+        const keyPair = NemKeyPair.generate();
         // Act:
         const transaction = new ImportanceTransferTransaction(keyPair.publicKey, ImportanceTransferMode.ACTIVATE);
 
@@ -30,7 +30,7 @@ describe('Nis1 ImportanceTransferTransaction', () => {
         expect(transaction.fee).equal(BigInt(150000));
         expect(transaction.mode).equal(ImportanceTransferMode.ACTIVATE);
         expect(transaction.remotePublicKey.toBytes()).deep.equal(keyPair.publicKey.toBytes());
-        expect(transaction.type).equal(Nis1TransactionType.IMPORTANCE_TRANSFER);
+        expect(transaction.type).equal(NemTransactionType.IMPORTANCE_TRANSFER);
         expect(transaction.serialize().length).greaterThan(0);
         expect(transaction.size).equal(4 + 4 + 32);
     });
