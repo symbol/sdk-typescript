@@ -17,6 +17,7 @@ import { Key, KeyPair, Network, SymbolIdGenerator } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
+import { deriveSharedKey, deriveSharedSecret, encode } from 'src/core/symbol/SymbolCrypto';
 import { VectorTester } from './vector-tests/VectorTester';
 
 const tester = new VectorTester();
@@ -91,6 +92,52 @@ export const AddressMosaicIdTester = <T extends Network>(
                 });
             },
             'address & mosaic',
+        );
+    });
+};
+
+export const CipherVectorTester = (testCipherVectorFile: string): void => {
+    describe('cipher - test vector', () => {
+        tester.run(
+            testCipherVectorFile,
+            (item: { privateKey: string; otherPublicKey: string; tag: string; iv: string; cipherText: string; clearText: string }) => {
+                // Act:
+                const encoded = encode(
+                    Key.createFromHex(item.privateKey),
+                    Key.createFromHex(item.otherPublicKey),
+                    item.clearText,
+                    true,
+                    Converter.hexToUint8(item.iv),
+                );
+                // Assert:
+                const message = ` from ${item.clearText}`;
+                expect(Converter.uint8ToHex(encoded), `cipher ${message}`).equal(`${item.tag}${item.iv}${item.cipherText}`);
+            },
+            'cipher test',
+        );
+    });
+};
+
+export const DeriveVectorTester = (testCipherVectorFile: string): void => {
+    describe('Derive - test vector', () => {
+        tester.run(
+            testCipherVectorFile,
+            (item: { privateKey: string; otherPublicKey: string; scalarMulResult: string; sharedKey: string }) => {
+                // Act:
+                const sharedSecret = deriveSharedSecret(
+                    Key.createFromHex(item.privateKey).toBytes(),
+                    Key.createFromHex(item.otherPublicKey).toBytes(),
+                );
+                const sharedKey = deriveSharedKey(
+                    Key.createFromHex(item.privateKey).toBytes(),
+                    Key.createFromHex(item.otherPublicKey).toBytes(),
+                );
+                // Assert:
+                const message = ` from ${item.privateKey}`;
+                expect(Converter.uint8ToHex(sharedSecret), `ScalarMulResult ${message}`).equal(item.scalarMulResult);
+                expect(Converter.uint8ToHex(sharedKey), `SharedKey ${message}`).equal(item.sharedKey);
+            },
+            'derive test',
         );
     });
 };
