@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { Key, Nis1KeyPair } from '@core';
+import { Key, NemKeyPair } from '@core';
 import { BasicKeyPairTester } from '../../BasicKeyPairTest.template';
 
-describe('Nis1 key pair', () => {
+describe('Nem key pair', () => {
     const deterministicPrivateKey = Key.createFromHex('575DBB3062267EFF57C970A336EBBC8FBCFE12C5BD3ED7BC11EB0481D7704CED');
     const expectedPublicKey = Key.createFromHex('C5F54BA980FCBB657DBAAA42700539B207873E134D2375EFEAB5F1AB52F87844');
 
-    BasicKeyPairTester(Nis1KeyPair, deterministicPrivateKey, expectedPublicKey);
+    BasicKeyPairTester(NemKeyPair, deterministicPrivateKey, expectedPublicKey);
 });

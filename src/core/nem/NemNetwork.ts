@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Address, Network, Nis1Address, Nis1NetworkList, Nis1TransactionFactory, RawAddress } from '@core';
+import { Address, NemAddress, NemNetworkList, NemTransactionFactory, Network, RawAddress } from '@core';
 import { Hash, keccak256 } from 'js-sha3';
 
-export class Nis1Network extends Network {
+export class NemNetwork extends Network {
     /**
      * Constructor
      *
-     * @param name - Nis1 Network name
-     * @param identifier - Nis1 Network identifier
+     * @param name - Nem Network name
+     * @param identifier - Nem Network identifier
      */
     constructor(name: string, identifier: number) {
         super(name, identifier);
@@ -38,10 +38,10 @@ export class Nis1Network extends Network {
     }
 
     /**
-     * Creates a transaction factory for Nis1 transaction.
+     * Creates a transaction factory for Nem transaction.
      */
-    public createTransactionFactory(): Nis1TransactionFactory {
-        return new Nis1TransactionFactory(this);
+    public createTransactionFactory(): NemTransactionFactory {
+        return new NemTransactionFactory(this);
     }
 
     /**
@@ -49,16 +49,16 @@ export class Nis1Network extends Network {
      *
      * @returns read array of networks
      */
-    public static list(): ReadonlyArray<Nis1Network> {
-        return Nis1NetworkList.map((n) => new Nis1Network(n.name, n.identifier));
+    public static list(): ReadonlyArray<NemNetwork> {
+        return NemNetworkList.map((n) => new NemNetwork(n.name, n.identifier));
     }
 
     /**
-     * It creates the address for the nis1 network.
+     * It creates the address for the Nem network.
      * @param rawAddress - the raw address
-     * @returns the Nis1 address instance.
+     * @returns the Nem address instance.
      */
     protected createAddress(rawAddress: RawAddress): Address {
-        return new Nis1Address(rawAddress);
+        return new NemAddress(rawAddress);
     }
 }

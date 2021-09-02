@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Deadline, Network, Nis1KeyPair, Nis1TransactionType } from '@core';
+import { Deadline, NemKeyPair, NemTransactionType, Network } from '@core';
 import { Duration, Instant } from '@js-joda/core';
 import { toBufferLE } from 'bigint-buffer';
 import { Key } from '../Key';
@@ -22,9 +22,9 @@ import { Converter } from '../utils/Converter';
 import { Serializer } from './transactions/Serializer';
 
 /**
- * Generic Nis1 transaction class
+ * Generic Nem transaction class
  */
-export class Nis1Transaction<T extends Serializer> {
+export class NemTransaction<T extends Serializer> {
     /**
      * Transaction version
      */
@@ -37,7 +37,7 @@ export class Nis1Transaction<T extends Serializer> {
 
     /**
      * Constructor
-     * @param network - Nis1 network
+     * @param network - Nem network
      * @param deadline - Transaction deadline
      * @param signerPublicKey - Signer's public key
      * @param body - Transaction body
@@ -57,7 +57,7 @@ export class Nis1Transaction<T extends Serializer> {
     /**
      * Property: transaction type
      */
-    public get type(): Nis1TransactionType {
+    public get type(): NemTransactionType {
         return this.body.type;
     }
 
@@ -95,7 +95,7 @@ export class Nis1Transaction<T extends Serializer> {
      * Sign transaction and attach signature to the payload
      * @param keyPair - Signer key pair
      */
-    public sign(keyPair: Nis1KeyPair): void {
+    public sign(keyPair: NemKeyPair): void {
         this.signerPublicKey = keyPair.publicKey; // Re-assign signer's public key
         const payload = this.serialize();
         const signature = keyPair.sign(payload);

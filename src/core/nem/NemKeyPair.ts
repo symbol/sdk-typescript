@@ -19,14 +19,14 @@ import * as Crypto from 'crypto';
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
-export class Nis1KeyPair extends KeyPair {
+export class NemKeyPair extends KeyPair {
     /**
      * Constructor
      *
      * @param privateKey - Private Key
      */
     constructor(privateKey: Key) {
-        super(privateKey, Nis1KeyPair.derivePublicKey(privateKey));
+        super(privateKey, NemKeyPair.derivePublicKey(privateKey));
     }
 
     /**
@@ -34,8 +34,8 @@ export class Nis1KeyPair extends KeyPair {
      *
      * @returns New keypair
      */
-    public static generate(): Nis1KeyPair {
-        return new Nis1KeyPair(new Key(Crypto.randomBytes(32)));
+    public static generate(): NemKeyPair {
+        return new NemKeyPair(new Key(Crypto.randomBytes(32)));
     }
 
     /**

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Nis1Network } from '@core';
+import { NemNetwork } from '@core';
 import { expect } from 'chai';
 import * as crypto from 'crypto';
 import { keccak256 } from 'js-sha3';
 import { assertNetwork, basicNetworkTester } from '../../BasicNetworkTest.template';
 
-describe('Nis1 Network', () => {
+describe('Nem Network', () => {
     describe('Network Constructor', () => {
         // Act:
-        const network = new Nis1Network('testnet', 0x98);
+        const network = new NemNetwork('testnet', 0x98);
 
         // Assert:
         assertNetwork(network, 'testnet', 0x98);
@@ -32,7 +32,7 @@ describe('Nis1 Network', () => {
     describe('Correct networks are registered', () => {
         it('predefined network', () => {
             // Act:
-            const networks = Nis1Network.list();
+            const networks = NemNetwork.list();
 
             // Assert:
             expect(['mainnet', 'testnet']).to.be.deep.equal(networks.map((n) => n.name));
@@ -44,7 +44,7 @@ describe('Nis1 Network', () => {
     describe('Address Hasher', () => {
         it('can create correct hasher', () => {
             // Arrange:
-            const network = new Nis1Network('testnet', 0x98);
+            const network = new NemNetwork('testnet', 0x98);
             const randomHash = crypto.randomBytes(32);
             const expected = keccak256.arrayBuffer(randomHash);
 
@@ -59,7 +59,7 @@ describe('Nis1 Network', () => {
 
     describe('Network finder', () => {
         // Arrange:
-        const networks = Nis1Network.list();
+        const networks = NemNetwork.list();
 
         describe('Assert first network', () => {
             basicNetworkTester(networks, 'mainnet', 0x68);

@@ -68,7 +68,7 @@ export abstract class Network {
     /**
      * Get network by its name.
      *
-     * @param networks - Nis1Network[] | SymbolNetwork[]
+     * @param networks - NemNetwork[] | SymbolNetwork[]
      * @param name - name of network, example: 'mainnet'
      * @returns filtered network
      */

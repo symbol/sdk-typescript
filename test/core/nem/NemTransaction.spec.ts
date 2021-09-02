@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Deadline, ImportanceTransferMode, ImportanceTransferTransaction, Nis1KeyPair, Nis1Network, Nis1TransactionType } from '@core';
+import { Deadline, ImportanceTransferMode, ImportanceTransferTransaction, NemKeyPair, NemNetwork, NemTransactionType } from '@core';
 import { expect } from 'chai';
-import { Nis1Transaction } from '../../../src/core/nis1/Nis1Transaction';
+import { NemTransaction } from '../../../src/core/nem/NemTransaction';
 
-describe('Nis1Transaction', () => {
-    const network = new Nis1Network('foo', 0x54);
+describe('NemTransaction', () => {
+    const network = new NemNetwork('foo', 0x54);
 
-    const createTransaction = (keyPair: Nis1KeyPair) => {
+    const createTransaction = (keyPair: NemKeyPair) => {
         const deadline = Deadline.createFromAdjustedValue(12345 + 24 * 60 * 60);
         const body = new ImportanceTransferTransaction(keyPair.publicKey, ImportanceTransferMode.ACTIVATE);
-        return new Nis1Transaction(network, deadline, keyPair.publicKey, body);
+        return new NemTransaction(network, deadline, keyPair.publicKey, body);
     };
 
     const verifyTransactionCreation = (
-        transaction: Nis1Transaction<ImportanceTransferTransaction>,
-        keyPair: Nis1KeyPair,
+        transaction: NemTransaction<ImportanceTransferTransaction>,
+        keyPair: NemKeyPair,
         withoutSignature = true,
     ) => {
         expect(transaction).not.to.be.undefined;
         expect(transaction.body.fee).equal(BigInt(150000));
         expect(transaction.body.mode).equal(ImportanceTransferMode.ACTIVATE);
         expect(transaction.body.remotePublicKey.toBytes()).deep.equal(keyPair.publicKey.toBytes());
-        expect(transaction.type).equal(Nis1TransactionType.IMPORTANCE_TRANSFER);
+        expect(transaction.type).equal(NemTransactionType.IMPORTANCE_TRANSFER);
         expect(transaction.serialize().length).greaterThan(0);
         withoutSignature
             ? expect(transaction.payload).deep.equal(transaction.serialize())
@@ -44,7 +44,7 @@ describe('Nis1Transaction', () => {
 
     it('Can create transaction object', () => {
         // Arrange:
-        const keyPair = Nis1KeyPair.generate();
+        const keyPair = NemKeyPair.generate();
 
         // Act + Assert:
         verifyTransactionCreation(createTransaction(keyPair), keyPair);
@@ -52,7 +52,7 @@ describe('Nis1Transaction', () => {
 
     it('Can sign and attach signature', () => {
         // Arrange:
-        const keyPair = Nis1KeyPair.generate();
+        const keyPair = NemKeyPair.generate();
         const transaction = createTransaction(keyPair);
 
         // Act:

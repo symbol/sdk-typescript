@@ -21,7 +21,7 @@ import { keccak256 } from 'js-sha3';
 /**
  * The address structure describes an address with its network
  */
-export class Nis1Address extends Address {
+export class NemAddress extends Address {
     /**
      * Constructor
      *
@@ -32,7 +32,7 @@ export class Nis1Address extends Address {
     }
 
     /**
-     * Get the raw address byte with checksum bytes for Nis1 Address
+     * Get the raw address byte with checksum bytes for Nem Address
      *
      * @returns Address bytes
      */
@@ -45,43 +45,43 @@ export class Nis1Address extends Address {
     }
 
     /**
-     * Create Nis1 Address object from encoded address string
+     * Create Nem Address object from encoded address string
      *
      * @param encodedAddress - Encoded address
-     * @returns Nis1Address object
+     * @returns NemAddress object
      */
-    public static createFromString(encodedAddress: string): Nis1Address {
+    public static createFromString(encodedAddress: string): NemAddress {
         const decoded = Base32.Base32Decode(encodedAddress);
-        return new Nis1Address({
+        return new NemAddress({
             addressWithoutChecksum: decoded.subarray(0, 21),
             checksum: decoded.subarray(21, 25),
         });
     }
 
     /**
-     * Create Nis1 Address object from encoded address bytes
+     * Create Nem Address object from encoded address bytes
      *
      * @param addressBytes - address bytes
-     * @returns Nis1Address object
+     * @returns NemAddress object
      */
-    public static createFromBytes(addressBytes: Uint8Array): Nis1Address {
+    public static createFromBytes(addressBytes: Uint8Array): NemAddress {
         const padded = new Uint8Array(25);
         padded.set(addressBytes);
-        return new Nis1Address({
+        return new NemAddress({
             addressWithoutChecksum: padded.subarray(0, 21),
             checksum: padded.subarray(21, 25),
         });
     }
 
     /**
-     * Create Nis1 Address object from decoded
+     * Create Nem Address object from decoded
      *
      * @param addressHex - address hex string
-     * @returns Nis1Address object
+     * @returns NemAddress object
      */
-    public static createFromHex(addressHex: string): Nis1Address {
+    public static createFromHex(addressHex: string): NemAddress {
         const bytes = Converter.hexToUint8(addressHex);
-        return Nis1Address.createFromBytes(bytes);
+        return NemAddress.createFromBytes(bytes);
     }
 
     /**
@@ -98,7 +98,7 @@ export class Nis1Address extends Address {
         }
 
         try {
-            const { rawAddress } = Nis1Address.createFromString(formatAddress);
+            const { rawAddress } = NemAddress.createFromString(formatAddress);
             const hasher = keccak256.create();
             const hash = hasher.update(rawAddress.addressWithoutChecksum).arrayBuffer();
             return arrayDeepEqual(new Uint8Array(hash).subarray(0, 4), rawAddress.checksum);

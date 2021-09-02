@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Key, Nis1Address, Nis1Network } from '@core';
+import { Key, NemAddress, NemNetwork } from '@core';
 import { expect } from 'chai';
 import { AssertNetworkAddress, BasicAddressTester } from '../../BasicAddressTest.template';
 
-describe('Nis1 Address', () => {
+describe('Nem Address', () => {
     // Arrange:
     const testKeyAddressPair = {
         publicKey: 'C5F54BA980FCBB657DBAAA42700539B207873E134D2375EFEAB5F1AB52F87844',
@@ -29,8 +29,8 @@ describe('Nis1 Address', () => {
 
     const deterministicPublicKey = Key.createFromHex(testKeyAddressPair.publicKey);
 
-    const testnetNetwork = new Nis1Network('testnet', 0x98);
-    const mainnetNetwork = new Nis1Network('mainnet', 0x68);
+    const testnetNetwork = new NemNetwork('testnet', 0x98);
+    const mainnetNetwork = new NemNetwork('mainnet', 0x68);
 
     const testnetAddress = testnetNetwork.createAddressFromPublicKey(deterministicPublicKey);
 
@@ -42,39 +42,39 @@ describe('Nis1 Address', () => {
     describe('Address can create', () => {
         it('from encoded string', () => {
             // Act:
-            const address = Nis1Address.createFromString(testKeyAddressPair.testnet_address);
+            const address = NemAddress.createFromString(testKeyAddressPair.testnet_address);
             // Assert:
             expect(testnetAddress).to.be.deep.equal(address);
         });
 
         it('from decoded string', () => {
             // Act:
-            const address = Nis1Address.createFromHex(testKeyAddressPair.decoded_testnet_address);
+            const address = NemAddress.createFromHex(testKeyAddressPair.decoded_testnet_address);
             // Assert:
             expect(testnetAddress).to.be.deep.equal(address);
         });
 
         it('from Bytes', () => {
             // Arrange:
-            const addressBytes = Nis1Address.createFromString(testKeyAddressPair.testnet_address).getAddressBytes();
+            const addressBytes = NemAddress.createFromString(testKeyAddressPair.testnet_address).getAddressBytes();
             // Act:
-            const nis1Address = Nis1Address.createFromBytes(addressBytes);
+            const nemAddress = NemAddress.createFromBytes(addressBytes);
             // Assert:
-            expect(testnetAddress).to.be.deep.equal(nis1Address);
+            expect(testnetAddress).to.be.deep.equal(nemAddress);
         });
     });
 
     describe('Address can verify', () => {
         it('valid address', () => {
             // Act + Assert:
-            expect(Nis1Address.isValid(testKeyAddressPair.testnet_address)).to.be.true;
+            expect(NemAddress.isValid(testKeyAddressPair.testnet_address)).to.be.true;
         });
 
         it('invalid address', () => {
             // Arrange:
             const invalidAddress = 'NATNE9Q5BITMUTRRN6IB4I7FLSDRDWZA34SQ33Y';
             // Act + Assert:
-            expect(Nis1Address.isValid(invalidAddress)).to.be.false;
+            expect(NemAddress.isValid(invalidAddress)).to.be.false;
         });
     });
 
