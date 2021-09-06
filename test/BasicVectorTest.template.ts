@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Key, KeyPair, Network, SymbolIdGenerator } from '@core';
+import { deriveSharedKey, deriveSharedSecret, encode, Key, KeyPair, Network, SymbolIdGenerator } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
-import { deriveSharedKey, deriveSharedSecret, encode } from 'src/core/symbol/SymbolCrypto';
 import { VectorTester } from './vector-tests/VectorTester';
-
 const tester = new VectorTester();
 
 interface KeyPairClass {
@@ -105,8 +103,7 @@ export const CipherVectorTester = (testCipherVectorFile: string): void => {
                 const encoded = encode(
                     Key.createFromHex(item.privateKey),
                     Key.createFromHex(item.otherPublicKey),
-                    item.clearText,
-                    true,
+                    Converter.hexToUint8(item.clearText),
                     Converter.hexToUint8(item.iv),
                 );
                 // Assert:
