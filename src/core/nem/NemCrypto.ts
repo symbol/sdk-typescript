@@ -53,14 +53,17 @@ export class NemCrypto {
      *
      * @param privateKey - A sender private key
      * @param publicKey - A recipient public key
-     * @param message - A text message
+     * @param message - A text message (max 976 bytes)
      * @param customIv - An initialization vector
      * @param customSalt - A salt
      *
      * @returns The encoded message
      */
     static encode(privateKey: Key, publicKey: Key, message: Uint8Array, customIv?: Uint8Array, customSalt?: Uint8Array): Uint8Array {
-        if (message.length > 32) throw new Error('Invalid message size!');
+        // Max payload size is 1024 bytes included iv and salt
+        if (message.length > 976) throw new Error('Invalid message size!');
+        if (customIv && customIv.length !== 16) throw new Error('Invalid iv size!');
+        if (customSalt && customSalt.length !== 32) throw new Error('Invalid salt size!');
 
         const iv = customIv ? customIv : Crypto.randomBytes(16);
         const salt = customSalt ? customSalt : Crypto.randomBytes(32);
@@ -71,7 +74,6 @@ export class NemCrypto {
         const cipher = Crypto.createCipheriv(this.algorithm, Buffer.from(key), iv);
         const encrypted = Buffer.concat([cipher.update(message), cipher.final()]);
 
-        // return Converter.uint8ToHex(salt) + Converter.uint8ToHex(iv) + encrypted.toString('hex').toUpperCase();
         return Buffer.concat([salt, iv, encrypted]);
     }
 
@@ -80,12 +82,12 @@ export class NemCrypto {
      *
      * @param privateKey - A recipient private key
      * @param publicKey - A sender public key
-     * @param payload - An encrypted message payload
+     * @param payload - An encrypted message payload (max 1024 bytes)
      *
      * @returns The decoded message
      */
     static decode(privateKey: Key, publicKey: Key, payload: Uint8Array): Uint8Array {
-        if (payload.length !== 80) throw new Error('Invalid payload size!');
+        if (payload.length > 1024) throw new Error('Invalid payload size!');
 
         // 32 byte for salt
         const salt = payload.slice(0, 32);
