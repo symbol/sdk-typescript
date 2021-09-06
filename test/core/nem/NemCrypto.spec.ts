@@ -10,7 +10,7 @@ describe('Nem crypto cipher', () => {
     const recipient = new NemKeyPair(deterministicReceiverPrivateKey);
     const message = 'Nem is awesome!';
     const encryptedHex =
-        '26A5EEBD8B959F664DB060DE9E8265BD4A4597D2BE9DAA2C481042879BEA9F995790143301428700938A0ABB7D8122499E16AE67FFD5E2E4143A58100CA0BD604EC054F82FFF719B26C3E2B68CB6EBB0';
+        '26A5EEBD8B959F664DB060DE9E8265BD4A4597D2BE9DAA2C481042879BEA9F995790143301428700938A0ABB7D81224996058BECCAB21970239EE94A5C587429';
 
     describe('encode & decode message', () => {
         it('Can encode message with sender private key', () => {
@@ -40,7 +40,7 @@ describe('Nem crypto cipher', () => {
 
             // Assert:
             expect(Converter.uint8ToUtf8(decrypted)).equal(message);
-            expect(encrypted.length).equal(80);
+            expect(encrypted.length).equal(Converter.hexToUint8(encryptedHex).length);
         });
 
         it('Roundtrip encode decode', () => {
@@ -52,23 +52,48 @@ describe('Nem crypto cipher', () => {
             expect(Converter.uint8ToUtf8(decrypted)).equal(message);
         });
 
-        it('Encoding throw error if message exceed 32 btyes', () => {
+        it('Encoding throw error if message exceed 976 btyes', () => {
             // Arrange:
-            const exceedBtyesMessage = message.repeat(10);
+            const message = new Uint8Array(977);
 
             // Act:
-            const encoded = () => NemCrypto.encode(sender.privateKey, recipient.publicKey, Converter.utf8ToUint8(exceedBtyesMessage));
+            const encoded = () => NemCrypto.encode(sender.privateKey, recipient.publicKey, message);
 
             // Assert:
             expect(encoded).to.throw(Error);
         });
 
-        it('Decoding throw error if payload exceed 80 btyes', () => {
+        it('Encoding throw error if iv exceed 16 btyes', () => {
             // Arrange:
-            const exceedBtyesPayload = encryptedHex.repeat(2);
+            const message = new Uint8Array(32);
+            const customIv = new Uint8Array(17);
 
             // Act:
-            const decoded = () => NemCrypto.decode(recipient.privateKey, sender.publicKey, Converter.hexToUint8(exceedBtyesPayload));
+            const encoded = () => NemCrypto.encode(sender.privateKey, recipient.publicKey, message, customIv);
+
+            // Assert:
+            expect(encoded).to.throw(Error);
+        });
+
+        it('Encoding throw error if salt exceed 32 btyes', () => {
+            // Arrange:
+            const message = new Uint8Array(32);
+            const customIv = new Uint8Array(16);
+            const customSalt = new Uint8Array(33);
+
+            // Act:
+            const encoded = () => NemCrypto.encode(sender.privateKey, recipient.publicKey, message, customIv, customSalt);
+
+            // Assert:
+            expect(encoded).to.throw(Error);
+        });
+
+        it('Decoding throw error if payload exceed 1024 btyes', () => {
+            // Arrange:
+            const exceedBtyesPayload = new Uint8Array(1025);
+
+            // Act:
+            const decoded = () => NemCrypto.decode(recipient.privateKey, sender.publicKey, exceedBtyesPayload);
 
             // Assert:
             expect(decoded).to.throw(Error);
