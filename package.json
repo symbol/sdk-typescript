@@ -59,7 +59,10 @@
         "@js-joda/core": "^3.2.0",
         "bigint-buffer": "^1.1.5",
         "catbuffer-typescript": "^1.0.1-alpha-202108062013",
+        "crypto-js": "^4.1.1",
+        "futoin-hkdf": "^1.4.2",
         "js-sha3": "^0.8.0",
+        "js-sha512": "^0.8.0",
         "ripemd160": "^2.0.2",
         "tweetnacl": "^1.0.3",
         "utf8": "^3.0.0"
