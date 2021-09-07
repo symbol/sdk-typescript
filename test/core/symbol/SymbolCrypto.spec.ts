@@ -46,7 +46,7 @@ describe('Symbol Crypto', () => {
     });
 
     describe('Edge Case Tests', () => {
-        describe('encode', () => {
+        describe('Encode', () => {
             it('Encode throws if using empty key', () => {
                 // Act+Assert:
                 expect(() => {
@@ -72,7 +72,7 @@ describe('Symbol Crypto', () => {
             });
         });
 
-        describe('decode', () => {
+        describe('Decode', () => {
             it('Decode throws if using empty key', () => {
                 // Arrange:
                 const encoded = encodeAndDecodeAssert();
@@ -90,7 +90,10 @@ describe('Symbol Crypto', () => {
                 const encoded = encodeAndDecodeAssert();
 
                 // Act+Assert:
-                expect(encoded.length).greaterThan(28); // Make sure IV & Tag are included
+                expect(() => {
+                    decode(recipient.privateKey, sender.publicKey, encoded);
+                }).not.to.throw();
+
                 expect(() => {
                     decode(recipient.privateKey, sender.publicKey, new Uint8Array(10));
                 }).to.throw();
