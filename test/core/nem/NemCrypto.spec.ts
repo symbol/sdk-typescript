@@ -52,6 +52,17 @@ describe('Nem crypto cipher', () => {
             expect(Converter.uint8ToUtf8(decrypted)).equal(message);
         });
 
+        it('Can encode message in max size 976 btyes', () => {
+            // Arrange:
+            const message = new Uint8Array(976);
+
+            // Act:
+            const encoded = () => NemCrypto.encode(sender.privateKey, recipient.publicKey, message);
+
+            // Assert:
+            expect(encoded).to.not.throw(Error);
+        });
+
         it('Encoding throw error if message exceed 976 btyes', () => {
             // Arrange:
             const message = new Uint8Array(977);
