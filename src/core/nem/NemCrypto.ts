@@ -29,7 +29,7 @@ export class NemCrypto {
     private static algorithm = 'aes-256-cbc';
 
     /**
-     * Key derive for cipher
+     * Derive key for cipher
      *
      * @param shared - shared secret
      * @param salt - A salt
@@ -38,7 +38,7 @@ export class NemCrypto {
      *
      * @returns Keccak-256 hash
      */
-    private static key_derive(shared: Uint8Array, salt: Uint8Array, privateKey: Key, publicKey: Key): number[] {
+    private static deriveKey(shared: Uint8Array, salt: Uint8Array, privateKey: Key, publicKey: Key): number[] {
         Ed25519.crypto_shared_key_hash(shared, publicKey.toBytes(), [...privateKey.toBytes()].reverse(), keccakHash);
 
         for (let i = 0; i < salt.length; i++) {
@@ -69,7 +69,7 @@ export class NemCrypto {
         const salt = customSalt ? customSalt : Crypto.randomBytes(32);
 
         const shared = new Uint8Array(32);
-        const key = this.key_derive(shared, salt, privateKey, publicKey);
+        const key = this.deriveKey(shared, salt, privateKey, publicKey);
 
         const cipher = Crypto.createCipheriv(this.algorithm, Buffer.from(key), iv);
         const encrypted = Buffer.concat([cipher.update(message), cipher.final()]);
@@ -97,11 +97,9 @@ export class NemCrypto {
         const message = payload.slice(48);
 
         const shared = new Uint8Array(32);
-        const key = this.key_derive(shared, salt, privateKey, publicKey);
+        const key = this.deriveKey(shared, salt, privateKey, publicKey);
 
         const decipher = Crypto.createDecipheriv(this.algorithm, Buffer.from(key), iv);
-        const decoded = Buffer.concat([decipher.update(message), decipher.final()]);
-
-        return decoded;
+        return Buffer.concat([decipher.update(message), decipher.final()]);
     }
 }
