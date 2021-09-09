@@ -50,7 +50,8 @@ export abstract class KeyPair {
 
     /**
      * To verify signature's encodedS.
-     * @param signatureS - The signatureS to verify.
+     *
+     * @param signatureS - The S part of the signature to verify.
      * @returns true if the signature is canonical, false otherwise.
      */
     protected IsCanonicalS(signatureS: Uint8Array): boolean {
