@@ -26,6 +26,11 @@
       "@core": ["src/core"],
       "@utils": ["src/core/utils"],
     },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths"
+      }
+    ]
   },
   "files": [
     "index.ts"
