@@ -50,11 +50,10 @@ describe('Symbol Network', () => {
         it('can create correct hasher', () => {
             // Arrange:
             const network = new SymbolNetwork('mainnet', 0x68, mainnetGenerationHash);
-            const expected = sha3_256.arrayBuffer(network.generationHash);
+            const expected = new Uint8Array(sha3_256.digest(network.generationHash));
 
             // Act:
-            const hasher = network.addressHasher();
-            const hash = hasher.arrayBuffer(network.generationHash);
+            const hash = network.addressHasher(network.generationHash);
 
             // Assert:
             expect(hash).to.be.deep.equal(expected);

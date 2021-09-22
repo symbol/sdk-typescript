@@ -10,7 +10,7 @@ interface INacl {
      * @param privateKey - The private key.
      * @param hashFunc - Hash function use to hash the private key.
      */
-    crypto_sign_keypair(publicKey: Uint8Array, privateKey: number[], hashFunc: (data: Uint8Array) => number[]): void;
+    crypto_sign_keypair(publicKey: Uint8Array, privateKey: number[], hashFunc: (data: Uint8Array) => Uint8Array): void;
     /**
      * Signs a data buffer with a key pair based on the hasher.
      * @param signature - The new signature bytes.

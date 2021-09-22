@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import ripemd160 = require('ripemd160');
-import { Address, Key, RawAddress } from '@core';
-import { Hash } from 'js-sha3';
+import { Address, Converter, HashUtils, Key, RawAddress } from '@core';
 
 export abstract class Network {
     /**
@@ -36,19 +34,17 @@ export abstract class Network {
     public createAddressFromPublicKey(publicKey: Key): Address {
         const publicKeyBytes = publicKey.toBytes();
         // step 1: sha3 hash of the public key
-        const publicKeyHash = this.addressHasher().arrayBuffer(publicKeyBytes);
+        const publicKeyHash = this.addressHasher(publicKeyBytes);
 
         // step 2: ripemd160 hash of (1)
-        const ripemd160Hash = new ripemd160().update(Buffer.from(publicKeyHash)).digest();
+        const ripemd160Hash = HashUtils.ripemd160Hash(publicKeyHash);
 
         // step 3: add network identifier byte in front of (2)
-        const addressWithoutChecksum = new Uint8Array(ripemd160Hash.length + 1);
-        addressWithoutChecksum.set(Uint8Array.of(this.identifier), 0);
-        addressWithoutChecksum.set(ripemd160Hash, 1);
+        const addressWithoutChecksum = Converter.concat(Uint8Array.of(this.identifier), ripemd160Hash);
 
         // step 4: concatenate (3) and the checksum of (3)
-        const hash = this.addressHasher().arrayBuffer(addressWithoutChecksum);
-        const checksum = new Uint8Array(hash).subarray(0, 4);
+        const hash = this.addressHasher(addressWithoutChecksum);
+        const checksum = hash.subarray(0, 4);
 
         return this.createAddress({ addressWithoutChecksum, checksum });
     }
@@ -63,7 +59,7 @@ export abstract class Network {
     /**
      * Abstract method to gets the primary hasher to use in the public key to address conversion.
      */
-    public abstract addressHasher(): Hash;
+    public abstract addressHasher(data: Uint8Array): Uint8Array;
 
     /**
      * Get network by its name.
