@@ -84,7 +84,9 @@ export class NemKeyPair extends KeyPair {
      * @returns true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
-        if (!this.IsCanonicalS(signature.slice(signature.length / 2))) return false;
+        if (!this.IsCanonicalS(signature.slice(signature.length / 2))) {
+            return false;
+        }
         const hasher = KeccakHasher();
         return Ed25519.crypto_verify_hash(signature, this.publicKey.toBytes(), data, hasher);
     }
