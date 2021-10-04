@@ -47,7 +47,7 @@ export class NemKeyPair extends KeyPair {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
         const reversedPrivateKey = [...privateKey.toBytes()].reverse();
 
-        Ed25519.crypto_sign_keypair_hash(publicKey.toBytes(), reversedPrivateKey, keccakHash);
+        Ed25519.crypto_sign_keypair(publicKey.toBytes(), reversedPrivateKey, keccakHash);
 
         return publicKey;
     }
