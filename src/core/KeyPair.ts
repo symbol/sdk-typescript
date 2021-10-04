@@ -49,7 +49,7 @@ export abstract class KeyPair {
     public abstract verify(data: Uint8Array, signature: Uint8Array): boolean;
 
     /**
-     * To verify signature's encodedS.
+     * Determines if a signature's S part is canonical or not.
      *
      * @param signatureS - The S part of the signature to verify.
      * @returns true if the signature is canonical, false otherwise.
