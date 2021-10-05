@@ -632,7 +632,7 @@
       scalarmult(p, q, s);
     }
 
-    function crypto_sign_keypair_hash(pk, sk, hash) {
+    function crypto_sign_keypair(pk, sk, hash) {
         var d = new Uint8Array(64);
         var p = [gf(), gf(), gf(), gf()];
         var i;
@@ -651,7 +651,7 @@
         return 0;
     }
 
-    function crypto_shared_key_hash(shared, pk, sk, hash) {
+    function crypto_shared_key(shared, pk, sk, hash) {
       var d = new Uint8Array(64);
       var p = [gf(), gf(), gf(), gf()];
 
@@ -878,17 +878,16 @@
 
     var crypto_scalarmult_BYTES = 32,
         crypto_scalarmult_SCALARBYTES = 32,
-        crypto_sign_PUBLICKEYBYTES = 32,
-        crypto_sign_SECRETKEYBYTES = 64;
+        crypto_sign_PUBLICKEYBYTES = 32;
 
     nacl.lowlevel = {
-      crypto_sign_keypair_hash: crypto_sign_keypair_hash,
+      crypto_sign_keypair: crypto_sign_keypair,
       crypto_sign_hash: crypto_sign_hash,
       crypto_verify_hash: crypto_verify_hash,
-      crypto_shared_key_hash: crypto_shared_key_hash,
+      crypto_shared_key: crypto_shared_key,
 
+      crypto_modL: modL,
       crypto_sign_PUBLICKEYBYTES: crypto_sign_PUBLICKEYBYTES,
-      crypto_sign_SECRETKEYBYTES: crypto_sign_SECRETKEYBYTES,
     };
 
     /* High-level API */

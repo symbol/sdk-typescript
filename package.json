@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
     "scripts": {
-        "build": "npx shx rm -rf dist/ && tsc",
+        "build": "npx shx rm -rf dist/ && ttsc",
         "watch": "tsc -b -w",
         "doc": "typedoc --out \"ts-docs/$(npm run version --silent)\" src",
         "test": "env VECTOR_LIMIT=20 mocha -r ts-node/register -r tsconfig-paths/register ./test/**/*.spec.ts ./test/**/*.vector.ts --ui bdd --timeout 120000",
@@ -37,6 +37,7 @@
         "@types/ripemd160": "^2.0.0",
         "@typescript-eslint/eslint-plugin": "^4.28.5",
         "@typescript-eslint/parser": "^4.28.5",
+        "@zerollup/ts-transform-paths": "^1.7.18",
         "chai": "^4.3.4",
         "coveralls": "^3.1.1",
         "eslint": "^7.32.0",
@@ -52,6 +53,7 @@
         "ts-mockito": "^2.6.1",
         "ts-node": "^10.1.0",
         "tsconfig-paths": "^3.10.1",
+        "ttypescript": "^1.5.12",
         "typedoc": "^0.21.4",
         "typescript": "^4.3.5"
     },
@@ -59,7 +61,10 @@
         "@js-joda/core": "^3.2.0",
         "bigint-buffer": "^1.1.5",
         "catbuffer-typescript": "^1.0.1-alpha-202108062013",
+        "crypto-js": "^4.1.1",
+        "futoin-hkdf": "^1.4.2",
         "js-sha3": "^0.8.0",
+        "js-sha512": "^0.8.0",
         "ripemd160": "^2.0.2",
         "tweetnacl": "^1.0.3",
         "utf8": "^3.0.0"

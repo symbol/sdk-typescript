@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 import { Key, KeyPair } from '@core';
+import Ed25519 from '@external';
 import { keccakHash, KeccakHasher } from '@utils';
 import * as Crypto from 'crypto';
-/* eslint @typescript-eslint/no-var-requires: "off" */
-const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
 export class NemKeyPair extends KeyPair {
     /**
@@ -48,7 +47,7 @@ export class NemKeyPair extends KeyPair {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
         const reversedPrivateKey = [...privateKey.toBytes()].reverse();
 
-        Ed25519.crypto_sign_keypair_hash(publicKey.toBytes(), reversedPrivateKey, keccakHash);
+        Ed25519.crypto_sign_keypair(publicKey.toBytes(), reversedPrivateKey, keccakHash);
 
         return publicKey;
     }
@@ -85,6 +84,9 @@ export class NemKeyPair extends KeyPair {
      * @returns true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
+        if (!this.IsCanonicalS(signature.slice(signature.length / 2))) {
+            return false;
+        }
         const hasher = KeccakHasher();
         return Ed25519.crypto_verify_hash(signature, this.publicKey.toBytes(), data, hasher);
     }

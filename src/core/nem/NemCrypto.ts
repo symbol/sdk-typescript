@@ -39,7 +39,7 @@ export class NemCrypto {
      * @returns Keccak-256 hash
      */
     private static deriveKey(shared: Uint8Array, salt: Uint8Array, privateKey: Key, publicKey: Key): number[] {
-        Ed25519.crypto_shared_key_hash(shared, publicKey.toBytes(), [...privateKey.toBytes()].reverse(), keccakHash);
+        Ed25519.crypto_shared_key(shared, publicKey.toBytes(), [...privateKey.toBytes()].reverse(), keccakHash);
 
         for (let i = 0; i < salt.length; i++) {
             shared[i] ^= salt[i];

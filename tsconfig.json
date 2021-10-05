@@ -25,7 +25,13 @@
     "paths": {
       "@core": ["src/core"],
       "@utils": ["src/core/utils"],
+      "@external": ["src/core/nem/external"],
     },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths"
+      }
+    ]
   },
   "files": [
     "index.ts"

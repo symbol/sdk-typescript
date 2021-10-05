@@ -1,5 +1,11 @@
 import { NemKeyPair, NemNetwork, SymbolKeyPair, SymbolNetwork } from '@core';
-import { AddressMosaicIdTester, KeyPairVectorTester, SignAndVerifyTester } from 'test/BasicVectorTest.template';
+import {
+    AddressMosaicIdTester,
+    CipherVectorTester,
+    DeriveVectorTester,
+    KeyPairVectorTester,
+    SignAndVerifyTester,
+} from 'test/BasicVectorTest.template';
 import path = require('path');
 
 describe('Nem', () => {
@@ -41,5 +47,15 @@ describe('Symbol', () => {
         const vectorFile = path.join(__dirname, '../test-vector/symbol/5.test-mosaic-id.json');
         const networks = SymbolNetwork.list();
         AddressMosaicIdTester(networks, vectorFile, true);
+    });
+
+    describe('test-derive vector', () => {
+        const vectorFile = path.join(__dirname, '../test-vector/symbol/3.test-derive.json');
+        DeriveVectorTester(vectorFile);
+    });
+
+    describe('test-cipher vector', () => {
+        const vectorFile = path.join(__dirname, '../test-vector/symbol/4.test-cipher.json');
+        CipherVectorTester(vectorFile);
     });
 });

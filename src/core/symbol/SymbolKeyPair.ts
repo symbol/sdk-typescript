@@ -17,6 +17,7 @@
 import { Key, KeyPair } from '@core';
 import * as Crypto from 'crypto';
 import * as nacl from 'tweetnacl';
+
 /**
  * Represents an ED25519 private and public key.
  */
@@ -70,6 +71,10 @@ export class SymbolKeyPair extends KeyPair {
      * @returns true if the signature is verifiable, false otherwise.
      */
     public verify(data: Uint8Array, signature: Uint8Array): boolean {
+        if (!this.IsCanonicalS(signature.slice(signature.length / 2))) {
+            return false;
+        }
+
         return nacl.sign.detached.verify(data, signature, this.publicKey.toBytes());
     }
 }
