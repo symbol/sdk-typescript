@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { deriveSharedKey, deriveSharedSecret, encode, Key, KeyPair, Network, SymbolIdGenerator } from '@core';
+import { decode, deriveSharedKey, deriveSharedSecret, encode, Key, KeyPair, NemCrypto, Network, SymbolIdGenerator } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
@@ -98,17 +98,37 @@ export const CipherVectorTester = (testCipherVectorFile: string): void => {
     describe('cipher - test vector', () => {
         tester.run(
             testCipherVectorFile,
-            (item: { privateKey: string; otherPublicKey: string; tag: string; iv: string; cipherText: string; clearText: string }) => {
+            (item: {
+                privateKey: string;
+                otherPublicKey: string;
+                tag: string;
+                salt: string;
+                iv: string;
+                cipherText: string;
+                clearText: string;
+            }) => {
+                // Arrange:
+                const privateKey = Key.createFromHex(item.privateKey);
+                const otherPublicKey = Key.createFromHex(item.otherPublicKey);
+                const clearText = Converter.hexToUint8(item.clearText);
+                const iv = Converter.hexToUint8(item.iv);
+                const salt = item.salt ? Converter.hexToUint8(item.salt) : undefined;
+
                 // Act:
-                const encoded = encode(
-                    Key.createFromHex(item.privateKey),
-                    Key.createFromHex(item.otherPublicKey),
-                    Converter.hexToUint8(item.clearText),
-                    Converter.hexToUint8(item.iv),
-                );
+                const encoded = salt
+                    ? NemCrypto.encode(privateKey, otherPublicKey, clearText, iv, salt)
+                    : encode(privateKey, otherPublicKey, clearText, iv);
+
+                const decoded = salt
+                    ? NemCrypto.decode(privateKey, otherPublicKey, Converter.hexToUint8(item.salt + item.iv + item.cipherText))
+                    : decode(privateKey, otherPublicKey, encoded);
+
                 // Assert:
                 const message = ` from ${item.clearText}`;
-                expect(Converter.uint8ToHex(encoded), `cipher ${message}`).equal(`${item.tag}${item.iv}${item.cipherText}`);
+                expect(Converter.uint8ToHex(encoded), `cipher encode ${message}`).equal(
+                    `${salt ? item.salt : item.tag}${item.iv}${item.cipherText}`,
+                );
+                expect(Converter.uint8ToHex(decoded), `cipher decoded ${message}`).equal(item.clearText);
             },
             'cipher test',
         );

@@ -24,6 +24,11 @@ describe('Nem', () => {
         const networks = NemNetwork.list();
         AddressMosaicIdTester(networks, vectorFile);
     });
+
+    describe('test-cipher vector', () => {
+        const vectorFile = path.join(__dirname, '../test-vector/nem/4.test-cipher.json');
+        CipherVectorTester(vectorFile);
+    });
 });
 
 describe('Symbol', () => {
