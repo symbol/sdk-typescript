@@ -15,6 +15,7 @@
  */
 
 import { Key } from '@core';
+import Ed25519 from '@external';
 import { Converter } from '@utils';
 
 export abstract class KeyPair {
@@ -46,4 +47,25 @@ export abstract class KeyPair {
      * @returns true if the signature is verifiable, false otherwise.
      */
     public abstract verify(data: Uint8Array, signature: Uint8Array): boolean;
+
+    /**
+     * Determines if a signature's S part is canonical or not.
+     *
+     * @param signatureS - The S part of the signature to verify.
+     * @returns true if the signature is canonical, false otherwise.
+     */
+    protected IsCanonicalS(signatureS: Uint8Array): boolean {
+        if (signatureS.every((x) => 0 == x)) return false;
+
+        // copy to larger space
+        const x = new Float64Array(64);
+        const reduced = new Uint8Array(64);
+        for (let i = 0; i < 32; ++i) x[i] = signatureS[i];
+
+        Ed25519.crypto_modL(reduced, x);
+        let result = 0;
+        for (let i = 0; i < 32; ++i) result += reduced[i] ^ signatureS[i];
+
+        return 0 == result;
+    }
 }

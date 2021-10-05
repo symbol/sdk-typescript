@@ -22,4 +22,10 @@ describe('Nem key pair', () => {
     const expectedPublicKey = Key.createFromHex('C5F54BA980FCBB657DBAAA42700539B207873E134D2375EFEAB5F1AB52F87844');
 
     BasicKeyPairTester(NemKeyPair, deterministicPrivateKey, expectedPublicKey);
+
+    describe('verify', () => {
+        it('non canonical signature', () => {
+            // Todo non canonical signature
+        });
+    });
 });
