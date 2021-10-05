@@ -15,12 +15,10 @@
  */
 
 import { Key } from '@core';
+import Ed25519 from '@external';
 import { keccakHash } from '@utils';
 import * as Crypto from 'crypto';
 import { keccak256 } from 'js-sha3';
-
-/* eslint @typescript-eslint/no-var-requires: "off" */
-const Ed25519 = require('./external/nacl-fast.js').lowlevel;
 
 export class NemCrypto {
     /**
