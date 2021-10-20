@@ -46,11 +46,10 @@ describe('Nem Network', () => {
             // Arrange:
             const network = new NemNetwork('testnet', 0x98);
             const randomHash = crypto.randomBytes(32);
-            const expected = keccak256.arrayBuffer(randomHash);
+            const expected = new Uint8Array(keccak256.digest(randomHash));
 
             // Act:
-            const hasher = network.addressHasher();
-            const hash = hasher.arrayBuffer(randomHash);
+            const hash = network.addressHasher(randomHash);
 
             // Assert:
             expect(hash).to.be.deep.equal(expected);

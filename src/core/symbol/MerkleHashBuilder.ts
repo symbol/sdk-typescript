@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { sha3_256 } from 'js-sha3';
+import { HashUtils } from '@utils';
 
 export class MerkleHashBuilder {
     /**
@@ -67,11 +67,6 @@ export class MerkleHashBuilder {
      * @returns Hashed bytes
      */
     private hash(hashes: Uint8Array[]): Uint8Array {
-        const hasher = sha3_256.create();
-
-        hashes.forEach((hashVal: Uint8Array) => {
-            hasher.update(hashVal);
-        });
-        return new Uint8Array(hasher.arrayBuffer());
+        return HashUtils.sha256Hash(...hashes);
     }
 }

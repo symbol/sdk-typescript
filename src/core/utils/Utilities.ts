@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 import { Alphabet, Encoded_Block_Size } from '@core';
-import { keccak512, sha3_256 } from 'js-sha3';
-
-export interface Hasher {
-    update(data: Uint8Array): void;
-    digest(): void;
-    reset(): void;
-}
 
 interface Builder {
     map: Record<string, number>;
@@ -57,65 +50,11 @@ const Char_To_Nibble_Map = (): Record<string, number> => {
     return builder.map;
 };
 
-const Char_To_Digit_Map = (): Record<string, number> => {
-    const builder = createBuilder();
-    builder.addRange('0', '9', 0);
-    return builder.map;
-};
-
 export const tryParseByte = (char1: string, char2: string): number | undefined => {
     const charMap = Char_To_Nibble_Map();
     const nibble1 = charMap[char1];
     const nibble2 = charMap[char2];
     return undefined === nibble1 || undefined === nibble2 ? undefined : (nibble1 << 4) | nibble2;
-};
-
-/**
- * Tries to parse a string representing an unsigned integer.
- *
- * @param str -The string to parse.
- * @returns The number represented by the input or undefined.
- */
-export const tryParseUint = (str: string): number | undefined => {
-    if ('0' === str) {
-        return 0;
-    }
-    let value = 0;
-    for (const char of str) {
-        const charMap = Char_To_Digit_Map();
-        const digit = charMap[char];
-        if (undefined === digit || (0 === value && 0 === digit)) {
-            return undefined;
-        }
-
-        value *= 10;
-        value += digit;
-
-        if (value > Number.MAX_SAFE_INTEGER) {
-            return undefined;
-        }
-    }
-    return value;
-};
-
-export const idGeneratorConst = {
-    namespace_base_id: [0, 0],
-    name_pattern: /^[a-z0-9][a-z0-9-_]*$/,
-};
-
-export const throwInvalidFqn = (reason: string, name: string): void => {
-    throw Error(`fully qualified id is invalid due to ${reason} (${name})`);
-};
-
-export const extractPartName = (name: string, start: number, size: number): string => {
-    if (0 === size) {
-        throwInvalidFqn('empty part', name);
-    }
-    const partName = name.substr(start, size);
-    if (!idGeneratorConst.name_pattern.test(partName)) {
-        throwInvalidFqn(`invalid part name [${partName}]`, name);
-    }
-    return partName;
 };
 
 export const split = (name: string, processor: (start: number, index: number) => void): number => {
@@ -127,15 +66,6 @@ export const split = (name: string, processor: (start: number, index: number) =>
         }
     }
     return start;
-};
-
-export const generateNamespaceId = (parentId: number[], name: string): number[] => {
-    const hash = sha3_256.create();
-    hash.update(Uint32Array.from(parentId).buffer);
-    hash.update(name);
-    const result = new Uint32Array(hash.arrayBuffer());
-    // right zero-filling required to keep unsigned number representation
-    return [result[0], (result[1] | 0x80000000) >>> 0];
 };
 
 export const encodeBlock = (input: Uint8Array, inputOffset: number, output: string[], outputOffset: number): void => {
@@ -176,33 +106,6 @@ export const decodeBlock = (input: string, inputOffset: number, output: Uint8Arr
     output[outputOffset + 2] = ((bytes[3] & 0x0f) << 4) | (bytes[4] >> 1);
     output[outputOffset + 3] = ((bytes[4] & 0x01) << 7) | (bytes[5] << 2) | (bytes[6] >> 3);
     output[outputOffset + 4] = ((bytes[6] & 0x07) << 5) | bytes[7];
-};
-
-/**
- * Generate keccak 512 hash given by data.
- *
- * @param data - The data to hash.
- * @returns The hash value.
- */
-export const keccakHash = (data: Uint8Array): number[] => {
-    return keccak512.digest(data);
-};
-
-/**
- * Create keccak 512 Hasher object used to hash data.
- *
- * @returns KeccakHasher object
- */
-
-export const KeccakHasher = (): Hasher => {
-    let hasher = keccak512.create();
-    return {
-        update: (data: Uint8Array) => hasher.update(data),
-        digest: () => hasher.digest(),
-        reset: () => {
-            hasher = keccak512.create();
-        },
-    };
 };
 
 // eslint-disable-next-line

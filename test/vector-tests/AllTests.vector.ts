@@ -5,7 +5,7 @@ import {
     DeriveVectorTester,
     KeyPairVectorTester,
     SignAndVerifyTester,
-} from 'test/BasicVectorTest.template';
+} from '../BasicVectorTest.template';
 import path = require('path');
 
 describe('Nem', () => {

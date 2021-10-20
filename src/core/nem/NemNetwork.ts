@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Address, NemAddress, NemNetworkList, NemTransactionFactory, Network, RawAddress } from '@core';
-import { Hash, keccak256 } from 'js-sha3';
+import { Address, HashUtils, NemAddress, NemNetworkList, NemTransactionFactory, Network, RawAddress } from '@core';
 
 export class NemNetwork extends Network {
     /**
@@ -31,11 +30,8 @@ export class NemNetwork extends Network {
     /**
      * Get hasher for address generation based on selected network type
      *
-     * @returns hasher
      */
-    public addressHasher(): Hash {
-        return keccak256;
-    }
+    public addressHasher = HashUtils.keccak256Hash;
 
     /**
      * Creates a transaction factory for Nem transaction.
