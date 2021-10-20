@@ -1,0 +1,3168 @@
+- comments: ''
+  name: Amount
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: BlockDuration
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: BlockFeeMultiplier
+  signedness: unsigned
+  size: 4
+  type: byte
+- comments: ''
+  name: Difficulty
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: FinalizationEpoch
+  signedness: unsigned
+  size: 4
+  type: byte
+- comments: ''
+  name: FinalizationPoint
+  signedness: unsigned
+  size: 4
+  type: byte
+- comments: ''
+  name: Height
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: Importance
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: ImportanceHeight
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: UnresolvedMosaicId
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: MosaicId
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: Timestamp
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: ''
+  name: UnresolvedAddress
+  signedness: unsigned
+  size: 24
+  type: byte
+- comments: ''
+  name: Address
+  signedness: unsigned
+  size: 24
+  type: byte
+- comments: ''
+  name: Hash256
+  signedness: unsigned
+  size: 32
+  type: byte
+- comments: ''
+  name: Hash512
+  signedness: unsigned
+  size: 64
+  type: byte
+- comments: ''
+  name: PublicKey
+  signedness: unsigned
+  size: 32
+  type: byte
+- comments: ''
+  name: VotingPublicKey
+  signedness: unsigned
+  size: 32
+  type: byte
+- comments: ''
+  name: Signature
+  signedness: unsigned
+  size: 64
+  type: byte
+- comments: binary layout for a mosaic
+  layout:
+  - comments: mosaic identifier
+    name: mosaic_id
+    type: MosaicId
+  - comments: mosaic amount
+    name: amount
+    type: Amount
+  name: Mosaic
+  type: struct
+- comments: binary layout for an unresolved mosaic
+  layout:
+  - comments: mosaic identifier
+    name: mosaic_id
+    type: UnresolvedMosaicId
+  - comments: mosaic amount
+    name: amount
+    type: Amount
+  name: UnresolvedMosaic
+  type: struct
+- comments: enumeration of link actions
+  name: LinkAction
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: unlink account
+    name: UNLINK
+    value: 0
+  - comments: link account
+    name: LINK
+    value: 1
+- comments: enumeration of network types
+  name: NetworkType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: public network
+    name: MAINNET
+    value: 104
+  - comments: public test network
+    name: TESTNET
+    value: 152
+- comments: binary layout for a size-prefixed entity
+  layout:
+  - comments: entity size
+    name: size
+    signedness: unsigned
+    size: 4
+    type: byte
+  name: SizePrefixedEntity
+  type: struct
+- comments: binary layout for a verifiable entity
+  layout:
+  - comments: reserved padding to align Signature on 8-byte boundary
+    disposition: reserved
+    name: verifiable_entity_header_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: entity signature
+    name: signature
+    type: Signature
+  name: VerifiableEntity
+  type: struct
+- comments: binary layout for a blockchain entity (block or transaction)
+  layout:
+  - comments: entity signer's public key
+    name: signer_public_key
+    type: PublicKey
+  - comments: reserved padding to align end of EntityBody on 8-byte boundary
+    disposition: reserved
+    name: entity_body_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: entity version
+    name: version
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: entity network
+    name: network
+    type: NetworkType
+  name: EntityBody
+  type: struct
+- comments: ''
+  name: ProofGamma
+  signedness: unsigned
+  size: 32
+  type: byte
+- comments: ''
+  name: ProofVerificationHash
+  signedness: unsigned
+  size: 16
+  type: byte
+- comments: ''
+  name: ProofScalar
+  signedness: unsigned
+  size: 32
+  type: byte
+- comments: enumeration of block types
+  name: BlockType
+  signedness: unsigned
+  size: 2
+  type: enum
+  values:
+  - comments: nemesis block
+    name: NEMESIS
+    value: 32835
+  - comments: normal block
+    name: NORMAL
+    value: 33091
+  - comments: importance block
+    name: IMPORTANCE
+    value: 33347
+- comments: verfiable random function proof
+  layout:
+  - comments: gamma
+    name: gamma
+    type: ProofGamma
+  - comments: verification hash
+    name: verification_hash
+    type: ProofVerificationHash
+  - comments: scalar
+    name: scalar
+    type: ProofScalar
+  name: VrfProof
+  type: struct
+- comments: binary layout for a block header
+  layout:
+  - comments: ''
+    disposition: inline
+    type: SizePrefixedEntity
+  - comments: ''
+    disposition: inline
+    type: VerifiableEntity
+  - comments: ''
+    disposition: inline
+    type: EntityBody
+  - comments: block type
+    name: type
+    type: BlockType
+  - comments: block height
+    name: height
+    type: Height
+  - comments: number of milliseconds elapsed since creation of nemesis block
+    name: timestamp
+    type: Timestamp
+  - comments: block difficulty
+    name: difficulty
+    type: Difficulty
+  - comments: generation hash proof
+    name: generation_hash_proof
+    type: VrfProof
+  - comments: previous block hash
+    name: previous_block_hash
+    type: Hash256
+  - comments: hash of the transactions in this block
+    name: transactions_hash
+    type: Hash256
+  - comments: hash of the receipts generated by this block
+    name: receipts_hash
+    type: Hash256
+  - comments: hash of the global chain state at this block
+    name: state_hash
+    type: Hash256
+  - comments: beneficiary address designated by harvester
+    name: beneficiary_address
+    type: Address
+  - comments: fee multiplier applied to block transactions
+    name: fee_multiplier
+    type: BlockFeeMultiplier
+  name: BlockHeader
+  type: struct
+- comments: binary layout for an importance block footer
+  layout:
+  - comments: number of voting eligible accounts
+    name: voting_eligible_accounts_count
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: number of harvesting eligible accounts
+    name: harvesting_eligible_accounts_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: total balance eligible for voting
+    name: total_voting_balance
+    type: Amount
+  - comments: previous importance block hash
+    name: previous_importance_block_hash
+    type: Hash256
+  name: ImportanceBlockFooter
+  type: struct
+- comments: binary layout for a nemesis block header
+  layout:
+  - comments: ''
+    disposition: const
+    name: BLOCK_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: BLOCK_TYPE
+    type: BlockType
+    value: NEMESIS
+  - comments: ''
+    disposition: inline
+    type: BlockHeader
+  - comments: ''
+    disposition: inline
+    type: ImportanceBlockFooter
+  name: NemesisBlockHeader
+  type: struct
+- comments: binary layout for a normal block header
+  layout:
+  - comments: ''
+    disposition: const
+    name: BLOCK_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: BLOCK_TYPE
+    type: BlockType
+    value: NORMAL
+  - comments: ''
+    disposition: inline
+    type: BlockHeader
+  - comments: reserved padding to align end of BlockHeader on 8-byte boundary
+    disposition: reserved
+    name: block_header_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  name: NormalBlockHeader
+  type: struct
+- comments: binary layout for an importance block header
+  layout:
+  - comments: ''
+    disposition: const
+    name: BLOCK_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: BLOCK_TYPE
+    type: BlockType
+    value: IMPORTANCE
+  - comments: ''
+    disposition: inline
+    type: BlockHeader
+  - comments: ''
+    disposition: inline
+    type: ImportanceBlockFooter
+  name: ImportanceBlockHeader
+  type: struct
+- comments: binary layout for finalization round
+  layout:
+  - comments: finalization epoch
+    name: epoch
+    type: FinalizationEpoch
+  - comments: finalization point
+    name: point
+    type: FinalizationPoint
+  name: FinalizationRound
+  type: struct
+- comments: binary layout for finalized block header
+  layout:
+  - comments: finalization round
+    name: round
+    type: FinalizationRound
+  - comments: finalization height
+    name: height
+    type: Height
+  - comments: finalization hash
+    name: hash
+    type: Hash256
+  name: FinalizedBlockHeader
+  type: struct
+- comments: enumeration of receipt types
+  name: ReceiptType
+  signedness: unsigned
+  size: 2
+  type: enum
+  values:
+  - comments: reserved receipt type
+    name: RESERVED
+    value: 0
+  - comments: mosaic rental fee receipt type
+    name: MOSAIC_RENTAL_FEE
+    value: 4685
+  - comments: namespace rental fee receipt type
+    name: NAMESPACE_RENTAL_FEE
+    value: 4942
+  - comments: harvest fee receipt type
+    name: HARVEST_FEE
+    value: 8515
+  - comments: lock hash completed receipt type
+    name: LOCK_HASH_COMPLETED
+    value: 8776
+  - comments: lock hash expired receipt type
+    name: LOCK_HASH_EXPIRED
+    value: 9032
+  - comments: lock secret completed receipt type
+    name: LOCK_SECRET_COMPLETED
+    value: 8786
+  - comments: lock secret expired receipt type
+    name: LOCK_SECRET_EXPIRED
+    value: 9042
+  - comments: lock hash created receipt type
+    name: LOCK_HASH_CREATED
+    value: 12616
+  - comments: lock secret created receipt type
+    name: LOCK_SECRET_CREATED
+    value: 12626
+  - comments: mosaic expired receipt type
+    name: MOSAIC_EXPIRED
+    value: 16717
+  - comments: namespace expired receipt type
+    name: NAMESPACE_EXPIRED
+    value: 16718
+  - comments: namespace deleted receipt type
+    name: NAMESPACE_DELETED
+    value: 16974
+  - comments: inflation receipt type
+    name: INFLATION
+    value: 20803
+  - comments: transaction group receipt type
+    name: TRANSACTION_GROUP
+    value: 57667
+  - comments: address alias resolution receipt type
+    name: ADDRESS_ALIAS_RESOLUTION
+    value: 61763
+  - comments: mosaic alias resolution receipt type
+    name: MOSAIC_ALIAS_RESOLUTION
+    value: 62019
+- comments: binary layout for a receipt entity
+  layout:
+  - comments: ''
+    disposition: inline
+    type: SizePrefixedEntity
+  - comments: receipt version
+    name: version
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: receipt type
+    name: type
+    type: ReceiptType
+  name: Receipt
+  type: struct
+- comments: binary layout for a balance transfer receipt
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: mosaic
+    name: mosaic
+    type: Mosaic
+  - comments: mosaic sender address
+    name: sender_address
+    type: Address
+  - comments: mosaic recipient address
+    name: recipient_address
+    type: Address
+  name: BalanceTransferReceipt
+  type: struct
+- comments: binary layout for a balance change receipt
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: mosaic
+    name: mosaic
+    type: Mosaic
+  - comments: account address
+    name: target_address
+    type: Address
+  name: BalanceChangeReceipt
+  type: struct
+- comments: binary layout for an inflation receipt
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: mosaic
+    name: mosaic
+    type: Mosaic
+  name: InflationReceipt
+  type: struct
+- comments: binary layout for a mosaic expiry receipt
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: expiring mosaic id
+    name: artifact_id
+    type: MosaicId
+  name: MosaicExpiryReceipt
+  type: struct
+- comments: ''
+  name: NamespaceId
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: enumeration of namespace registration types
+  name: NamespaceRegistrationType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: root namespace
+    name: ROOT
+    value: 0
+  - comments: child namespace
+    name: CHILD
+    value: 1
+- comments: enumeration of alias actions
+  name: AliasAction
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: unlink alias
+    name: UNLINK
+    value: 0
+  - comments: link alias
+    name: LINK
+    value: 1
+- comments: binary layout for a namespace expiry receipt
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: expiring namespace id
+    name: artifact_id
+    type: NamespaceId
+  name: NamespaceExpiryReceipt
+  type: struct
+- comments: binary layout for receipt source
+  layout:
+  - comments: transaction primary source (e.g. index within block)
+    name: primary_id
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: transaction secondary source (e.g. index within aggregate)
+    name: secondary_id
+    signedness: unsigned
+    size: 4
+    type: byte
+  name: ReceiptSource
+  type: struct
+- comments: binary layout for address resolution entry
+  layout:
+  - comments: source of resolution within block
+    name: source
+    type: ReceiptSource
+  - comments: resolved value
+    name: resolved
+    type: Address
+  name: AddressResolutionEntry
+  type: struct
+- comments: binary layout for mosaic resolution entry
+  layout:
+  - comments: source of resolution within block
+    name: source
+    type: ReceiptSource
+  - comments: resolved value
+    name: resolved
+    type: MosaicId
+  name: MosaicResolutionEntry
+  type: struct
+- comments: binary layout for a mosaic resolution statement
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: unresolved mosaic
+    name: unresolved
+    type: UnresolvedMosaicId
+  - comments: resolution entries
+    disposition: array fill
+    name: resolution_entries
+    size: 0
+    type: MosaicResolutionEntry
+  name: MosaicResolutionStatement
+  type: struct
+- comments: binary layout for an address resolution statement
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Receipt
+  - comments: unresolved address
+    name: unresolved
+    type: UnresolvedAddress
+  - comments: resolution entries
+    disposition: array fill
+    name: resolution_entries
+    size: 0
+    type: AddressResolutionEntry
+  name: AddressResolutionStatement
+  type: struct
+- comments: enumeration of account types
+  name: AccountType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: account is not linked to another account
+    name: UNLINKED
+    value: 0
+  - comments: account is a balance-holding account that is linked to a remote harvester
+      account
+    name: MAIN
+    value: 1
+  - comments: account is a remote harvester account that is linked to a balance-holding
+      account
+    name: REMOTE
+    value: 2
+  - comments: account is a remote harvester eligible account that is unlinked \note
+      this allows an account that has previously been used as remote to be reused
+      as a remote
+    name: REMOTE_UNLINKED
+    value: 3
+- comments: enumeration of account key type flags
+  name: AccountKeyTypeFlags
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: unset key
+    name: UNSET
+    value: 0
+  - comments: linked account public key \note this can be either a remote or main
+      account public key depending on context
+    name: LINKED
+    value: 1
+  - comments: node public key on which remote is allowed to harvest
+    name: NODE
+    value: 2
+  - comments: VRF public key
+    name: VRF
+    value: 4
+- comments: enumeration of account state formats
+  name: AccountStateFormat
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: regular account
+    name: REGULAR
+    value: 0
+  - comments: high value account eligible to harvest
+    name: HIGH_VALUE
+    value: 1
+- comments: pinned voting key
+  layout:
+  - comments: voting key
+    name: voting_key
+    type: VotingPublicKey
+  - comments: start finalization epoch
+    name: start_epoch
+    type: FinalizationEpoch
+  - comments: end finalization epoch
+    name: end_epoch
+    type: FinalizationEpoch
+  name: PinnedVotingKey
+  type: struct
+- comments: temporal importance information
+  layout:
+  - comments: account importance
+    name: importance
+    type: Importance
+  - comments: importance height
+    name: height
+    type: ImportanceHeight
+  name: ImportanceSnapshot
+  type: struct
+- comments: account activity bucket
+  layout:
+  - comments: activity start height
+    name: start_height
+    type: ImportanceHeight
+  - comments: total fees paid by account
+    name: total_fees_paid
+    type: Amount
+  - comments: number of times account has been used as a beneficiary
+    name: beneficiary_count
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: raw importance score
+    name: raw_score
+    signedness: unsigned
+    size: 8
+    type: byte
+  name: HeightActivityBucket
+  type: struct
+- comments: header common to all serialized states
+  layout:
+  - comments: serialization version
+    name: version
+    signedness: unsigned
+    size: 2
+    type: byte
+  name: StateHeader
+  type: struct
+- comments: account activity buckets
+  layout:
+  - comments: account activity buckets
+    disposition: array
+    name: buckets
+    size: 5
+    type: HeightActivityBucket
+  name: HeightActivityBuckets
+  type: struct
+- comments: binary layout for non-historical account state
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: address of account
+    name: address
+    type: Address
+  - comments: height at which address has been obtained
+    name: address_height
+    type: Height
+  - comments: public key of account
+    name: public_key
+    type: PublicKey
+  - comments: height at which public key has been obtained
+    name: public_key_height
+    type: Height
+  - comments: type of account
+    name: account_type
+    type: AccountType
+  - comments: account format
+    name: format
+    type: AccountStateFormat
+  - comments: mask of supplemental public key flags
+    name: supplemental_public_keys_mask
+    type: AccountKeyTypeFlags
+  - comments: number of voting public keys
+    name: voting_public_keys_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: linked account public key
+    condition: supplemental_public_keys_mask
+    condition_operation: in
+    condition_value: LINKED
+    name: linked_public_key
+    type: PublicKey
+  - comments: node public key
+    condition: supplemental_public_keys_mask
+    condition_operation: in
+    condition_value: NODE
+    name: node_public_key
+    type: PublicKey
+  - comments: vrf public key
+    condition: supplemental_public_keys_mask
+    condition_operation: in
+    condition_value: VRF
+    name: vrf_public_key
+    type: PublicKey
+  - comments: voting public keys
+    disposition: array
+    name: voting_public_keys
+    size: voting_public_keys_count
+    type: PinnedVotingKey
+  - comments: current importance snapshot of the account
+    condition: format
+    condition_operation: equals
+    condition_value: HIGH_VALUE
+    name: importance_snapshots
+    type: ImportanceSnapshot
+  - comments: activity buckets of the account
+    condition: format
+    condition_operation: equals
+    condition_value: HIGH_VALUE
+    name: activity_buckets
+    type: HeightActivityBuckets
+  - comments: number of total balances (mosaics)
+    name: balances_count
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: balances of account
+    disposition: array
+    name: balances
+    size: balances_count
+    type: Mosaic
+  name: AccountState
+  type: struct
+- comments: lock status for lock transaction
+  name: LockStatus
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: lock is unused
+    name: UNUSED
+    value: 0
+  - comments: lock was already used
+    name: USED
+    value: 1
+- comments: binary layout for hash lock transaction info
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: owner address
+    name: owner_address
+    type: Address
+  - comments: mosaic associated with lock
+    name: mosaic
+    type: Mosaic
+  - comments: height at which the lock expires
+    name: end_height
+    type: Height
+  - comments: flag indicating whether or not the lock was already used
+    name: status
+    type: LockStatus
+  - comments: hash
+    name: hash
+    type: Hash256
+  name: HashLockInfo
+  type: struct
+- comments: ''
+  name: ScopedMetadataKey
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: enum for the different types of metadata
+  name: MetadataType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: account metadata
+    name: ACCOUNT
+    value: 0
+  - comments: mosaic metadata
+    name: MOSAIC
+    value: 1
+  - comments: namespace metadata
+    name: NAMESPACE
+    value: 2
+- comments: binary layout of a metadata entry value
+  layout:
+  - comments: size of the value
+    name: size
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: data of the value
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: data
+    size: size
+    type: byte
+  name: MetadataValue
+  type: struct
+- comments: binary layout of a metadata entry
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: metadata source address (provider)
+    name: source_address
+    type: Address
+  - comments: metadata target address
+    name: target_address
+    type: Address
+  - comments: metadata key scoped to source, target and type
+    name: scoped_metadata_key
+    type: ScopedMetadataKey
+  - comments: target id
+    name: target_id
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: metadata type
+    name: metadata_type
+    type: MetadataType
+  - comments: value
+    name: value
+    type: MetadataValue
+  name: MetadataEntry
+  type: struct
+- comments: ''
+  name: MosaicNonce
+  signedness: unsigned
+  size: 4
+  type: byte
+- comments: enumeration of mosaic property flags
+  name: MosaicFlags
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: no flags present
+    name: NONE
+    value: 0
+  - comments: mosaic supports supply changes even when mosaic owner owns partial supply
+    name: SUPPLY_MUTABLE
+    value: 1
+  - comments: mosaic supports transfers between arbitrary accounts \note when not
+      set, mosaic can only be transferred to and from mosaic owner
+    name: TRANSFERABLE
+    value: 2
+  - comments: mosaic supports custom restrictions configured by mosaic owner
+    name: RESTRICTABLE
+    value: 4
+- comments: enumeration of mosaic supply change actions
+  name: MosaicSupplyChangeAction
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: decreases the supply
+    name: DECREASE
+    value: 0
+  - comments: increases the supply
+    name: INCREASE
+    value: 1
+- comments: binary layout for mosaic properties
+  layout:
+  - comments: mosaic flags
+    name: flags
+    type: MosaicFlags
+  - comments: mosaic divisibility
+    name: divisibility
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: mosaic duration
+    name: duration
+    type: BlockDuration
+  name: MosaicProperties
+  type: struct
+- comments: binary layout for mosaic definition
+  layout:
+  - comments: block height
+    name: start_height
+    type: Height
+  - comments: mosaic owner
+    name: owner_address
+    type: Address
+  - comments: revision
+    name: revision
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: properties
+    name: properties
+    type: MosaicProperties
+  name: MosaicDefinition
+  type: struct
+- comments: binary layout for mosaic entry
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: entry id
+    name: mosaic_id
+    type: MosaicId
+  - comments: total supply amount
+    name: supply
+    type: Amount
+  - comments: definition comprised of entry properties
+    name: definition
+    type: MosaicDefinition
+  name: MosaicEntry
+  type: struct
+- comments: binary layout for a multisig entry
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: minimum approval for modifications
+    name: min_approval
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: minimum approval for removal
+    name: min_removal
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: account address
+    name: account_address
+    type: Address
+  - comments: number of cosignatories
+    name: cosignatory_addresses_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: cosignatories for account
+    disposition: array
+    name: cosignatory_addresses
+    size: cosignatory_addresses_count
+    type: Address
+  - comments: number of other accounts for which the entry is cosignatory
+    name: multisig_addresses_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: accounts for which the entry is cosignatory
+    disposition: array
+    name: multisig_addresses
+    size: multisig_addresses_count
+    type: Address
+  name: MultisigEntry
+  type: struct
+- comments: binary layout for namespace lifetime
+  layout:
+  - comments: start height
+    name: lifetime_start
+    type: Height
+  - comments: end height
+    name: lifetime_end
+    type: Height
+  name: NamespaceLifetime
+  type: struct
+- comments: namespace alias type
+  name: NamespaceAliasType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: no alias
+    name: NONE
+    value: 0
+  - comments: if alias is mosaicId
+    name: MOSAIC_ID
+    value: 1
+  - comments: if alias is address
+    name: ADDRESS
+    value: 2
+- comments: binary layout for alias
+  layout:
+  - comments: namespace alias type
+    name: namespace_alias_type
+    type: NamespaceAliasType
+  - comments: mosaic alias
+    condition: namespace_alias_type
+    condition_operation: equals
+    condition_value: MOSAIC_ID
+    name: mosaic_alias
+    type: MosaicId
+  - comments: address alias
+    condition: namespace_alias_type
+    condition_operation: equals
+    condition_value: ADDRESS
+    name: address_alias
+    type: Address
+  name: NamespaceAlias
+  type: struct
+- comments: binary layout for a namespace path
+  layout:
+  - comments: number of paths (excluding root id)
+    name: path_size
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: namespace path (excluding root id)
+    disposition: array
+    name: path
+    size: path_size
+    type: NamespaceId
+  - comments: namespace alias
+    name: alias
+    type: NamespaceAlias
+  name: NamespacePath
+  type: struct
+- comments: binary layout for non-historical root namespace history
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: id of the root namespace history
+    name: id
+    type: NamespaceId
+  - comments: namespace owner address
+    name: owner_address
+    type: Address
+  - comments: lifetime in blocks
+    name: lifetime
+    type: NamespaceLifetime
+  - comments: root namespace alias
+    name: root_alias
+    type: NamespaceAlias
+  - comments: number of children
+    name: children_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: save child sub-namespace paths
+    disposition: array
+    name: paths
+    size: children_count
+    sort_key: path
+    type: NamespacePath
+  name: RootNamespaceHistory
+  type: struct
+- comments: enumeration of account restriction flags
+  name: AccountRestrictionFlags
+  signedness: unsigned
+  size: 2
+  type: enum
+  values:
+  - comments: restriction type is an address
+    name: ADDRESS
+    value: 1
+  - comments: restriction type is a mosaic identifier
+    name: MOSAIC_ID
+    value: 2
+  - comments: restriction type is a transaction type
+    name: TRANSACTION_TYPE
+    value: 4
+  - comments: restriction is interpreted as outgoing
+    name: OUTGOING
+    value: 16384
+  - comments: restriction is interpreted as blocking (instead of allowing) operation
+    name: BLOCK
+    value: 32768
+- comments: enumeration of transaction types
+  name: TransactionType
+  signedness: unsigned
+  size: 2
+  type: enum
+  values:
+  - comments: account key link transaction
+    name: ACCOUNT_KEY_LINK
+    value: 16716
+  - comments: node key link transaction
+    name: NODE_KEY_LINK
+    value: 16972
+  - comments: aggregate complete transaction
+    name: AGGREGATE_COMPLETE
+    value: 16705
+  - comments: aggregate bonded transaction
+    name: AGGREGATE_BONDED
+    value: 16961
+  - comments: voting key link transaction
+    name: VOTING_KEY_LINK
+    value: 16707
+  - comments: vrf key link transaction
+    name: VRF_KEY_LINK
+    value: 16963
+  - comments: hash lock transaction
+    name: HASH_LOCK
+    value: 16712
+  - comments: secret lock transaction
+    name: SECRET_LOCK
+    value: 16722
+  - comments: secret proof transaction
+    name: SECRET_PROOF
+    value: 16978
+  - comments: account metadata transaction
+    name: ACCOUNT_METADATA
+    value: 16708
+  - comments: mosaic metadata transaction
+    name: MOSAIC_METADATA
+    value: 16964
+  - comments: namespace metadata transaction
+    name: NAMESPACE_METADATA
+    value: 17220
+  - comments: mosaic definition transaction
+    name: MOSAIC_DEFINITION
+    value: 16717
+  - comments: mosaic supply change transaction
+    name: MOSAIC_SUPPLY_CHANGE
+    value: 16973
+  - comments: multisig account modification transaction
+    name: MULTISIG_ACCOUNT_MODIFICATION
+    value: 16725
+  - comments: address alias transaction
+    name: ADDRESS_ALIAS
+    value: 16974
+  - comments: mosaic alias transaction
+    name: MOSAIC_ALIAS
+    value: 17230
+  - comments: namespace registration transaction
+    name: NAMESPACE_REGISTRATION
+    value: 16718
+  - comments: account address restriction transaction
+    name: ACCOUNT_ADDRESS_RESTRICTION
+    value: 16720
+  - comments: account mosaic restriction transaction
+    name: ACCOUNT_MOSAIC_RESTRICTION
+    value: 16976
+  - comments: account operation restriction transaction
+    name: ACCOUNT_OPERATION_RESTRICTION
+    value: 17232
+  - comments: mosaic address restriction transaction
+    name: MOSAIC_ADDRESS_RESTRICTION
+    value: 16977
+  - comments: mosaic global restriction transaction
+    name: MOSAIC_GLOBAL_RESTRICTION
+    value: 16721
+  - comments: transfer transaction
+    name: TRANSFER
+    value: 16724
+- comments: binary layout for address based account restriction
+  layout:
+  - comments: number of restrictions for a particular account
+    name: restriction_values_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: restriction values
+    disposition: array
+    name: restriction_values
+    size: restriction_values_count
+    type: Address
+  name: AccountRestrictionAddressValue
+  type: struct
+- comments: binary layout for mosaic id based account restriction
+  layout:
+  - comments: number of restrictions for a particular account
+    name: restriction_values_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: restriction values
+    disposition: array
+    name: restriction_values
+    size: restriction_values_count
+    type: MosaicId
+  name: AccountRestrictionMosaicValue
+  type: struct
+- comments: binary layout for transaction type based account restriction
+  layout:
+  - comments: number of restrictions for a particular account
+    name: restriction_values_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: restriction values
+    disposition: array
+    name: restriction_values
+    size: restriction_values_count
+    type: TransactionType
+  name: AccountRestrictionTransactionTypeValue
+  type: struct
+- comments: binary layout for account restrictions
+  layout:
+  - comments: raw restriction flags
+    name: restriction_flags
+    type: AccountRestrictionFlags
+  - comments: address restrictions
+    condition: restriction_flags
+    condition_operation: in
+    condition_value: ADDRESS
+    name: address_restrictions
+    type: AccountRestrictionAddressValue
+  - comments: mosaic identifier restrictions
+    condition: restriction_flags
+    condition_operation: in
+    condition_value: MOSAIC_ID
+    name: mosaic_id_restrictions
+    type: AccountRestrictionMosaicValue
+  - comments: transaction type restrictions
+    condition: restriction_flags
+    condition_operation: in
+    condition_value: TRANSACTION_TYPE
+    name: transaction_type_restrictions
+    type: AccountRestrictionTransactionTypeValue
+  name: AccountRestrictionsInfo
+  type: struct
+- comments: binary layout for account restrictions
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: address on which restrictions are placed
+    name: address
+    type: Address
+  - comments: number of restrictions
+    name: restrictions_count
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: account restrictions
+    disposition: array
+    name: restrictions
+    size: restrictions_count
+    type: AccountRestrictionsInfo
+  name: AccountRestrictions
+  type: struct
+- comments: ''
+  name: MosaicRestrictionKey
+  signedness: unsigned
+  size: 8
+  type: byte
+- comments: enumeration of mosaic restriction types
+  name: MosaicRestrictionType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: uninitialized value indicating no restriction
+    name: NONE
+    value: 0
+  - comments: allow if equal
+    name: EQ
+    value: 1
+  - comments: allow if not equal
+    name: NE
+    value: 2
+  - comments: allow if less than
+    name: LT
+    value: 3
+  - comments: allow if less than or equal
+    name: LE
+    value: 4
+  - comments: allow if greater than
+    name: GT
+    value: 5
+  - comments: allow if greater than or equal
+    name: GE
+    value: 6
+- comments: type of mosaic restriction entry
+  name: MosaicRestrictionEntryType
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: address restriction
+    name: ADDRESS
+    value: 0
+  - comments: global (mosaic) restriction
+    name: GLOBAL
+    value: 1
+- comments: layout for mosaic address restriction key-value pair
+  layout:
+  - comments: key for value
+    name: key
+    type: MosaicRestrictionKey
+  - comments: value associated by key
+    name: value
+    signedness: unsigned
+    size: 8
+    type: byte
+  name: AddressKeyValue
+  type: struct
+- comments: binary layout for mosaic address restriction key-value set
+  layout:
+  - comments: number of key value pairs
+    name: key_value_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: key value array
+    disposition: array
+    name: keys
+    size: key_value_count
+    sort_key: key
+    type: AddressKeyValue
+  name: AddressKeyValueSet
+  type: struct
+- comments: binary layout of restriction rule being applied
+  layout:
+  - comments: identifier of the mosaic providing the restriction key
+    name: reference_mosaic_id
+    type: MosaicId
+  - comments: restriction value
+    name: restriction_value
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: restriction type
+    name: restriction_type
+    type: MosaicRestrictionType
+  name: RestrictionRule
+  type: struct
+- comments: binary layout for a global key-value
+  layout:
+  - comments: key associated with a restriction rule
+    name: key
+    type: MosaicRestrictionKey
+  - comments: restriction rule (the value) associated with a key
+    name: restriction_rule
+    type: RestrictionRule
+  name: GlobalKeyValue
+  type: struct
+- comments: binary layout for a global restriction key-value set
+  layout:
+  - comments: number of key value pairs
+    name: key_value_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: key value array
+    disposition: array
+    name: keys
+    size: key_value_count
+    sort_key: key
+    type: GlobalKeyValue
+  name: GlobalKeyValueSet
+  type: struct
+- comments: binary layout for a mosaic restriction
+  layout:
+  - comments: identifier of the mosaic to which the restriction applies
+    name: mosaic_id
+    type: MosaicId
+  - comments: address being restricted
+    name: address
+    type: Address
+  - comments: address key value restriction set
+    name: key_pairs
+    type: AddressKeyValueSet
+  name: MosaicAddressRestrictionEntry
+  type: struct
+- comments: binary layout for a mosaic restriction
+  layout:
+  - comments: identifier of the mosaic to which the restriction applies
+    name: mosaic_id
+    type: MosaicId
+  - comments: global key value restriction set
+    name: key_pairs
+    type: GlobalKeyValueSet
+  name: MosaicGlobalRestrictionEntry
+  type: struct
+- comments: binary layout for a mosaic restriction
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: type of restriction being placed upon the entity
+    name: entry_type
+    type: MosaicRestrictionEntryType
+  - comments: address restriction rule
+    condition: entry_type
+    condition_operation: equals
+    condition_value: ADDRESS
+    name: address_entry
+    type: MosaicAddressRestrictionEntry
+  - comments: global mosaic rule
+    condition: entry_type
+    condition_operation: equals
+    condition_value: GLOBAL
+    name: global_entry
+    type: MosaicGlobalRestrictionEntry
+  name: MosaicRestrictionEntry
+  type: struct
+- comments: enumeration of lock hash algorithms
+  name: LockHashAlgorithm
+  signedness: unsigned
+  size: 1
+  type: enum
+  values:
+  - comments: input is hashed using sha-3 256
+    name: SHA3_256
+    value: 0
+  - comments: 'input is hashed twice: first with sha-256 and then with ripemd-160
+      (bitcoin''s OP_HASH160)'
+    name: HASH_160
+    value: 1
+  - comments: input is hashed twice with sha-256 (bitcoin's OP_HASH256)
+    name: HASH_256
+    value: 2
+- comments: binary layout for serialized lock transaction
+  layout:
+  - comments: ''
+    disposition: inline
+    type: StateHeader
+  - comments: owner address
+    name: owner_address
+    type: Address
+  - comments: mosaic associated with lock
+    name: mosaic
+    type: Mosaic
+  - comments: height at which the lock expires
+    name: end_height
+    type: Height
+  - comments: flag indicating whether or not the lock was already used
+    name: status
+    type: LockStatus
+  - comments: hash algorithm
+    name: hash_algorithm
+    type: LockHashAlgorithm
+  - comments: transaction secret
+    name: secret
+    type: Hash256
+  - comments: transaction recipient
+    name: recipient
+    type: Address
+  name: SecretLockInfo
+  type: struct
+- comments: binary layout for a transaction
+  layout:
+  - comments: ''
+    disposition: inline
+    type: SizePrefixedEntity
+  - comments: ''
+    disposition: inline
+    type: VerifiableEntity
+  - comments: ''
+    disposition: inline
+    type: EntityBody
+  - comments: transaction type
+    name: type
+    type: TransactionType
+  - comments: transaction fee
+    name: fee
+    type: Amount
+  - comments: transaction deadline
+    name: deadline
+    type: Timestamp
+  name: Transaction
+  type: struct
+- comments: binary layout for an embedded transaction header
+  layout:
+  - comments: ''
+    disposition: inline
+    type: SizePrefixedEntity
+  - comments: reserved padding to align end of EmbeddedTransactionHeader on 8-byte
+      boundary
+    disposition: reserved
+    name: embedded_transaction_header_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  name: EmbeddedTransactionHeader
+  type: struct
+- comments: binary layout for an embedded transaction
+  layout:
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransactionHeader
+  - comments: ''
+    disposition: inline
+    type: EntityBody
+  - comments: transaction type
+    name: type
+    type: TransactionType
+  name: EmbeddedTransaction
+  type: struct
+- comments: binary layout for an account key link transaction
+  layout:
+  - comments: linked public key
+    name: linked_public_key
+    type: PublicKey
+  - comments: link action
+    name: link_action
+    type: LinkAction
+  name: AccountKeyLinkTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded account key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AccountKeyLinkTransactionBody
+  name: AccountKeyLinkTransaction
+  type: struct
+- comments: binary layout for an embedded account key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: AccountKeyLinkTransactionBody
+  name: EmbeddedAccountKeyLinkTransaction
+  type: struct
+- comments: binary layout for a node key link transaction
+  layout:
+  - comments: linked public key
+    name: linked_public_key
+    type: PublicKey
+  - comments: link action
+    name: link_action
+    type: LinkAction
+  name: NodeKeyLinkTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded node key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: NODE_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: NodeKeyLinkTransactionBody
+  name: NodeKeyLinkTransaction
+  type: struct
+- comments: binary layout for an embedded node key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: NODE_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: NodeKeyLinkTransactionBody
+  name: EmbeddedNodeKeyLinkTransaction
+  type: struct
+- comments: cosignature attached to an aggregate transaction
+  layout:
+  - comments: version
+    name: version
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: cosigner public key
+    name: signer_public_key
+    type: PublicKey
+  - comments: cosigner signature
+    name: signature
+    type: Signature
+  name: Cosignature
+  type: struct
+- comments: cosignature detached from an aggregate transaction
+  layout:
+  - comments: ''
+    disposition: inline
+    type: Cosignature
+  - comments: hash of the aggregate transaction that is signed by this cosignature
+    name: parent_hash
+    type: Hash256
+  name: DetachedCosignature
+  type: struct
+- comments: binary layout for an aggregate transaction
+  layout:
+  - comments: aggregate hash of an aggregate's transactions
+    name: transactions_hash
+    type: Hash256
+  - comments: transaction payload size in bytes \note this is the total number of
+      bytes occupied by all sub-transactions
+    name: payload_size
+    signedness: unsigned
+    size: 4
+    type: byte
+  - comments: reserved padding to align end of AggregateTransactionHeader on 8-byte
+      boundary
+    disposition: reserved
+    name: aggregate_transaction_header_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: sub-transaction data (transactions are variable sized and payload size
+      is in bytes)
+    disposition: array sized
+    name: transactions
+    size: payload_size
+    type: EmbeddedTransaction
+  - comments: cosignatures data (fills remaining body space after transactions)
+    disposition: array fill
+    name: cosignatures
+    size: 0
+    type: Cosignature
+  name: AggregateTransactionBody
+  type: struct
+- comments: binary layout for an aggregate complete transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: AGGREGATE_COMPLETE
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AggregateTransactionBody
+  name: AggregateCompleteTransaction
+  type: struct
+- comments: binary layout for an aggregate bonded transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: AGGREGATE_BONDED
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AggregateTransactionBody
+  name: AggregateBondedTransaction
+  type: struct
+- comments: binary layout for a voting key link transaction
+  layout:
+  - comments: linked public key
+    name: linked_public_key
+    type: VotingPublicKey
+  - comments: start finalization epoch
+    name: start_epoch
+    type: FinalizationEpoch
+  - comments: end finalization epoch
+    name: end_epoch
+    type: FinalizationEpoch
+  - comments: link action
+    name: link_action
+    type: LinkAction
+  name: VotingKeyLinkTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded voting key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: VOTING_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: VotingKeyLinkTransactionBody
+  name: VotingKeyLinkTransaction
+  type: struct
+- comments: binary layout for an embedded voting key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: VOTING_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: VotingKeyLinkTransactionBody
+  name: EmbeddedVotingKeyLinkTransaction
+  type: struct
+- comments: binary layout for a vrf key link transaction
+  layout:
+  - comments: linked public key
+    name: linked_public_key
+    type: PublicKey
+  - comments: link action
+    name: link_action
+    type: LinkAction
+  name: VrfKeyLinkTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded vrf key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: VRF_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: VrfKeyLinkTransactionBody
+  name: VrfKeyLinkTransaction
+  type: struct
+- comments: binary layout for an embedded vrf key link transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: VRF_KEY_LINK
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: VrfKeyLinkTransactionBody
+  name: EmbeddedVrfKeyLinkTransaction
+  type: struct
+- comments: binary layout for a hash lock transaction
+  layout:
+  - comments: lock mosaic
+    name: mosaic
+    type: UnresolvedMosaic
+  - comments: number of blocks for which a lock should be valid
+    name: duration
+    type: BlockDuration
+  - comments: lock hash
+    name: hash
+    type: Hash256
+  name: HashLockTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded hash lock transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: HASH_LOCK
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: HashLockTransactionBody
+  name: HashLockTransaction
+  type: struct
+- comments: binary layout for an embedded hash lock transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: HASH_LOCK
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: HashLockTransactionBody
+  name: EmbeddedHashLockTransaction
+  type: struct
+- comments: binary layout for a secret lock transaction
+  layout:
+  - comments: locked mosaic recipient address
+    name: recipient_address
+    type: UnresolvedAddress
+  - comments: secret
+    name: secret
+    type: Hash256
+  - comments: locked mosaic
+    name: mosaic
+    type: UnresolvedMosaic
+  - comments: number of blocks for which a lock should be valid
+    name: duration
+    type: BlockDuration
+  - comments: hash algorithm
+    name: hash_algorithm
+    type: LockHashAlgorithm
+  name: SecretLockTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded secret lock transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: SECRET_LOCK
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: SecretLockTransactionBody
+  name: SecretLockTransaction
+  type: struct
+- comments: binary layout for an embedded secret lock transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: SECRET_LOCK
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: SecretLockTransactionBody
+  name: EmbeddedSecretLockTransaction
+  type: struct
+- comments: binary layout for a secret proof transaction
+  layout:
+  - comments: locked mosaic recipient address
+    name: recipient_address
+    type: UnresolvedAddress
+  - comments: secret
+    name: secret
+    type: Hash256
+  - comments: proof size in bytes
+    name: proof_size
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: hash algorithm
+    name: hash_algorithm
+    type: LockHashAlgorithm
+  - comments: proof data
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: proof
+    size: proof_size
+    type: byte
+  name: SecretProofTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded secret proof transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: SECRET_PROOF
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: SecretProofTransactionBody
+  name: SecretProofTransaction
+  type: struct
+- comments: binary layout for an embedded secret proof transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: SECRET_PROOF
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: SecretProofTransactionBody
+  name: EmbeddedSecretProofTransaction
+  type: struct
+- comments: binary layout for an account metadata transaction
+  layout:
+  - comments: metadata target address
+    name: target_address
+    type: UnresolvedAddress
+  - comments: metadata key scoped to source, target and type
+    name: scoped_metadata_key
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: change in value size in bytes
+    name: value_size_delta
+    signedness: signed
+    size: 2
+    type: byte
+  - comments: value size in bytes
+    name: value_size
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: difference between existing value and new value \note when there is
+      no existing value, new value is same this value \note when there is an existing
+      value, new value is calculated as xor(previous-value, value)
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: value
+    size: value_size
+    type: byte
+  name: AccountMetadataTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded account metadata transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_METADATA
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AccountMetadataTransactionBody
+  name: AccountMetadataTransaction
+  type: struct
+- comments: binary layout for an embedded account metadata transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_METADATA
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: AccountMetadataTransactionBody
+  name: EmbeddedAccountMetadataTransaction
+  type: struct
+- comments: binary layout for a mosaic metadata transaction
+  layout:
+  - comments: metadata target address
+    name: target_address
+    type: UnresolvedAddress
+  - comments: metadata key scoped to source, target and type
+    name: scoped_metadata_key
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: target mosaic identifier
+    name: target_mosaic_id
+    type: UnresolvedMosaicId
+  - comments: change in value size in bytes
+    name: value_size_delta
+    signedness: signed
+    size: 2
+    type: byte
+  - comments: value size in bytes
+    name: value_size
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: difference between existing value and new value \note when there is
+      no existing value, new value is same this value \note when there is an existing
+      value, new value is calculated as xor(previous-value, value)
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: value
+    size: value_size
+    type: byte
+  name: MosaicMetadataTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded mosaic metadata transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_METADATA
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MosaicMetadataTransactionBody
+  name: MosaicMetadataTransaction
+  type: struct
+- comments: binary layout for an embedded mosaic metadata transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_METADATA
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MosaicMetadataTransactionBody
+  name: EmbeddedMosaicMetadataTransaction
+  type: struct
+- comments: binary layout for a namespace metadata transaction
+  layout:
+  - comments: metadata target address
+    name: target_address
+    type: UnresolvedAddress
+  - comments: metadata key scoped to source, target and type
+    name: scoped_metadata_key
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: target namespace identifier
+    name: target_namespace_id
+    type: NamespaceId
+  - comments: change in value size in bytes
+    name: value_size_delta
+    signedness: signed
+    size: 2
+    type: byte
+  - comments: value size in bytes
+    name: value_size
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: difference between existing value and new value \note when there is
+      no existing value, new value is same this value \note when there is an existing
+      value, new value is calculated as xor(previous-value, value)
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: value
+    size: value_size
+    type: byte
+  name: NamespaceMetadataTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded namespace metadata transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: NAMESPACE_METADATA
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: NamespaceMetadataTransactionBody
+  name: NamespaceMetadataTransaction
+  type: struct
+- comments: binary layout for an embedded namespace metadata transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: NAMESPACE_METADATA
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: NamespaceMetadataTransactionBody
+  name: EmbeddedNamespaceMetadataTransaction
+  type: struct
+- comments: binary layout for a mosaic definition transaction
+  layout:
+  - comments: mosaic identifier
+    name: id
+    type: MosaicId
+  - comments: mosaic duration
+    name: duration
+    type: BlockDuration
+  - comments: mosaic nonce
+    name: nonce
+    type: MosaicNonce
+  - comments: mosaic flags
+    name: flags
+    type: MosaicFlags
+  - comments: mosaic divisibility
+    name: divisibility
+    signedness: unsigned
+    size: 1
+    type: byte
+  name: MosaicDefinitionTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded mosaic definition transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_DEFINITION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MosaicDefinitionTransactionBody
+  name: MosaicDefinitionTransaction
+  type: struct
+- comments: binary layout for an embedded mosaic definition transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_DEFINITION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MosaicDefinitionTransactionBody
+  name: EmbeddedMosaicDefinitionTransaction
+  type: struct
+- comments: binary layout for a mosaic supply change transaction
+  layout:
+  - comments: affected mosaic identifier
+    name: mosaic_id
+    type: UnresolvedMosaicId
+  - comments: change amount
+    name: delta
+    type: Amount
+  - comments: supply change action
+    name: action
+    type: MosaicSupplyChangeAction
+  name: MosaicSupplyChangeTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded mosaic supply change transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_SUPPLY_CHANGE
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MosaicSupplyChangeTransactionBody
+  name: MosaicSupplyChangeTransaction
+  type: struct
+- comments: binary layout for an embedded mosaic supply change transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_SUPPLY_CHANGE
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MosaicSupplyChangeTransactionBody
+  name: EmbeddedMosaicSupplyChangeTransaction
+  type: struct
+- comments: binary layout for a multisig account modification transaction
+  layout:
+  - comments: relative change of the minimal number of cosignatories required when
+      removing an account
+    name: min_removal_delta
+    signedness: signed
+    size: 1
+    type: byte
+  - comments: relative change of the minimal number of cosignatories required when
+      approving a transaction
+    name: min_approval_delta
+    signedness: signed
+    size: 1
+    type: byte
+  - comments: number of cosignatory address additions
+    name: address_additions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: number of cosignatory address deletions
+    name: address_deletions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: reserved padding to align addressAdditions on 8-byte boundary
+    disposition: reserved
+    name: multisig_account_modification_transaction_body_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: cosignatory address additions
+    disposition: array
+    name: address_additions
+    size: address_additions_count
+    type: UnresolvedAddress
+  - comments: cosignatory address deletions
+    disposition: array
+    name: address_deletions
+    size: address_deletions_count
+    type: UnresolvedAddress
+  name: MultisigAccountModificationTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded multisig account modification transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MULTISIG_ACCOUNT_MODIFICATION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MultisigAccountModificationTransactionBody
+  name: MultisigAccountModificationTransaction
+  type: struct
+- comments: binary layout for an embedded multisig account modification transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MULTISIG_ACCOUNT_MODIFICATION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MultisigAccountModificationTransactionBody
+  name: EmbeddedMultisigAccountModificationTransaction
+  type: struct
+- comments: binary layout for an address alias transaction
+  layout:
+  - comments: identifier of the namespace that will become an alias
+    name: namespace_id
+    type: NamespaceId
+  - comments: aliased address
+    name: address
+    type: Address
+  - comments: alias action
+    name: alias_action
+    type: AliasAction
+  name: AddressAliasTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded address alias transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ADDRESS_ALIAS
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AddressAliasTransactionBody
+  name: AddressAliasTransaction
+  type: struct
+- comments: binary layout for an embedded address alias transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ADDRESS_ALIAS
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: AddressAliasTransactionBody
+  name: EmbeddedAddressAliasTransaction
+  type: struct
+- comments: binary layout for an mosaic alias transaction
+  layout:
+  - comments: identifier of the namespace that will become an alias
+    name: namespace_id
+    type: NamespaceId
+  - comments: aliased mosaic identifier
+    name: mosaic_id
+    type: MosaicId
+  - comments: alias action
+    name: alias_action
+    type: AliasAction
+  name: MosaicAliasTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded mosaic alias transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_ALIAS
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MosaicAliasTransactionBody
+  name: MosaicAliasTransaction
+  type: struct
+- comments: binary layout for an embedded mosaic alias transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_ALIAS
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MosaicAliasTransactionBody
+  name: EmbeddedMosaicAliasTransaction
+  type: struct
+- comments: binary layout for a namespace registration transaction
+  layout:
+  - comments: namespace duration
+    condition: registration_type
+    condition_operation: equals
+    condition_value: ROOT
+    name: duration
+    type: BlockDuration
+  - comments: parent namespace identifier
+    condition: registration_type
+    condition_operation: equals
+    condition_value: CHILD
+    name: parent_id
+    type: NamespaceId
+  - comments: namespace identifier
+    name: id
+    type: NamespaceId
+  - comments: namespace registration type
+    name: registration_type
+    type: NamespaceRegistrationType
+  - comments: namespace name size
+    name: name_size
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: namespace name
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: name
+    size: name_size
+    type: byte
+  name: NamespaceRegistrationTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded namespace registration transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: NAMESPACE_REGISTRATION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: NamespaceRegistrationTransactionBody
+  name: NamespaceRegistrationTransaction
+  type: struct
+- comments: binary layout for an embedded namespace registration transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: NAMESPACE_REGISTRATION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: NamespaceRegistrationTransactionBody
+  name: EmbeddedNamespaceRegistrationTransaction
+  type: struct
+- comments: binary layout for an account address restriction transaction
+  layout:
+  - comments: account restriction flags
+    name: restriction_flags
+    type: AccountRestrictionFlags
+  - comments: number of account restriction additions
+    name: restriction_additions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: number of account restriction deletions
+    name: restriction_deletions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: reserved padding to align restrictionAdditions on 8-byte boundary
+    disposition: reserved
+    name: account_restriction_transaction_body_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: account restriction additions
+    disposition: array
+    name: restriction_additions
+    size: restriction_additions_count
+    type: UnresolvedAddress
+  - comments: account restriction deletions
+    disposition: array
+    name: restriction_deletions
+    size: restriction_deletions_count
+    type: UnresolvedAddress
+  name: AccountAddressRestrictionTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded account address restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_ADDRESS_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AccountAddressRestrictionTransactionBody
+  name: AccountAddressRestrictionTransaction
+  type: struct
+- comments: binary layout for an embedded account address restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_ADDRESS_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: AccountAddressRestrictionTransactionBody
+  name: EmbeddedAccountAddressRestrictionTransaction
+  type: struct
+- comments: binary layout for an account mosaic restriction transaction
+  layout:
+  - comments: account restriction flags
+    name: restriction_flags
+    type: AccountRestrictionFlags
+  - comments: number of account restriction additions
+    name: restriction_additions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: number of account restriction deletions
+    name: restriction_deletions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: reserved padding to align restrictionAdditions on 8-byte boundary
+    disposition: reserved
+    name: account_restriction_transaction_body_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: account restriction additions
+    disposition: array
+    name: restriction_additions
+    size: restriction_additions_count
+    type: UnresolvedMosaicId
+  - comments: account restriction deletions
+    disposition: array
+    name: restriction_deletions
+    size: restriction_deletions_count
+    type: UnresolvedMosaicId
+  name: AccountMosaicRestrictionTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded account mosaic restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_MOSAIC_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AccountMosaicRestrictionTransactionBody
+  name: AccountMosaicRestrictionTransaction
+  type: struct
+- comments: binary layout for an embedded account mosaic restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_MOSAIC_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: AccountMosaicRestrictionTransactionBody
+  name: EmbeddedAccountMosaicRestrictionTransaction
+  type: struct
+- comments: binary layout for an account operation restriction transaction
+  layout:
+  - comments: account restriction flags
+    name: restriction_flags
+    type: AccountRestrictionFlags
+  - comments: number of account restriction additions
+    name: restriction_additions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: number of account restriction deletions
+    name: restriction_deletions_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: reserved padding to align restrictionAdditions on 8-byte boundary
+    disposition: reserved
+    name: account_restriction_transaction_body_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: account restriction additions
+    disposition: array
+    name: restriction_additions
+    size: restriction_additions_count
+    type: TransactionType
+  - comments: account restriction deletions
+    disposition: array
+    name: restriction_deletions
+    size: restriction_deletions_count
+    type: TransactionType
+  name: AccountOperationRestrictionTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded account operation restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_OPERATION_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: AccountOperationRestrictionTransactionBody
+  name: AccountOperationRestrictionTransaction
+  type: struct
+- comments: binary layout for an embedded account operation restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: ACCOUNT_OPERATION_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: AccountOperationRestrictionTransactionBody
+  name: EmbeddedAccountOperationRestrictionTransaction
+  type: struct
+- comments: binary layout for a mosaic address restriction transaction
+  layout:
+  - comments: identifier of the mosaic to which the restriction applies
+    name: mosaic_id
+    type: UnresolvedMosaicId
+  - comments: restriction key
+    name: restriction_key
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: previous restriction value
+    name: previous_restriction_value
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: new restriction value
+    name: new_restriction_value
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: address being restricted
+    name: target_address
+    type: UnresolvedAddress
+  name: MosaicAddressRestrictionTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded mosaic address restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_ADDRESS_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MosaicAddressRestrictionTransactionBody
+  name: MosaicAddressRestrictionTransaction
+  type: struct
+- comments: binary layout for an embedded mosaic address restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_ADDRESS_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MosaicAddressRestrictionTransactionBody
+  name: EmbeddedMosaicAddressRestrictionTransaction
+  type: struct
+- comments: binary layout for a mosaic global restriction transaction
+  layout:
+  - comments: identifier of the mosaic being restricted
+    name: mosaic_id
+    type: UnresolvedMosaicId
+  - comments: identifier of the mosaic providing the restriction key
+    name: reference_mosaic_id
+    type: UnresolvedMosaicId
+  - comments: restriction key relative to the reference mosaic identifier
+    name: restriction_key
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: previous restriction value
+    name: previous_restriction_value
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: new restriction value
+    name: new_restriction_value
+    signedness: unsigned
+    size: 8
+    type: byte
+  - comments: previous restriction type
+    name: previous_restriction_type
+    type: MosaicRestrictionType
+  - comments: new restriction type
+    name: new_restriction_type
+    type: MosaicRestrictionType
+  name: MosaicGlobalRestrictionTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded mosaic global restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_GLOBAL_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: MosaicGlobalRestrictionTransactionBody
+  name: MosaicGlobalRestrictionTransaction
+  type: struct
+- comments: binary layout for an embedded mosaic global restriction transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: MOSAIC_GLOBAL_RESTRICTION
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: MosaicGlobalRestrictionTransactionBody
+  name: EmbeddedMosaicGlobalRestrictionTransaction
+  type: struct
+- comments: binary layout for a transfer transaction
+  layout:
+  - comments: recipient address
+    name: recipient_address
+    type: UnresolvedAddress
+  - comments: size of attached message
+    name: message_size
+    signedness: unsigned
+    size: 2
+    type: byte
+  - comments: number of attached mosaics
+    name: mosaics_count
+    signedness: unsigned
+    size: 1
+    type: byte
+  - comments: reserved padding to align mosaics on 8-byte boundary
+    disposition: reserved
+    name: transfer_transaction_body_reserved_1
+    signedness: unsigned
+    size: 4
+    type: byte
+    value: 0
+  - comments: reserved padding to align mosaics on 8-byte boundary
+    disposition: reserved
+    name: transfer_transaction_body_reserved_2
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 0
+  - comments: attached mosaics
+    disposition: array
+    name: mosaics
+    size: mosaics_count
+    sort_key: mosaic_id
+    type: UnresolvedMosaic
+  - comments: attached message
+    disposition: array
+    element_disposition:
+      signedness: unsigned
+      size: 1
+    name: message
+    size: message_size
+    type: byte
+  name: TransferTransactionBody
+  type: struct
+- comments: binary layout for a non-embedded transfer transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: TRANSFER
+  - comments: ''
+    disposition: inline
+    type: Transaction
+  - comments: ''
+    disposition: inline
+    type: TransferTransactionBody
+  name: TransferTransaction
+  type: struct
+- comments: binary layout for an embedded transfer transaction
+  layout:
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_VERSION
+    signedness: unsigned
+    size: 1
+    type: byte
+    value: 1
+  - comments: ''
+    disposition: const
+    name: TRANSACTION_TYPE
+    type: TransactionType
+    value: TRANSFER
+  - comments: ''
+    disposition: inline
+    type: EmbeddedTransaction
+  - comments: ''
+    disposition: inline
+    type: TransferTransactionBody
+  name: EmbeddedTransferTransaction
+  type: struct
