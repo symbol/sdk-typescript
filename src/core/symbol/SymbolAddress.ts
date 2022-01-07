@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { Address, RawAddress } from '@core';
+import { Address, HashUtils, RawAddress } from '@core';
 import { arrayDeepEqual, Base32, Converter } from '@utils';
-import { sha3_256 } from 'js-sha3';
 
 /**
  * The address structure describes an address with its network
@@ -99,9 +98,8 @@ export class SymbolAddress extends Address {
 
         try {
             const { rawAddress } = SymbolAddress.createFromString(formatAddress);
-            const hasher = sha3_256.create();
-            const hash = hasher.update(rawAddress.addressWithoutChecksum).arrayBuffer();
-            return arrayDeepEqual(new Uint8Array(hash).subarray(0, 3), rawAddress.checksum);
+            const hash = HashUtils.sha256Hash(rawAddress.addressWithoutChecksum);
+            return arrayDeepEqual(hash.subarray(0, 3), rawAddress.checksum);
         } catch (e) {
             return false;
         }

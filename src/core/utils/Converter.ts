@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import { Nibble_To_Char_Map } from '@core';
-import { sha3_256 } from 'js-sha3';
 import { decode } from 'utf8';
 import { tryParseByte } from './Utilities';
 
@@ -301,20 +300,5 @@ export class Converter {
             length += array.length;
         }
         return result;
-    }
-
-    /**
-     * It hashes the list of Uint8Array into a Uint8Array.
-     *
-     * This method abstracts out the sha3 implementation, if for some reason the hash needs to be changed, it's centralized in one place.
-     *
-     * @param hashes - the list of Uint8Array to hash.
-     */
-    public static hash(...hashes: Uint8Array[]): Uint8Array {
-        const hasher = sha3_256.create();
-        hashes.forEach((hashVal: Uint8Array) => {
-            hasher.update(hashVal);
-        });
-        return new Uint8Array(hasher.arrayBuffer());
     }
 }

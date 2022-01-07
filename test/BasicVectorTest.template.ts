@@ -85,7 +85,8 @@ export const AddressMosaicIdTester = <T extends Network>(
                     expect(item[addressKeyName]).to.be.equal(address.encoded);
                     if (testMosaicId) {
                         const mosaicId = SymbolIdGenerator.generateMosaicId(address, toBufferLE(BigInt(item['mosaicNonce']), 4));
-                        expect(item[mosaicKeyName]).to.be.equal(mosaicId.toString(16).toLocaleUpperCase().padStart(16, '0'));
+                        const value = mosaicId.toString(16).toLocaleUpperCase().padStart(16, '0');
+                        expect(value).to.be.equal(item[mosaicKeyName]);
                     }
                 });
             },

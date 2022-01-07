@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Address, Converter, NamespaceConst } from '@core';
+import { Address, Converter, HashUtils, NamespaceConst } from '@core';
 import { toBigIntLE, toBufferLE } from 'bigint-buffer';
 import { GeneratorUtils } from 'catbuffer-typescript';
 import * as Crypto from 'crypto';
-import { sha3_256 } from 'js-sha3';
 
 export class SymbolIdGenerator {
     /**
@@ -28,10 +27,8 @@ export class SymbolIdGenerator {
      * @returns Mosaic id bigint value
      */
     public static generateMosaicId(ownerAddress: Address, nonce: Uint8Array): bigint {
-        const hash = sha3_256.create();
-        hash.update(nonce);
-        hash.update(ownerAddress.getAddressBytes());
-        const result = new Uint32Array(hash.arrayBuffer());
+        const hash = HashUtils.sha256Hash(nonce, ownerAddress.getAddressBytes());
+        const result = Converter.uint8ToUint32(hash);
         return toBigIntLE(Buffer.from(new Uint32Array([result[0], result[1] & 0x7fffffff]).buffer));
     }
 
@@ -52,10 +49,8 @@ export class SymbolIdGenerator {
      * @returns Namespace id bigint value
      */
     public static generateNamespaceId(name: string, parentId = BigInt(0)): bigint {
-        const hash = sha3_256.create();
-        hash.update(toBufferLE(parentId, 8));
-        hash.update(name);
-        const result = new Uint32Array(hash.arrayBuffer());
+        const hash = HashUtils.sha256Hash(toBufferLE(parentId, 8), name);
+        const result = Converter.uint8ToUint32(hash);
         // right zero-filling required to keep unsigned number representation
         return toBigIntLE(Buffer.from(new Uint32Array([result[0], (result[1] | 0x80000000) >>> 0]).buffer));
     }

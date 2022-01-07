@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Network, RawAddress, SymbolAddress, SymbolNetworkList, SymbolTransactionFactory } from '@core';
-import { Hash, sha3_256 } from 'js-sha3';
+import { HashUtils, Network, RawAddress, SymbolAddress, SymbolNetworkList, SymbolTransactionFactory } from '@core';
 
 export class SymbolNetwork extends Network {
     /**
@@ -39,11 +38,8 @@ export class SymbolNetwork extends Network {
     /**
      * Get hasher for address generation based on selected network type
      *
-     * @returns SHA3 hasher
      */
-    public addressHasher(): Hash {
-        return sha3_256;
-    }
+    public addressHasher = HashUtils.sha256Hash;
 
     /**
      * List all networks

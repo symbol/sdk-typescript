@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Key, KeyPair } from '@core';
+import { HashUtils, Key, KeyPair } from '@core';
 import Ed25519 from '@external';
-import { keccakHash, KeccakHasher } from '@utils';
 import * as Crypto from 'crypto';
 
 export class NemKeyPair extends KeyPair {
@@ -46,9 +45,7 @@ export class NemKeyPair extends KeyPair {
     private static derivePublicKey(privateKey: Key): Key {
         const publicKey = new Key(new Uint8Array(Ed25519.crypto_sign_PUBLICKEYBYTES));
         const reversedPrivateKey = [...privateKey.toBytes()].reverse();
-
-        Ed25519.crypto_sign_keypair(publicKey.toBytes(), reversedPrivateKey, keccakHash);
-
+        Ed25519.crypto_sign_keypair(publicKey.toBytes(), reversedPrivateKey, HashUtils.keccak512Hash);
         return publicKey;
     }
 
@@ -60,14 +57,13 @@ export class NemKeyPair extends KeyPair {
      */
     public sign(data: Uint8Array): Uint8Array {
         const signature = new Uint8Array(64);
-        const hasher = KeccakHasher();
 
         const keypair = {
             privateKey: [...this.privateKey.toBytes()].reverse(),
             publicKey: this.publicKey.toBytes(),
         };
 
-        const success = Ed25519.crypto_sign_hash(signature, keypair, data, hasher);
+        const success = Ed25519.crypto_sign_hash(signature, keypair, data, HashUtils.keccak512Hasher());
 
         if (!success) {
             throw new Error(`Couldn't sign the tx, generated invalid signature`);
@@ -87,7 +83,6 @@ export class NemKeyPair extends KeyPair {
         if (!this.IsCanonicalS(signature.slice(signature.length / 2))) {
             return false;
         }
-        const hasher = KeccakHasher();
-        return Ed25519.crypto_verify_hash(signature, this.publicKey.toBytes(), data, hasher);
+        return Ed25519.crypto_verify_hash(signature, this.publicKey.toBytes(), data, HashUtils.keccak512Hasher());
     }
 }

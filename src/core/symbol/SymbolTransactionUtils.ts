@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { KeyPair, MerkleHashBuilder } from '@core';
+import { HashUtils, KeyPair, MerkleHashBuilder } from '@core';
 import { Converter } from '@utils';
 import * as allBuilders from 'catbuffer-typescript';
 import {
@@ -125,7 +125,7 @@ export class SymbolTransactionUtils {
         const signature = transactionPayload.slice(8, 8 + 64);
         const publicKey = transactionPayload.slice(8 + 64, 8 + 64 + 32);
         // layout: `signature_R || signerPublicKey || generationHash || EntityDataBuffer`
-        return Converter.hash(signature, publicKey, generationHash, transactionBody);
+        return HashUtils.sha256Hash(signature, publicKey, generationHash, transactionBody);
     }
 
     /**
@@ -234,7 +234,7 @@ export class SymbolTransactionUtils {
         const builder = new MerkleHashBuilder();
         transactions.forEach((transaction) => {
             const padding = new Uint8Array(GeneratorUtils.getPaddingSize(transaction.length, 8));
-            builder.update(Converter.hash(Converter.concat(transaction, padding)));
+            builder.update(HashUtils.sha256Hash(Converter.concat(transaction, padding)));
         });
         return builder.final();
     }
