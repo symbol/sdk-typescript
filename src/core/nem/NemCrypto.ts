@@ -91,7 +91,7 @@ export class NemCrypto {
         const salt = payload.slice(0, 32);
         // 16 byte for iv
         const iv = payload.slice(32, 48);
-        // 32 byte for payload
+        // 48 byte for payload
         const message = payload.slice(48);
 
         const shared = new Uint8Array(32);

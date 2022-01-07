@@ -63,7 +63,7 @@ describe('Nem crypto cipher', () => {
             expect(encoded).to.not.throw(Error);
         });
 
-        it('Encoding throw error if message exceed 976 btyes', () => {
+        it('Encoding throw error if message exceed 976 bytes', () => {
             // Arrange:
             const message = new Uint8Array(977);
 
