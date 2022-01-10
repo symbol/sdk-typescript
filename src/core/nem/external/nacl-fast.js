@@ -737,7 +737,7 @@
       var p = [gf(), gf(), gf(), gf()];
       var q = [gf(), gf(), gf(), gf()];
 
-      if (unpackneg(q, pk)) return false;
+      if (unpack(q, pk, true)) return false;
 
       hasher.reset();
       hasher.update(signature.subarray(0, 64/2));
@@ -827,22 +827,20 @@
       return 0;
     }
 
-    function unpack(r, p) {
+    // A method modified from unpackneg.
+    // Support unpack and unpackneg.
+    function unpack(r, p, isNegate = false) {
       var t = gf(), chk = gf(), num = gf(),
           den = gf(), den2 = gf(), den4 = gf(),
           den6 = gf();
 
       set25519(r[2], gf1);
       unpack25519(r[1], p);
-
-      // num = u = y^2 - 1
-      // den = v = d * y^2 + 1
       S(num, r[1]);
       M(den, num, D);
       Z(num, num, r[2]);
       A(den, r[2], den);
 
-      // r[0] = x = sqrt(u / v)
       S(den2, den);
       S(den4, den2);
       M(den6, den4, den2);
@@ -857,19 +855,20 @@
 
       S(chk, r[0]);
       M(chk, chk, den);
-      if (neq25519(chk, num)) {
-        M(r[0], r[0], I);
-      }
+      if (neq25519(chk, num)) M(r[0], r[0], I);
 
       S(chk, r[0]);
       M(chk, chk, den);
-      if (neq25519(chk, num)) {
-        console.log("not a valid Ed25519EncodedGroupElement.");
-        return -1;
-      }
+      if (neq25519(chk, num)) return -1;
 
-      if (par25519(r[0]) !== (p[31]>>7)) {
-        Z(r[0], gf0, r[0]);
+      if (isNegate) {
+        if (par25519(r[0]) === (p[31]>>7)) {
+            Z(r[0], gf0, r[0])
+        }
+      } else {
+        if (par25519(r[0]) !== (p[31]>>7)) {
+            Z(r[0], gf0, r[0]);
+        }
       }
 
       M(r[3], r[0], r[1]);
