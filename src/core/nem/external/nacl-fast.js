@@ -651,6 +651,22 @@
         return 0;
     }
 
+    function crypto_shared_key(shared, pk, sk, hash) {
+      var d = new Uint8Array(64);
+      var p = [gf(), gf(), gf(), gf()];
+
+      d = hash(sk);
+
+      d[0] &= 248;
+      d[31] &= 127;
+      d[31] |= 64;
+
+      var q = [gf(), gf(), gf(), gf()];
+      unpack(q, pk);
+      scalarmult(p, q, d);
+      pack(shared, p);
+    }
+
     function crypto_sign_hash(sm, keypair, data, hasher) {
       var privHash = new Uint8Array(64);
       var seededHash = new Uint8Array(64);
@@ -721,7 +737,7 @@
       var p = [gf(), gf(), gf(), gf()];
       var q = [gf(), gf(), gf(), gf()];
 
-      if (unpackneg(q, pk)) return false;
+      if (unpack(q, pk, true)) return false;
 
       hasher.reset();
       hasher.update(signature.subarray(0, 64/2));
@@ -811,6 +827,54 @@
       return 0;
     }
 
+    // A method modified from unpackneg.
+    // Support unpack and unpackneg.
+    function unpack(r, p, isNegate = false) {
+      var t = gf(), chk = gf(), num = gf(),
+          den = gf(), den2 = gf(), den4 = gf(),
+          den6 = gf();
+
+      set25519(r[2], gf1);
+      unpack25519(r[1], p);
+      S(num, r[1]);
+      M(den, num, D);
+      Z(num, num, r[2]);
+      A(den, r[2], den);
+
+      S(den2, den);
+      S(den4, den2);
+      M(den6, den4, den2);
+      M(t, den6, num);
+      M(t, t, den);
+
+      pow2523(t, t);
+      M(t, t, num);
+      M(t, t, den);
+      M(t, t, den);
+      M(r[0], t, den);
+
+      S(chk, r[0]);
+      M(chk, chk, den);
+      if (neq25519(chk, num)) M(r[0], r[0], I);
+
+      S(chk, r[0]);
+      M(chk, chk, den);
+      if (neq25519(chk, num)) return -1;
+
+      if (isNegate) {
+        if (par25519(r[0]) === (p[31]>>7)) {
+            Z(r[0], gf0, r[0])
+        }
+      } else {
+        if (par25519(r[0]) !== (p[31]>>7)) {
+            Z(r[0], gf0, r[0]);
+        }
+      }
+
+      M(r[3], r[0], r[1]);
+      return 0;
+    }
+
     var crypto_scalarmult_BYTES = 32,
         crypto_scalarmult_SCALARBYTES = 32,
         crypto_sign_PUBLICKEYBYTES = 32;
@@ -819,6 +883,8 @@
       crypto_sign_keypair: crypto_sign_keypair,
       crypto_sign_hash: crypto_sign_hash,
       crypto_verify_hash: crypto_verify_hash,
+      crypto_shared_key: crypto_shared_key,
+
       crypto_modL: modL,
       crypto_sign_PUBLICKEYBYTES: crypto_sign_PUBLICKEYBYTES,
     };

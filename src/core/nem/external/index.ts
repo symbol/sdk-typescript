@@ -34,7 +34,15 @@ interface INacl {
      * @param data - The data to verify.
      * @param hasher - Hasher function example KeccakHasher.
      */
-    crypto_verify_hash(signature: Uint8Array, publicKey: Uint8Array, data: Uint8Array, hasher: Hasher);
+    crypto_verify_hash(signature: Uint8Array, publicKey: Uint8Array, data: Uint8Array, hasher: Hasher): boolean;
+    /**
+     * Derive a shared key from private key based on the hash function.
+     * @param shared - shared secret.
+     * @param publicKey - The public key.
+     * @param privateKey - The private key.
+     * @param hashFunc - Hash function use to hash the private key.
+     */
+    crypto_shared_key(shared: Uint8Array, publicKey: Uint8Array, privateKey: number[], hashFunc: (data: Uint8Array) => Uint8Array): void;
     crypto_modL(r: Uint8Array, x: Float64Array): Uint8Array;
     /* number of public key bytes */
     crypto_sign_PUBLICKEYBYTES: number;

@@ -1,10 +1,11 @@
 import { NemKeyPair, NemNetwork, SymbolKeyPair, SymbolNetwork } from '@core';
 import {
     AddressMosaicIdTester,
-    CipherVectorTester,
     DeriveVectorTester,
     KeyPairVectorTester,
+    NemCipherVectorTester,
     SignAndVerifyTester,
+    SymbolCipherVectorTester,
 } from '../BasicVectorTest.template';
 import path = require('path');
 
@@ -23,6 +24,11 @@ describe('Nem', () => {
         const vectorFile = path.join(__dirname, '../test-vector/nem/1.test-address.json');
         const networks = NemNetwork.list();
         AddressMosaicIdTester(networks, vectorFile);
+    });
+
+    describe('test-cipher vector', () => {
+        const vectorFile = path.join(__dirname, '../test-vector/nem/4.test-cipher.json');
+        NemCipherVectorTester(vectorFile);
     });
 });
 
@@ -56,6 +62,6 @@ describe('Symbol', () => {
 
     describe('test-cipher vector', () => {
         const vectorFile = path.join(__dirname, '../test-vector/symbol/4.test-cipher.json');
-        CipherVectorTester(vectorFile);
+        SymbolCipherVectorTester(vectorFile);
     });
 });

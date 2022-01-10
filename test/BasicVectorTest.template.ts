@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { deriveSharedKey, deriveSharedSecret, encode, Key, KeyPair, Network, SymbolIdGenerator } from '@core';
+import { decode, deriveSharedKey, deriveSharedSecret, encode, Key, KeyPair, NemCrypto, Network, SymbolIdGenerator } from '@core';
 import { Converter } from '@utils';
 import { toBufferLE } from 'bigint-buffer';
 import { expect } from 'chai';
@@ -95,23 +95,54 @@ export const AddressMosaicIdTester = <T extends Network>(
     });
 };
 
-export const CipherVectorTester = (testCipherVectorFile: string): void => {
-    describe('cipher - test vector', () => {
+export const NemCipherVectorTester = (testCipherVectorFile: string): void => {
+    describe('nem cipher - test vector', () => {
+        tester.run(
+            testCipherVectorFile,
+            (item: { privateKey: string; otherPublicKey: string; salt: string; iv: string; cipherText: string; clearText: string }) => {
+                // Arrange:
+                const privateKey = Key.createFromHex(item.privateKey);
+                const otherPublicKey = Key.createFromHex(item.otherPublicKey);
+                const clearText = Converter.hexToUint8(item.clearText);
+                const iv = Converter.hexToUint8(item.iv);
+                const salt = Converter.hexToUint8(item.salt);
+
+                // Act:
+                const payload = item.salt + item.iv + item.cipherText;
+                const encoded = NemCrypto.encode(privateKey, otherPublicKey, clearText, iv, salt);
+                const decoded = NemCrypto.decode(privateKey, otherPublicKey, Converter.hexToUint8(payload));
+
+                // Assert:
+                const message = ` from ${item.clearText}`;
+                expect(Converter.uint8ToHex(encoded), `nem cipher encode ${message}`).equal(payload);
+                expect(Converter.uint8ToHex(decoded), `nem cipher decoded ${message}`).equal(item.clearText);
+            },
+            'nem cipher test',
+        );
+    });
+};
+
+export const SymbolCipherVectorTester = (testCipherVectorFile: string): void => {
+    describe('symbol cipher - test vector', () => {
         tester.run(
             testCipherVectorFile,
             (item: { privateKey: string; otherPublicKey: string; tag: string; iv: string; cipherText: string; clearText: string }) => {
+                // Arrange:
+                const privateKey = Key.createFromHex(item.privateKey);
+                const otherPublicKey = Key.createFromHex(item.otherPublicKey);
+                const clearText = Converter.hexToUint8(item.clearText);
+                const iv = Converter.hexToUint8(item.iv);
+
                 // Act:
-                const encoded = encode(
-                    Key.createFromHex(item.privateKey),
-                    Key.createFromHex(item.otherPublicKey),
-                    Converter.hexToUint8(item.clearText),
-                    Converter.hexToUint8(item.iv),
-                );
+                const encoded = encode(privateKey, otherPublicKey, clearText, iv);
+                const decoded = decode(privateKey, otherPublicKey, encoded);
+
                 // Assert:
                 const message = ` from ${item.clearText}`;
-                expect(Converter.uint8ToHex(encoded), `cipher ${message}`).equal(`${item.tag}${item.iv}${item.cipherText}`);
+                expect(Converter.uint8ToHex(encoded), `symbol cipher encode ${message}`).equal(`${item.tag}${item.iv}${item.cipherText}`);
+                expect(Converter.uint8ToHex(decoded), `symbol cipher decoded ${message}`).equal(item.clearText);
             },
-            'cipher test',
+            'symbol cipher test',
         );
     });
 };
